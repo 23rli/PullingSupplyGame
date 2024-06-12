@@ -2,13 +2,13 @@
 import { useDrop } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from './ItemTypes.js'
+import { ItemTypes } from '../ItemTypes.js'
 
 // Importing Overlay component and OverlayType constant from the same directory
-import { Overlay, OverlayType } from './Overlay.js'
+import { Overlay, OverlayType } from '../Overlay.js'
 
 // Importing Square component from the same directory
-import { Square } from './Square.js'
+import { Square } from '../Square.js'
 
 // BoardSquare component that represents each square on the chessboard
 export const BoardSquare = ({ x, y, children, game }) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BoardSquare } from './BoardSquare.js'
-import { Piece } from './Piece.js'
+import { Piece } from '../Pieces/Piece.js'
 /** Styling properties applied to the board element */
 const boardStyle = {
   width: '100%',

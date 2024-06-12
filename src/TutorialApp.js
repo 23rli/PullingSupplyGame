@@ -2,7 +2,7 @@
 import { useMemo } from 'react'
 
 // Importing the Board component from the same directory
-import { Board } from './Board.js'
+import { Board } from './Gameboard/Board.js'
 
 // Importing the Game class from the same directory
 import { Game } from './Game.js'

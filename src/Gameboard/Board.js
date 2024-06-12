@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { BoardSquare } from './BoardSquare.js'
 
 // Importing the Piece component from the same directory
-import { Piece } from './Piece.js'
+import { Piece } from '../Pieces/Piece.js'
 
 // Styling properties applied to the board element
 const boardStyle = {

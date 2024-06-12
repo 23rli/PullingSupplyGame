@@ -2,10 +2,10 @@
 import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from './ItemTypes.js'
+import { ItemTypes } from '../ItemTypes.js'
 
 // Importing knightImage for the drag preview
-import { knightImage } from './knightImage.js'
+import { knightImage } from '../knightImage.js'
 
 // Styling properties applied to the knight element
 const knightStyle = {

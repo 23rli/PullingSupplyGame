@@ -2,7 +2,7 @@
 import { useDrop } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from './ItemTypes.js'
+import { ItemTypes } from '../ItemTypes.js'
 
 // Importing Overlay component and OverlayType constant from the same directory
 import { Overlay, OverlayType } from './Overlay.js'
