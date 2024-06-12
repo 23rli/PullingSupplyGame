@@ -1,33 +1,43 @@
+// Defining the Game class
 export class Game {
+  // Initial position of the knight on the chessboard
   knightPosition = [1, 7]
 
+  // Array to store observers (callbacks) that will be notified of changes
   observers = []
 
+  // Method to add an observer
   observe(o) {
-    this.observers.push(o)
-    this.emitChange()
+    this.observers.push(o)  // Add the observer to the array
+    this.emitChange()  // Emit the current state to the new observer
     return () => {
+      // Return a function to remove the observer
       this.observers = this.observers.filter((t) => t !== o)
     }
   }
 
+  // Method to move the knight to a new position
   moveKnight(toX, toY) {
-    this.knightPosition = [toX, toY]
-    this.emitChange()
+    this.knightPosition = [toX, toY]  // Update the knight's position
+    this.emitChange()  // Notify all observers of the change
   }
 
+  // Method to check if the knight can move to a specified position
   canMoveKnight(toX, toY) {
-    const [x, y] = this.knightPosition
-    const dx = toX - x
-    const dy = toY - y
+    const [x, y] = this.knightPosition  // Current position of the knight
+    const dx = toX - x  // Change in the x-coordinate
+    const dy = toY - y  // Change in the y-coordinate
+    // Return true if the move is valid for a knight (L-shaped move)
     return (
       (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
       (Math.abs(dx) === 1 && Math.abs(dy) === 2)
     )
   }
   
+  // Method to notify all observers of a change
   emitChange() {
-    const pos = this.knightPosition
+    const pos = this.knightPosition  // Current position of the knight
+    // Call each observer with the current position
     this.observers.forEach((o) => o && o(pos))
   }
 }

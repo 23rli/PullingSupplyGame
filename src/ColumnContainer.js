@@ -19,7 +19,7 @@ export const Board = ({ game }) => {
   useEffect(() => game.observe(setKnightPos))
   
   function renderSquare(i) {
-    const x = i % 9
+    const x = i % 8
     const y = Math.floor(i / 8)
     return (
       <div key={i} style={squareStyle}>
