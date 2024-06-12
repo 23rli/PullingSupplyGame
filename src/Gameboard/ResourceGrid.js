@@ -11,7 +11,7 @@ import { Overlay, OverlayType } from './Overlay.js';
 import { Square } from './Square.js';
 
 // BoardSquare component that represents each square on the chessboard
-export const BoardSquare = ({ x, y, children, game }) => {
+export const ResourceSquare = ({ x, y, children, game }) => {
   // Setting up the drop target for the knight using the useDrop hook
   const products = [ItemTypes.YRESOURCE, ItemTypes.BRESOURCE, ItemTypes.RRESOURCE];
 
@@ -28,7 +28,7 @@ export const BoardSquare = ({ x, y, children, game }) => {
     [game],  // Dependency array containing game object
   );
 
-  // Determining if the square is black or white
+  // Determining if the square is yellow, blue, red, or white
   const color = '';
   if(x<5){
     color = 'red';
