@@ -2,7 +2,16 @@
 import { useEffect, useState } from 'react'
 
 // Importing the BoardSquare component from the same directory
-import { BoardSquare } from './BoardSquare.js'
+import { ColumnGrid } from './ColumnGrid.js'
+
+// Importing the BoardSquare component from the same directory
+import { ResourceGrid } from './ResourceGrid.js'
+
+import { ColumnHeader } from './ColumnHeader.js'
+
+import { BoardHeader } from './ResourceBoard.js'
+
+import {Header} from './Header.js'
 
 // Importing the Piece component from the same directory
 import { Piece } from '../Pieces/Piece.js'
@@ -16,8 +25,8 @@ const boardStyle = {
 }
 
 // Styling properties applied to each square element
-const squareStyle = { width: '16.33%', height: '17%' }  // Each square takes 12.5% of the width and height (8x8 grid)
 const columnStyle = { width: '16.33%', height: '17%' }
+const columnHeaderStyle = { width: '16.33%', height: '10%' }
 const headerStyle = { width: '25%', height: '15%'}
 const resourceBoardStyle = { width: '50%', height: '3%'}
 const resourceSlotStyle = { width: '3.333%', height: '6%'}
@@ -33,46 +42,46 @@ export const Board = ({ game }) => {
   // useEffect to set up an observer for the game state
   useEffect(() => game.observe(setKnightPos))
 
-  // Function to render a single square on the board
-  function renderSquare(i) {
-    const x = i % 6              // Calculate x-coordinate (column) of the square
-    const y = Math.floor(i / 6)  // Calculate y-coordinate (row) of the square
-    return (
-      <div key={i} style={squareStyle}>
-        {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <BoardSquare x={x} y={y} game={game}>
-          {/* Render the Piece component, indicating if the piece is the knight */}
-          <Piece isKnight={x === knightX && y === knightY} />
-        </BoardSquare>
-      </div>
-    )
-  }
     // Function to render a single square on the board
     function renderResourceSquare(i) {
       const y = i % 2              // Calculate x-coordinate (column) of the square
       const x = Math.floor(i / 2)  // Calculate y-coordinate (row) of the square
       return (
-        <div key={i} style={squareStyle}>
+        <div key={i} style={resourceSlotStyle}>
           {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-          <BoardSquare x={x} y={y} game={game}>
+          <ResourceGrid x={x} y={y} game={game}>
             {/* Render the Piece component, indicating if the piece is the knight */}
             <Piece isKnight={x === knightX && y === knightY} />
-          </BoardSquare>
+          </ResourceGrid>
         </div>
       )
     }
 
-  // Function to render a single square on the board
+    // Function to render a single square on the board
   function renderHeader(i) {
     const x = 0              // Calculate x-coordinate (column) of the square
     const y = 0  // Calculate y-coordinate (row) of the square
     return (
-      <div key={i} style={squareStyle}>
+      <div key={i} style={resourceBoardStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <BoardSquare x={x} y={y} game={game}>
+        <Header>
+          
+        </Header>
+      </div>
+    )
+  }
+
+  // Function to render a single square on the board
+  function renderBoardHeader(i) {
+    const x = 0              // Calculate x-coordinate (column) of the square
+    const y = 0  // Calculate y-coordinate (row) of the square
+    return (
+      <div key={i} style={resourceBoardStyle}>
+        {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
+        <BoardHeader>
           {/* Render the Piece component, indicating if the piece is the knight */}
           <Piece isKnight={x === knightX && y === knightY} />
-        </BoardSquare>
+        </BoardHeader>
       </div>
     )
   }
@@ -82,27 +91,26 @@ export const Board = ({ game }) => {
     const x = 1            // Calculate x-coordinate (column) of the square
     const y = 0 // Calculate y-coordinate (row) of the square
     return (
-      <div key={i} style={squareStyle}>
+      <div key={i} style={headerStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <BoardSquare x={x} y={y} game={game}>
-          {/* Render the Piece component, indicating if the piece is the knight */}
-          <Piece isKnight={x === knightX && y === knightY} />
-        </BoardSquare>
+        <ColumnHeader x={x} y={y} game={game}>
+
+        </ColumnHeader>
       </div>
     )
   }
 
   // Function to render a single square on the board
   function renderColumnSpace(i) {
-    const y = 3 + i % 6              // Calculate x-coordinate (column) of the square
+    const y = 4 + i % 6              // Calculate x-coordinate (column) of the square
     const x = Math.floor(i / 8)  // Calculate y-coordinate (row) of the square
     return (
-      <div key={i} style={squareStyle}>
+      <div key={i} style={columnStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <BoardSquare x={x} y={y} game={game}>
+        <ColumnGrid x={x} y={y} game={game}>
           {/* Render the Piece component, indicating if the piece is the knight */}
           <Piece isKnight={x === knightX && y === knightY} />
-        </BoardSquare>
+        </ColumnGrid>
       </div>
     )
   }
@@ -110,7 +118,7 @@ export const Board = ({ game }) => {
   // Array to hold all the squares of the board
   const squares = []
   squares.push(renderHeader(0));
-  squares.push(renderColumnHeader(1));
+  /*
   for (let i = 2; i < 34; i += 1){
       squares.push(renderResourceSquare(i))
   }
@@ -119,7 +127,7 @@ export const Board = ({ game }) => {
   for (let i = 35; i < 84; i += 1){
     squares.push(renderColumnSpace(i))
   }
-
+*/
 /*
   // Loop to generate 64 squares (8x8 grid)
   for (let i = 0; i < 48; i += 1) {

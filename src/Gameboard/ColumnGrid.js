@@ -8,10 +8,10 @@ import { ItemTypes } from '../ItemTypes.js'
 import { Overlay, OverlayType } from '../Overlay.js'
 
 // Importing Square component from the same directory
-import { Square } from '../Square.js'
+import { ColumnContainer } from '../ColumnContainer.js'
 
 // BoardSquare component that represents each square on the chessboard
-export const BoardSquare = ({ x, y, children, game }) => {
+export const ColumnGrid = ({ x, y, children, game }) => {
   // Setting up the drop target for the knight using the useDrop hook
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -27,7 +27,20 @@ export const BoardSquare = ({ x, y, children, game }) => {
   )
 
   // Determining if the square is black or white
-  const black = (x + y) % 2 === 1
+  const color = '';
+  if(x == 0){
+    color = 'gray';
+  }else if (x == 1){
+    color = 'red';
+  }else if (x==2){
+    color = 'yellow';
+  }else if (x == 3){
+    color = 'blue';
+  }else if (x == 4){
+    color = 'white'
+  }else{
+    color = 'green'
+  } 
 
   return (
     <div
@@ -41,7 +54,7 @@ export const BoardSquare = ({ x, y, children, game }) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <Square black={black}>{children}</Square>
+      <ColumnContainer color={color}>{children}</ColumnContainer>
       
       {/* Conditionally render different overlays based on drag and drop state */}
       {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}
