@@ -9,8 +9,8 @@ import { Game } from './Game.js'
 
 // Styling properties applied to the container of the chessboard
 const containerStyle = {
-  width: 500,                // Width of the container
-  height: 500,               // Height of the container
+  width: Math.max( window.innerWidth, document.body.clientWidth ),        // Width of the container
+  height: Math.max( window.innerHeight, document.body.clientHeight ),               // Height of the container
   border: '1px solid gray',  // Border styling
 }
 

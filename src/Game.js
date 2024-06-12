@@ -1,7 +1,15 @@
 // Defining the Game class
 export class Game {
+  knightPosition = [];
+  BlueCars = [];
+  GreenCars = [];
   // Initial position of the knight on the chessboard
-  knightPosition = [1, 7]
+  constructor(x, y){
+    this.knightPosition.push(y);
+    this.knightPosition.push(x);
+
+  }
+  knightPosition = [0, 0]
 
   // Array to store observers (callbacks) that will be notified of changes
   observers = []
@@ -10,6 +18,7 @@ export class Game {
   observe(o) {
     this.observers.push(o)  // Add the observer to the array
     this.emitChange()  // Emit the current state to the new observer
+    console.log("Observer has passed");
     return () => {
       // Return a function to remove the observer
       this.observers = this.observers.filter((t) => t !== o)
@@ -24,6 +33,18 @@ export class Game {
 
   // Method to check if the knight can move to a specified position
   canMoveKnight(toX, toY) {
+    const [x, y] = this.knightPosition  // Current position of the knight
+    const dx = toX - x  // Change in the x-coordinate
+    const dy = toY - y  // Change in the y-coordinate
+    // Return true if the move is valid for a knight (L-shaped move)
+    return (
+      (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
+      (Math.abs(dx) === 1 && Math.abs(dy) === 2)
+    )
+  }
+
+  // Method to check if the knight can move to a specified position
+  canMoveCar(toX, toY) {
     const [x, y] = this.knightPosition  // Current position of the knight
     const dx = toX - x  // Change in the x-coordinate
     const dy = toY - y  // Change in the y-coordinate

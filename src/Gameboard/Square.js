@@ -7,8 +7,8 @@ const squareStyle = {
 // Square component representing each square on the chessboard
 export const Square = ({ black, children }) => {
   // Determine background and text colors based on whether the square is black or white
-  const backgroundColor = black ? 'black' : 'white';
-  const color = black ? 'white' : 'black';
+  const backgroundColor =  'white';  // Set background color to black if black prop is true, otherwise white
+  const color = 'black';  // Set text color to white if black prop is true, otherwise black
   
   return (
     <div
@@ -18,8 +18,7 @@ export const Square = ({ black, children }) => {
         backgroundColor,   // Background color
       }}
     >
-      {children // Render any children passed to the Square component
-      }
+      {children}
     </div>
   )
 }

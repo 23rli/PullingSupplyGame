@@ -9,11 +9,12 @@ import { knightImage } from './knightImage.js'
 
 // Styling properties applied to the knight element
 const knightStyle = {
-  fontSize: 60,          // Font size for the knight piece
+  fontSize: 30,          // Font size for the knight piece
   fontWeight: 'bold',    // Bold font weight
   cursor: 'move',        // Cursor style indicating the element is draggable
 }
 
+// Knight component representing the knight piece on the chessboard
 // Knight component representing the knight piece on the chessboard
 export const Knight = () => {
   // Setting up the drag source using the useDrag hook
@@ -30,7 +31,7 @@ export const Knight = () => {
   return (
     <>
       {/* DragPreviewImage for showing a custom drag preview */}
-      <DragPreviewImage connect={preview} src={knightImage} />
+      <DragPreviewImage connect={preview} src={knightImage} key={new Date().getTime()} />
       <div
         ref={drag}  // Assigning the drag source ref to this div
         style={{
@@ -38,7 +39,8 @@ export const Knight = () => {
           opacity: isDragging ? 0.5 : 1,  // Changing opacity when dragging
         }}
       >
-        ♘  {/* Unicode character for the knight */}
+        {/* Image tag for the additional image */}
+        <img src="butter.jpg" alt="butter" /> {/* 'dice.png' is the path to your image */}
       </div>
     </>
   )

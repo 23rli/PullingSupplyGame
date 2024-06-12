@@ -5,7 +5,7 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 import { ItemTypes } from '../ItemTypes.js'
 
 // Importing knightImage for the drag preview
-import { knightImage } from './knightImage.js'
+import { BCARImage } from './knightImage.js'
 
 // Styling properties applied to the knight element
 const knightStyle = {

@@ -1,21 +1,23 @@
 // Importing useDrop hook from react-dnd library
-import { useDrop } from 'react-dnd'
+import { useDrop } from 'react-dnd';
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from '../ItemTypes.js'
+import { ItemTypes } from '../ItemTypes.js';
 
 // Importing Overlay component and OverlayType constant from the same directory
-import { Overlay, OverlayType } from '../Overlay.js'
+import { Overlay, OverlayType } from './Overlay.js';
 
 // Importing Square component from the same directory
-import { Square } from '../Square.js'
+import { Square } from './Square.js';
 
 // BoardSquare component that represents each square on the chessboard
 export const BoardSquare = ({ x, y, children, game }) => {
   // Setting up the drop target for the knight using the useDrop hook
+  const products = [ItemTypes.YRESOURCE, ItemTypes.BRESOURCE, ItemTypes.RRESOURCE];
+
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
-      accept: ItemTypes.KNIGHT,  // Accepts only items of type KNIGHT
+      accept: products,   // Accepts only items of type KNIGHT
       canDrop: () => game.canMoveKnight(x, y),  // Checks if the knight can be moved to this square
       drop: () => game.moveKnight(x, y),  // Moves the knight to this square when dropped
       collect: (monitor) => ({
@@ -24,10 +26,19 @@ export const BoardSquare = ({ x, y, children, game }) => {
       }),
     }),
     [game],  // Dependency array containing game object
-  )
+  );
 
   // Determining if the square is black or white
-  const black = (x + y) % 2 === 1
+  const color = '';
+  if(x<5){
+    color = 'red';
+  }else if(x > 6 && x < 11){
+    color = 'yellow';
+  }else if(x > 12 && x < 15){
+    color = 'blue';
+  }else{
+    color = 'white'
+  }
 
   return (
     <div
@@ -41,12 +52,15 @@ export const BoardSquare = ({ x, y, children, game }) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <Square black={black}>{children}</Square>
+      <Square>
+        {/* Render children if any */}
+        {children}
+      </Square>
       
       {/* Conditionally render different overlays based on drag and drop state */}
       {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}
       {!isOver && canDrop && <Overlay type={OverlayType.PossibleMove} />}
       {isOver && canDrop && <Overlay type={OverlayType.LegalMoveHover} />}
     </div>
-  )
-}
+  );
+};
