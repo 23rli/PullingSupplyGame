@@ -8,7 +8,7 @@ import { ItemTypes } from '../ItemTypes.js';
 import { Overlay, OverlayType } from './Overlay.js';
 
 // Importing Square component from the same directory
-import { Square } from './Square.js';
+import { ResourceSpace } from './ResourceSpace.js';
 
 // BoardSquare component that represents each square on the chessboard
 export const ResourceGrid = ({ x, y, children, game }) => {
@@ -29,7 +29,7 @@ export const ResourceGrid = ({ x, y, children, game }) => {
   );
 
   // Determining if the square is yellow, blue, red, or white
-  const color = '';
+  let color = '';
   if(x<5){
     color = 'red';
   }else if(x > 6 && x < 11){
@@ -52,10 +52,10 @@ export const ResourceGrid = ({ x, y, children, game }) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <Square>
+      <ResourceSpace color = {color}>
         {/* Render children if any */}
         {children}
-      </Square>
+      </ResourceSpace>
       
       {/* Conditionally render different overlays based on drag and drop state */}
       {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}

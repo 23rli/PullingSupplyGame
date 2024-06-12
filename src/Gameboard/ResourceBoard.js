@@ -16,6 +16,7 @@ const boardHeaderStyle = {
           ...boardHeaderStyle,    // Apply base square styles
           color,             // Text color
           backgroundColor,   // Background color
+          border: '1px solid black',  // Black border
         }}
       >
         Available Production Points

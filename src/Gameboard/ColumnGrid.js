@@ -5,10 +5,10 @@ import { useDrop } from 'react-dnd'
 import { ItemTypes } from '../ItemTypes.js'
 
 // Importing Overlay component and OverlayType constant from the same directory
-import { Overlay, OverlayType } from '../Overlay.js'
+import { Overlay, OverlayType } from './Overlay.js'
 
 // Importing Square component from the same directory
-import { ColumnContainer } from '../ColumnContainer.js'
+import { ColumnContainer } from './ColumnContainer.js'
 
 // BoardSquare component that represents each square on the chessboard
 export const ColumnGrid = ({ x, y, children, game }) => {
@@ -26,22 +26,6 @@ export const ColumnGrid = ({ x, y, children, game }) => {
     [game],  // Dependency array containing game object
   )
 
-  // Determining if the square is black or white
-  const color = '';
-  if(x == 0){
-    color = 'gray';
-  }else if (x == 1){
-    color = 'red';
-  }else if (x==2){
-    color = 'yellow';
-  }else if (x == 3){
-    color = 'blue';
-  }else if (x == 4){
-    color = 'white'
-  }else{
-    color = 'green'
-  } 
-
   return (
     <div
       ref={drop}  // Assigning the drop target ref to this div
@@ -54,7 +38,7 @@ export const ColumnGrid = ({ x, y, children, game }) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <ColumnContainer color={color}>{children}</ColumnContainer>
+      <ColumnContainer x = {x} y = {y}>{children}</ColumnContainer>
       
       {/* Conditionally render different overlays based on drag and drop state */}
       {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}
