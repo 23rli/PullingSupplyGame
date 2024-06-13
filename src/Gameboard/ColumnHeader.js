@@ -9,19 +9,26 @@ const headerStyle = {
     // Determine background and text colors based on whether the square is black or white
     let backgroundColor =  '';  // Set background color to black if black prop is true, otherwise white
     const color = 'black';  // Set text color to white if black prop is true, otherwise black
+    let title = '';
 
     if(x == 0){
         backgroundColor = 'gray';
+        title = 'Planning';
     }else if (x == 1){
         backgroundColor = 'red';
+        title = 'Manufacturing';
     }else if (x == 2){
         backgroundColor = 'yellow';
+        title = 'Assembly';
     }else if (x == 3){
         backgroundColor = 'blue';
+        title = 'Quality';
     }else if (x == 4){
         backgroundColor = 'white'
+        title = 'Paint and Dry';
     }else{
         backgroundColor = 'green'
+        title = 'Done';
     } 
   
     
@@ -34,7 +41,7 @@ const headerStyle = {
           border: '1px solid black',  // Black border
         }}
       >
-        {children}
+        {title}
       </div>
     )
   }

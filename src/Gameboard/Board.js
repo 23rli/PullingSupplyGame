@@ -30,10 +30,10 @@ const resourceSlotStyle = { width: '3.333%', height: '6%'}
  * The chessboard component
  * @param props The react props
  */
-export const Board = ({ game }) => {
+export const Board = ({ game, BlueCarInitializer, GreenCarInitializer }) => {
   // Destructuring knight's position from the state and a function to update it
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  const [[], setGreenCarPos] = useState(GCarRules.GreenCars)
+  const[[], setGCARArray] = useState([])
   
   // useEffect to set up an observer for the game state
   useEffect(() => game.observe(setKnightPos))
@@ -73,10 +73,9 @@ export const Board = ({ game }) => {
     return (
       <div key={i} style={columnStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <ColumnGrid x={x} y={y} game={game}>
+        <ColumnGrid x={x} y={y} game={game} BlueCarInitializer = {BlueCarInitializer}>
           {/* Render the Piece component, indicating if the piece is the knight */}
           <Piece isKnight={x === knightX && y === knightY} />
-          <Piece isGreenCar={x === knightX && y === knightY} />
           <Piece isBlueCar={x === knightX && y === knightY} />
         </ColumnGrid>
       </div>

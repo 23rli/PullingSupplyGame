@@ -1,8 +1,10 @@
 // Defining the Game class
+import { BlueCar } from "../Pieces/BlueCarVisual";
+
 export class BCarRules {
     BlueCars = [];
     // Initial position of the knight on the chessboard
-    initialPosition = [0, 0]
+    initialPosition = [0, 2]
   
     // Array to store observers (callbacks) that will be notified of changes
     observers = []

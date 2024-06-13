@@ -11,7 +11,7 @@ import { Overlay, OverlayType } from './Overlay.js'
 import { ColumnContainer } from './ColumnContainer.js'
 
 // BoardSquare component that represents each square on the chessboard
-export const ColumnGrid = ({ x, y, children, game }) => {
+export const ColumnGrid = ({ x, y, children, game, BlueCarInitializer}) => {
   // Setting up the drop target for the knight using the useDrop hook
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -38,7 +38,10 @@ export const ColumnGrid = ({ x, y, children, game }) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <ColumnContainer x = {x} y = {y}>{children}</ColumnContainer>
+      <ColumnContainer x = {x} y = {y}>
+        {children}
+        
+      </ColumnContainer>
       
       {/* Conditionally render different overlays based on drag and drop state */}
       {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}

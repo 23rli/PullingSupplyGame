@@ -6,6 +6,8 @@ import { Board } from './Gameboard/Board.js'
 
 // Importing the Game class from the same directory
 import { Game } from './Rules/Game.js'
+import { BlueCarInitializer } from './Rules/BCarRules.js'
+import { GreenCarInitializer } from './Rules/GCarRules.js'
 
 // Styling properties applied to the container of the chessboard
 const containerStyle = {
@@ -20,12 +22,14 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
+  const BCarRule = useMemo(() => new BCarRules(), [])
+  const GCarRule = useMemo(() => new GCarRules(), [])
   
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board game={game} />
+      <Board game={game} GCarRules={GCarRule} BCarRules={BCarRule}/>
     </div>
   )
 }
