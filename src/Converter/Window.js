@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react'
 // Importing the BoardSquare component from the same directory
 import { ColumnGrid } from './ColumnGrid.js'
 
+// Importing the BoardSquare component from the same directory
+import { ResourceGrid } from './ResourceGrid.js'
+
 import { ColumnHeader } from './ColumnHeader.js'
+
+import { BoardHeader } from './ResourceBoard.js'
 
 import {Header} from './Header.js'
 
@@ -37,7 +42,22 @@ export const Board = ({ game }) => {
   
   // useEffect to set up an observer for the game state
   useEffect(() => game.observe(setKnightPos))
-
+/*
+    // Function to render a single square on the board
+    function renderResourceSquare(i) {
+      const y = 1            // Calculate x-coordinate (column) of the square
+      const x = 0//Math.floor(i / 2)  // Calculate y-coordinate (row) of the square
+      return (
+        <div key={i} style={resourceSlotStyle}>
+          {/* Render the BoardSquare component, passing x and y coordinates and the game object }
+          <ResourceGrid x={x} y={y} game={game}>
+            {/* Render the Piece component, indicating if the piece is the knight }
+            <Piece isKnight={x === knightX && y === knightY} />
+          </ResourceGrid>
+        </div>
+      )
+    }
+*/
     // Function to render a single square on the board
   function renderHeader(i) {
     const x = 0              // Calculate x-coordinate (column) of the square
@@ -51,7 +71,22 @@ export const Board = ({ game }) => {
       </div>
     )
   }
-
+/*
+  // Function to render a single square on the board
+  function renderBoardHeader(i) {
+    const x = 1              // Calculate x-coordinate (column) of the square
+    const y = 0  // Calculate y-coordinate (row) of the square
+    return (
+      <div key={i} style={resourceBoardStyle}>
+        {/* Render the BoardSquare component, passing x and y coordinates and the game object }
+        <BoardHeader>
+          {/* Render the Piece component, indicating if the piece is the knight }
+          <Piece isKnight={x === knightX && y === knightY} />
+        </BoardHeader>
+      </div>
+    )
+  }
+*/
   // Function to render a single square on the board
   function renderColumnHeader(i) {
     const x = i            // Calculate x-coordinate (column) of the square

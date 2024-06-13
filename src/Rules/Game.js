@@ -27,8 +27,17 @@ export class Game {
 
   // Method to move the knight to a new position
   moveKnight(toX, toY) {
+   // toY = gravitateUp(toX, toY);
     this.knightPosition = [toX, toY]  // Update the knight's position
     this.emitChange()  // Notify all observers of the change
+  }
+
+  gravitateUp(toX, toY){
+    for(let i = 0; i < this.BlueCars.length; i++){
+      if(this.BlueCars[i][0] === toX && this.BlueCars[i][1]){
+
+      }
+    }
   }
 
   // Method to check if the knight can move to a specified position
@@ -38,8 +47,8 @@ export class Game {
     const dy = toY - y  // Change in the y-coordinate
     // Return true if the move is valid for a knight (L-shaped move)
     return (
-      (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
-      (Math.abs(dx) === 1 && Math.abs(dy) === 2)
+      (dx === 1 ) || (dx === 0 && Math.abs(dy) > 0)
+      
     )
   }
 
@@ -50,8 +59,7 @@ export class Game {
     const dy = toY - y  // Change in the y-coordinate
     // Return true if the move is valid for a knight (L-shaped move)
     return (
-      (Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
-      (Math.abs(dx) === 1 && Math.abs(dy) === 2)
+      (dx >= 0)
     )
   }
   

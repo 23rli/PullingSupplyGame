@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { Board } from './Gameboard/Board.js'
 
 // Importing the Game class from the same directory
-import { Game } from './Game.js'
+import { Game } from './Rules/Game.js'
 
 // Styling properties applied to the container of the chessboard
 const containerStyle = {

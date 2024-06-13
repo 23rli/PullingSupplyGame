@@ -16,7 +16,6 @@ const headerStyle = {
           ...headerStyle,    // Apply base square styles
           color,             // Text color
           backgroundColor,   // Background color
-          border: '1px solid black',  // Black border
         }}
       >
         {children}

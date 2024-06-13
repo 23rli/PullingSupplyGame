@@ -16,7 +16,7 @@ export const ColumnGrid = ({ x, y, children, game }) => {
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: ItemTypes.KNIGHT,  // Accepts only items of type KNIGHT
-      canDrop: () => game.canMoveKnight(x, y),  // Checks if the knight can be moved to this square
+      canDrop: () => (game.canMoveKnight(x, y)),  // Checks if the knight can be moved to this square
       drop: () => game.moveKnight(x, y),  // Moves the knight to this square when dropped
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),  // Whether an item is currently being hovered over this square
