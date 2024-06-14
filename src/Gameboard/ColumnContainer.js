@@ -1,41 +1,45 @@
-// Styling properties applied to each square element
 const containerStyle = {
   width: '100%',  // Full width of the parent container
   height: '100%', // Full height of the parent container
+  display: 'flex',  // Use flexbox for alignment if needed
+  alignItems: 'center',  // Center items vertically
+  justifyContent: 'center',  // Center items horizontally
+  textAlign: 'center',  // Center text
+  overflow: 'hidden',  // Hide overflow
+  whiteSpace: 'nowrap',  // Prevent text wrapping
+  textOverflow: 'ellipsis',  // Add ellipsis if text overflows
+};
+
+const getBackgroundColor = (x) => {
+  switch (x) {
+      case 0:
+          return 'rgba(128, 128, 128, 0.5)'; // Gray with 50% opacity
+      case 1:
+          return 'rgba(255, 0, 0, 0.5)'; // Red with 50% opacity
+      case 2:
+          return 'rgba(255, 255, 0, 0.5)'; // Yellow with 50% opacity
+      case 3:
+          return 'rgba(0, 0, 255, 0.5)'; // Blue with 50% opacity
+      case 4:
+          return 'rgba(255, 255, 255, 0.5)'; // White with 50% opacity
+      default:
+          return 'rgba(0, 128, 0, 0.5)'; // Green with 50% opacity
+  }
 }
 
 // Square component representing each square on the chessboard
-export const ColumnContainer = ({ x,y , children }) => {
-  // Determine background and text colors based on whether the square is black or white
-  let backgroundColor =  '';  // Set background color to black if black prop is true, otherwise white
-  const textColor = 'black';  // Set text color to white if black prop is true, otherwise black
-
-
-  if(x == 0){
-    backgroundColor = 'gray';
-}else if (x == 1){
-    backgroundColor = 'red';
-}else if (x == 2){
-    backgroundColor = 'yellow';
-}else if (x == 3){
-    backgroundColor = 'blue';
-}else if (x == 4){
-    backgroundColor = 'white'
-}else{
-    backgroundColor = 'green'
-} 
-
+export const ColumnContainer = ({ x, y, children }) => {
+  const backgroundColor = getBackgroundColor(x);
 
   return (
-    <div
-      style={{
-        ...containerStyle,    // Apply base square styles
-        textColor,             // Text color
-        backgroundColor,   // Background color
-        //border: '1px solid black',  // Black border
-      }}
-    >
-      {children}
-    </div>
-  )
+      <div
+          style={{
+              ...containerStyle,    // Apply base square styles
+              color: 'black',        // Text color
+              backgroundColor,       // Background color with transparency
+          }}
+      >
+          {children}
+      </div>
+  );
 }

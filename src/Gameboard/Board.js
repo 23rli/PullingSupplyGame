@@ -11,32 +11,70 @@ import {Header} from './Header.js'
 // Importing the Piece component from the same directory
 import { Piece } from '../Pieces/Piece.js'
 
+//import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
+
+//import {GreenCarInitializer, GreenCars} from '../Pieces/GreenCarInitializer.js'
+
+
 // Styling properties applied to the board element
+// Styles for the board
 const boardStyle = {
-  width: '100%',      // Full width of the container
-  height: '100%',     // Full height of the container
-  display: 'flex',    // Flexbox layout
-  flexWrap: 'wrap',   // Wrap children to the next line
-}
+  width: '90vw',       // 90% of viewport width
+  height: '150vh',      // 90% of viewport height
+  display: 'flex',     // Flexbox layout
+  flexWrap: 'wrap',    // Wrap children to the next line
+  boxSizing: 'border-box',  // Include padding and border in the element's total width and height
+};
 
 // Styling properties applied to each square element
-const columnStyle = { width: '16.666%', height: '17%' }
-const columnHeaderStyle = { width: '16.666%', height: '10%' }
-const headerStyle = { width: '25%', height: '15%'}
-const resourceBoardStyle = { width: '50%', height: '3%'}
-const resourceSlotStyle = { width: '3.333%', height: '6%'}
+const columnStyle = { width: '16.666%', height: '11%' }
+const columnHeaderStyle = { width: '16.666%', height: '5%' }
+const headerStyle = { width: '100%', height: '10%'}
+
 
 /**
  * The chessboard component
  * @param props The react props
  */
-export const Board = ({ game, BlueCarInitializer, GreenCarInitializer }) => {
-  // Destructuring knight's position from the state and a function to update it
+export const Board = ({game}) => {
+
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  const[[], setGCARArray] = useState([])
-  
+ const [[BCar1X, BCar1Y],  setBCar1Pos] = useState(game.knightPosition);
+/*  const [[BCar2X, BCar2Y],  setBCar2Pos] = useState();
+  const [[BCar3X, BCar3Y],  setBCar3Pos] = useState();
+  const [[BCar4X, BCar4Y],  setBCar4Pos] = useState();
+  const [[BCar5X, BCar5Y],  setBCar5Pos] = useState();
+  const [[BCar6X, BCar6Y],  setBCar6Pos] = useState();
+  const [[BCar7X, BCar7Y],  setBCar7Pos] = useState();
+  const [[BCar8X, BCar8Y],  setBCar8Pos] = useState();
+  const [[BCar9X, BCar9Y],  setBCar9Pos] = useState();
+  const [[BCar10X, BCar10Y],  setBCar10Pos] = useState();
+  const [[BCar11X, BCar11Y],  setBCar11Pos] = useState();
+  const [[BCar12X, BCar12Y],  setBCar12Pos] = useState();
+  const [[BCar13X, BCar13Y],  setBCar13Pos] = useState();
+  const [[BCar14X, BCar14Y],  setBCar14Pos] = useState();
+  const [[BCar15X, BCar15Y],  setBCar15Pos] = useState();
+
+  const [[GCar1X, GCar1Y],  setGCar1Pos] = useState();
+  const [[GCar2X, GCar2Y],  setGCar2Pos] = useState();
+  const [[GCar3X, GCar3Y],  setGCar3Pos] = useState();
+  const [[GCar4X, GCar4Y],  setGCar4Pos] = useState();
+  const [[GCar5X, GCar5Y],  setGCar5Pos] = useState();
+  const [[GCar6X, GCar6Y],  setGCar6Pos] = useState();
+  const [[GCar7X, GCar7Y],  setGCar7Pos] = useState();
+  const [[GCar8X, GCar8Y],  setGCar8Pos] = useState();
+  const [[GCar9X, GCar9Y],  setGCar9Pos] = useState();
+  const [[GCar10X, GCar10Y],  setGCar10Pos] = useState();
+  const [[GCar11X, GCar11Y],  setGCar11Pos] = useState();
+  const [[GCar12X, GCar12Y],  setGCar12Pos] = useState();
+  const [[GCar13X, GCar13Y],  setGCar13Pos] = useState();
+  const [[GCar14X, GCar14Y],  setGCar14Pos] = useState();
+  const [[GCar15X, GCar15Y],  setGCar15Pos] = useState();
+  */
   // useEffect to set up an observer for the game state
-  useEffect(() => game.observe(setKnightPos))
+  useEffect(() => game.observe(setKnightPos, setBCar1Pos))
+  //useEffect(() => game.observe(setBluePos))
+  //useEffect(() => game.observe(setGreenPos))
 
     // Function to render a single square on the board
   function renderHeader(i) {
@@ -73,10 +111,9 @@ export const Board = ({ game, BlueCarInitializer, GreenCarInitializer }) => {
     return (
       <div key={i} style={columnStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <ColumnGrid x={x} y={y} game={game} BlueCarInitializer = {BlueCarInitializer}>
+        <ColumnGrid x={x} y={y} game={game} >
           {/* Render the Piece component, indicating if the piece is the knight */}
           <Piece isKnight={x === knightX && y === knightY} />
-          <Piece isBlueCar={x === knightX && y === knightY} />
         </ColumnGrid>
       </div>
     )
@@ -85,10 +122,7 @@ export const Board = ({ game, BlueCarInitializer, GreenCarInitializer }) => {
   // Array to hold all the squares of the board
   const squares = []
   squares.push(renderHeader(0));
-  squares.push(renderHeader(1));
-  squares.push(renderHeader(2));
   //squares.push(renderBoardHeader(1))
-  squares.push(renderHeader(3));
   //for (let i = 3; i < 35; i += 1){
    //squares.push(renderResourceSquare(1))
   //}

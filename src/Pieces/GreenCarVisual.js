@@ -5,7 +5,7 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 import { ItemTypes } from '../ItemTypes.js'
 
 // Knight component representing the knight piece on the chessboard
-export const GreenCar = () => {
+export const GreenCarVisual = () => {
   // Setting up the drag source using the useDrag hook
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({

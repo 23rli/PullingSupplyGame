@@ -1,14 +1,7 @@
+
 // Defining the Game class
 export class Game {
-  knightPosition = [];
-  BlueCars = [];
-  GreenCars = [];
-  // Initial position of the knight on the chessboard
-  constructor(x, y){
-    this.knightPosition.push(y);
-    this.knightPosition.push(x);
-
-  }
+  
   knightPosition = [0, 0]
 
   // Array to store observers (callbacks) that will be notified of changes
@@ -32,13 +25,11 @@ export class Game {
     this.emitChange()  // Notify all observers of the change
   }
 
-  gravitateUp(toX, toY){
-    for(let i = 0; i < this.BlueCars.length; i++){
-      if(this.BlueCars[i][0] === toX && this.BlueCars[i][1]){
-
-      }
-    }
-  }
+  moveSprite(toX, toY, isBC, isGC, ) {
+    // toY = gravitateUp(toX, toY);
+     this.knightPosition = [toX, toY]  // Update the knight's position
+     this.emitChange()  // Notify all observers of the change
+   }
 
   // Method to check if the knight can move to a specified position
   canMoveKnight(toX, toY) {
@@ -62,7 +53,7 @@ export class Game {
       (dx >= 0)
     )
   }
-  
+
   // Method to notify all observers of a change
   emitChange() {
     const pos = this.knightPosition  // Current position of the knight

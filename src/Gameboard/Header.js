@@ -1,8 +1,16 @@
 // Styling properties applied to each square element
 const headerStyle = {
-    width: '100%',  // Full width of the parent container
-    height: '100%', // Full height of the parent container
-  }
+  width: '100%',  // Full width of the parent container
+  height: '100%', // Full height of the parent container
+  display: 'flex',  // Use flexbox for alignment
+  alignItems: 'center',  // Center the items vertically
+  justifyContent: 'center',  // Center the items horizontally
+  textAlign: 'center',  // Center the text
+  fontSize: 'calc(2em + 2vw)',  // Responsive font size
+  overflow: 'hidden',  // Hide overflow
+  whiteSpace: 'nowrap',  // Prevent text wrapping
+  textOverflow: 'ellipsis',  // Add ellipsis if text overflows
+};
   
   // Square component representing each square on the chessboard
   export const Header = ({ children }) => {
@@ -18,7 +26,7 @@ const headerStyle = {
           backgroundColor,   // Background color
         }}
       >
-        {children}
+        Motor City...Online
       </div>
     )
   }

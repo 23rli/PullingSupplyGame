@@ -10,12 +10,17 @@ import { Overlay, OverlayType } from './Overlay.js'
 // Importing Square component from the same directory
 import { ColumnContainer } from './ColumnContainer.js'
 
+import { Piece } from '../Pieces/Piece.js'
+
+import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
+
 // BoardSquare component that represents each square on the chessboard
-export const ColumnGrid = ({ x, y, children, game, BlueCarInitializer}) => {
+export const ColumnGrid = ({ x, y, children, game}) => {
   // Setting up the drop target for the knight using the useDrop hook
+  const products = [ItemTypes.KNIGHT, ItemTypes.GCAR, ItemTypes.BCAR];
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
-      accept: ItemTypes.KNIGHT,  // Accepts only items of type KNIGHT
+      accept: products,  // Accepts only items of type KNIGHT
       canDrop: () => (game.canMoveKnight(x, y)),  // Checks if the knight can be moved to this square
       drop: () => game.moveKnight(x, y),  // Moves the knight to this square when dropped
       collect: (monitor) => ({
@@ -40,7 +45,7 @@ export const ColumnGrid = ({ x, y, children, game, BlueCarInitializer}) => {
       {/* Render the Square component, passing whether the square is black */}
       <ColumnContainer x = {x} y = {y}>
         {children}
-        
+        <Piece isBlueCar={x == {x} && y == {y}} />
       </ColumnContainer>
       
       {/* Conditionally render different overlays based on drag and drop state */}

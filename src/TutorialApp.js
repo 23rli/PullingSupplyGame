@@ -6,15 +6,20 @@ import { Board } from './Gameboard/Board.js'
 
 // Importing the Game class from the same directory
 import { Game } from './Rules/Game.js'
-import { BlueCarInitializer } from './Rules/BCarRules.js'
-import { GreenCarInitializer } from './Rules/GCarRules.js'
+
 
 // Styling properties applied to the container of the chessboard
 const containerStyle = {
-  width: Math.max( window.innerWidth, document.body.clientWidth ),        // Width of the container
-  height: Math.max( window.innerHeight, document.body.clientHeight ),               // Height of the container
-  border: '1px solid gray',  // Border styling
-}
+  display: 'flex',            // Flexbox layout
+  justifyContent: 'center',   // Center horizontally
+  alignItems: 'center',       // Center vertically
+  width: '100vw',             // Full viewport width
+  height: '160vh',            // Full viewport height
+  margin: 0,                  // Remove default margin
+  padding: 0,                 // Remove default padding
+  backgroundColor: '#f0f0f0', // Light gray background color (you can change this to any color you prefer)
+};
+
 
 /**
  * The Chessboard Tutorial Application
@@ -22,14 +27,12 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
-  const BCarRule = useMemo(() => new BCarRules(), [])
-  const GCarRule = useMemo(() => new GCarRules(), [])
   
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board game={game} GCarRules={GCarRule} BCarRules={BCarRule}/>
+      <Board game={game}/>
     </div>
   )
 }
