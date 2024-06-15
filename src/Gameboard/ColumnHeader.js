@@ -12,25 +12,25 @@ const headerStyle = {
 };
 
 // Square component representing each square on the chessboard
-export const ColumnHeader = ({ x, y, children }) => {
+export const ColumnHeader = ({ x, y}) => {
   // Determine background and text colors based on the column index (x)
   let backgroundColor = '';
   const color = 'black';
   let title = '';
 
-  if (x === 0) {
+  if (x === -6) {
       backgroundColor = 'gray';
       title = 'Planning';
-  } else if (x === 1) {
+  } else if (x === -5) {
       backgroundColor = 'red';
       title = 'Manufacturing';
-  } else if (x === 2) {
+  } else if (x === -4) {
       backgroundColor = 'yellow';
       title = 'Assembly';
-  } else if (x === 3) {
+  } else if (x === -3) {
       backgroundColor = 'blue';
       title = 'Quality';
-  } else if (x === 4) {
+  } else if (x === -2) {
       backgroundColor = 'white';
       title = 'Paint and Dry';
   } else {

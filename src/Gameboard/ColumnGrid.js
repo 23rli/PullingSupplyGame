@@ -12,7 +12,7 @@ import { ColumnContainer } from './ColumnContainer.js'
 
 import { Piece } from '../Pieces/Piece.js'
 
-import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
+//import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
 // BoardSquare component that represents each square on the chessboard
 export const ColumnGrid = ({ x, y, children, game}) => {
