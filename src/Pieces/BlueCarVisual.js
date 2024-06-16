@@ -2,14 +2,15 @@
 import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from '../ItemTypes.js'
+import { ItemTypes } from './ItemTypes.js'
 
 // Knight component representing the knight piece on the chessboard
-export const BlueCarVisual = () => {
+export const BlueCarVisual = ({id}) => {
   // Setting up the drag source using the useDrag hook
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: ItemTypes.BCAR,  // Type of the draggable item
+      item: {id},
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),

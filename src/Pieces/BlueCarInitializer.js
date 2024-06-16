@@ -46,6 +46,8 @@ export class CarManager {
         const [x, y] = isBlue ? this.blueCarsCoords[id] : this.greenCarsCoords[id];
         const dx = toX - x;
         const dy = toY - y;
+        console.log(dx + " " + dy)
+        console.log((dx === 1) || (dx === 0 && Math.abs(dy) > 0))
         return (dx === 1) || (dx === 0 && Math.abs(dy) > 0);
     }
 
@@ -72,5 +74,23 @@ export class CarManager {
             }
         }
         return false;
+    }
+
+    findBlueId(x, y){
+        for (let i = 0; i < this.blueCarsCoords.length; i++) {
+            if (this.blueCarsCoords[i][0] === x && this.blueCarsCoords[i][1] === y)  {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    findGreenId(x, y){
+        for (let i = 0; i < this.greenCarsCoords.length; i++) {
+            if (this.greenCarsCoords[i][0] === x && this.greenCarsCoords[i][1] === y)  {
+                return i;
+            }
+        }
+        return 0;
     }
 }

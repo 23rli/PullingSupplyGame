@@ -33,12 +33,22 @@ const headerStyle = { width: '100%', height: '10%'}
  * @param props The react props
  */
 export const Board = ({game, carManager}) => {
+  const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
+  const [blueCarsCoords, setBlueCarsCoords] = useState(carManager.blueCarsCoords);
+  const [greenCarsCoords, setGreenCarsCoords] = useState(carManager.greenCarsCoords);
 
+   // useEffect to set up an observer for the game state
+   useEffect(() => {
+    game.observe(setKnightPos);
+    //carManager.observe(setBlueCarsCoords);
+    //carManager.observe(setGreenCarsCoords);
+  }, [game, carManager]);
+  /*
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
   console.log(carManager.blueCarsCoords[0])
   const [[BCar0X, BCar0Y],  setBCar0Pos] = useState(carManager.blueCarsCoords[0]);
   
-  /*const [[BCar1X, BCar1Y],  setBCar1Pos] = useState(carManager.blueCarCoords[1]);
+  const [[BCar1X, BCar1Y],  setBCar1Pos] = useState(carManager.blueCarCoords[1]);
   const [[BCar2X, BCar2Y],  setBCar2Pos] = useState(carManager.blueCarCoords[2]);
   const [[BCar3X, BCar3Y],  setBCar3Pos] = useState(carManager.blueCarCoords[3]);
   const [[BCar4X, BCar4Y],  setBCar4Pos] = useState(carManager.blueCarCoords[4]);
@@ -68,23 +78,23 @@ export const Board = ({game, carManager}) => {
   const [[GCar12X, GCar12Y],  setGCar12Pos] = useState(carManager.greenCarCoords[12]);
   const [[GCar13X, GCar13Y],  setGCar13Pos] = useState(carManager.greenCarCoords[13]);
   const [[GCar14X, GCar14Y],  setGCar14Pos] = useState(carManager.greenCarCoords[14]);
-*/
+
   // useEffect to set up an observer for the game state
   useEffect(() => {
     game.observe(setKnightPos);
-    //carManager.observe(setBCar0Pos);
-    //carManager.observe( setBCar1Pos, setBCar2Pos, setBCar3Pos, setBCar4Pos, setBCar5Pos, setBCar6Pos,
-    //  setBCar7Pos, setBCar8Pos, setBCar9Pos, setBCar10Pos, setBCar11Pos, setBCar12Pos, setBCar13Pos, setBCar14Pos, setBCar0Pos, 
-    //  setGCar1Pos, setGCar2Pos, setGCar3Pos, setGCar4Pos, setGCar5Pos, setGCar6Pos, setGCar7Pos, setGCar8Pos, setGCar9Pos, setGCar10Pos, 
-    //setGCar11Pos, setGCar12Pos, setGCar13Pos, setGCar14Pos, setGCar0Pos);
-  //console.log("game:", game);
-  //console.log("carManager:", carManager);
+    carManager.observe(setBCar0Pos);
+    carManager.observe( setBCar1Pos, setBCar2Pos, setBCar3Pos, setBCar4Pos, setBCar5Pos, setBCar6Pos,
+      setBCar7Pos, setBCar8Pos, setBCar9Pos, setBCar10Pos, setBCar11Pos, setBCar12Pos, setBCar13Pos, setBCar14Pos, setBCar0Pos, 
+      setGCar1Pos, setGCar2Pos, setGCar3Pos, setGCar4Pos, setGCar5Pos, setGCar6Pos, setGCar7Pos, setGCar8Pos, setGCar9Pos, setGCar10Pos, 
+    setGCar11Pos, setGCar12Pos, setGCar13Pos, setGCar14Pos, setGCar0Pos);
+  console.log("game:", game);
+  console.log("carManager:", carManager);
   // Add more logs as needed to debug specific state or prop issues
 }, [game, carManager]);
 
   //useEffect(() => game.observe(setBluePos))
   //useEffect(() => game.observe(setGreenPos))
-
+  */
     // Function to render a single square on the board
   function renderHeader(i) {
     const x = 0              // Calculate x-coordinate (column) of the square
@@ -133,6 +143,7 @@ export const Board = ({game, carManager}) => {
       </div>
     );
   }
+  
 
 
  // Array to hold all the squares of the board

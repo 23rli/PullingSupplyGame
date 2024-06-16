@@ -2,17 +2,18 @@
 import { Knight } from './Knight.js'
 import { BlueCarVisual } from './BlueCarVisual.js'
 import { GreenCarVisual } from './GreenCarVisual.js'
+import { ItemTypes } from './ItemTypes.js';
 
 // Piece component that conditionally renders different pieces based on props
 export const Piece = ({ isKnight, isGreenCar, isBlueCar }) => {
   if (isKnight) {
-    return <Knight />;
+    return <Knight id = {ItemTypes.KNIGHT}/>;
   }
   if (isGreenCar) {
-    return <GreenCarVisual />;
+    return <GreenCarVisual id = {ItemTypes.GCAR} />;
   }
   if (isBlueCar) {
-    return <BlueCarVisual />;
+    return <BlueCarVisual id = {ItemTypes.BCAR} />;
   }
   return null; // Render nothing if no conditions are met
 };

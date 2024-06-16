@@ -2,7 +2,7 @@
 import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from '../ItemTypes.js'
+import { ItemTypes } from './ItemTypes.js'
 
 // Importing knightImage for the drag preview
 import { knightImage } from './knightImage.js'
@@ -14,7 +14,7 @@ export const Knight = ({id}) => {
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: ItemTypes.KNIGHT,  // Type of the draggable item
-      item: { id: id },
+      item: {id},
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
