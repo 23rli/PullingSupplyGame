@@ -40,8 +40,8 @@ export const Board = ({game, carManager}) => {
    // useEffect to set up an observer for the game state
    useEffect(() => {
     game.observe(setKnightPos);
-    //carManager.observe(setBlueCarsCoords);
-    //carManager.observe(setGreenCarsCoords);
+    carManager.observe(setBlueCarsCoords);
+    carManager.observe(setGreenCarsCoords);
   }, [game, carManager]);
   /*
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
@@ -134,7 +134,7 @@ export const Board = ({game, carManager}) => {
     
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} game={game}>
+        <ColumnGrid x={x} y={y} game={game} carManager={carManager}>
           <Piece isKnight={isKnight} />
           {/*In future add variable for model. This way the correct blue visual can be selected from the bank to represent to car*/}
           <Piece isBlueCar={isBlueCar} />

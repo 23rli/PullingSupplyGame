@@ -34,6 +34,8 @@ export class CarManager {
     }
 
     moveCar(toX, toY, id, isBlue) {
+        console.log("arrived in moveCar")
+        console.log(toX + " " + toY + " " + id + " " + isBlue)
         if (isBlue) {
             this.blueCarsCoords[id] = [toX, toY];
         } else {
@@ -43,6 +45,7 @@ export class CarManager {
     }
 
     canMoveCar(toX, toY, id, isBlue) {
+        console.log("arrived in canmovecar")
         const [x, y] = isBlue ? this.blueCarsCoords[id] : this.greenCarsCoords[id];
         const dx = toX - x;
         const dy = toY - y;

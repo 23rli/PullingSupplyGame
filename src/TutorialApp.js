@@ -29,15 +29,15 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
-  const initializer = new CarManager();
-  console.log(initializer.blueCarsCoords[0])
+  const carManager = useMemo(() => new CarManager(), []);
+  console.log(carManager.blueCarsCoords[0])
  // const GreenCarInitializer = useMemo(() => new GreenCarInitializer(), []);
   
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board game={game} carManager = {initializer} />
+      <Board game={game} carManager = {carManager} />
     </div>
   )
 
