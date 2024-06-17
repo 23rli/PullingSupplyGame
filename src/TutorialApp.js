@@ -7,7 +7,7 @@ import { Board } from './Gameboard/Board.js'
 // Importing the Game class from the same directory
 import { Game } from './Rules/Game.js'
 
-import {CarManager} from './Pieces/BlueCarInitializer.js'
+import {CarManager} from './Pieces/CarManager.js'
 
 
 // Styling properties applied to the container of the chessboard
@@ -30,8 +30,7 @@ export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
   const carManager = useMemo(() => new CarManager(), []);
-  console.log(carManager.blueCarsCoords[0])
- // const GreenCarInitializer = useMemo(() => new GreenCarInitializer(), []);
+   // const GreenCarInitializer = useMemo(() => new GreenCarInitializer(), []);
   
   return (
     // Container div styled with containerStyle

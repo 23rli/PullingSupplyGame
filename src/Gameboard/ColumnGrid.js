@@ -12,7 +12,7 @@ import { ColumnContainer } from './ColumnContainer.js'
 
 
 import { Piece } from '../Pieces/Piece.js'
-import { CarManager } from '../Pieces/BlueCarInitializer.js'
+import { CarManager } from '../Pieces/CarManager.js'
 
 //import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
@@ -25,23 +25,24 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
+        console.log(item);
         if (item.id == ItemTypes.KNIGHT) {
           return game.canMoveKnight(x, y);
-        } else if (item.id == ItemTypes.BCAR) {
-          console.log("item identified and about to be checked")
-          return carManager.canMoveCar(x, y, carManager.findBlueId(x,y), true);
-        } else if (item.id == ItemTypes.GCAR) {
-          return carManager.canMoveCar(x, y, carManager.findGreenId(x,y), false);
+        } else if (item.id.type == ItemTypes.BCAR) {
+          return carManager.canMoveCar(x, y, item.id.id, true);
+        } else if (item.type == ItemTypes.GCAR) {
+          return carManager.canMoveCar(x, y, item.id.id, false);
         }
         return false;
       },
       drop: (item) => { 
-        if (item.id === ItemTypes.KNIGHT) {
+        if (item.id == ItemTypes.KNIGHT) {
           game.moveKnight(x, y);
-        } else if (item.id === ItemTypes.BCAR) {
-          carManager.moveCar(x, y, carManager.findBlueId(x,y), true);
-        } else if (item.id === ItemTypes.GCAR) {
-          carManager.moveCar(x, y, carManager.findGreenId(x,y), false);
+        } else if (item.id.type == ItemTypes.BCAR) {
+          console.log()
+          carManager.moveCar(x, y, item.id.id, true);
+        } else if (item.id.type == ItemTypes.GCAR) {
+          carManager.moveCar(x, y, item.id.id, false);
         }
       },  // Moves the knight to this square when dropped
       collect: (monitor) => ({

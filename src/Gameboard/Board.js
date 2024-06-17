@@ -43,62 +43,9 @@ export const Board = ({game, carManager}) => {
     carManager.observe(setBlueCarsCoords);
     carManager.observe(setGreenCarsCoords);
   }, [game, carManager]);
-  /*
-  const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  console.log(carManager.blueCarsCoords[0])
-  const [[BCar0X, BCar0Y],  setBCar0Pos] = useState(carManager.blueCarsCoords[0]);
-  
-  const [[BCar1X, BCar1Y],  setBCar1Pos] = useState(carManager.blueCarCoords[1]);
-  const [[BCar2X, BCar2Y],  setBCar2Pos] = useState(carManager.blueCarCoords[2]);
-  const [[BCar3X, BCar3Y],  setBCar3Pos] = useState(carManager.blueCarCoords[3]);
-  const [[BCar4X, BCar4Y],  setBCar4Pos] = useState(carManager.blueCarCoords[4]);
-  const [[BCar5X, BCar5Y],  setBCar5Pos] = useState(carManager.blueCarCoords[5]);
-  const [[BCar6X, BCar6Y],  setBCar6Pos] = useState(carManager.blueCarCoords[6]);
-  const [[BCar7X, BCar7Y],  setBCar7Pos] = useState(carManager.blueCarCoords[7]);
-  const [[BCar8X, BCar8Y],  setBCar8Pos] = useState(carManager.blueCarCoords[8]);
-  const [[BCar9X, BCar9Y],  setBCar9Pos] = useState(carManager.blueCarCoords[9]);
-  const [[BCar10X, BCar10Y],  setBCar10Pos] = useState(carManager.blueCarCoords[10]);
-  const [[BCar11X, BCar11Y],  setBCar11Pos] = useState(carManager.blueCarCoords[11]);
-  const [[BCar12X, BCar12Y],  setBCar12Pos] = useState(carManager.blueCarCoords[12]);
-  const [[BCar13X, BCar13Y],  setBCar13Pos] = useState(carManager.blueCarCoords[13]);
-  const [[BCar14X, BCar14Y],  setBCar14Pos] = useState(carManager.blueCarCoords[14]);
-
-  const [[GCar0X, GCar0Y],  setGCar0Pos] = useState(carManager.greenCarCoords[0]);
-  const [[GCar1X, GCar1Y],  setGCar1Pos] = useState(carManager.greenCarCoords[1]);
-  const [[GCar2X, GCar2Y],  setGCar2Pos] = useState(carManager.greenCarCoords[2]);
-  const [[GCar3X, GCar3Y],  setGCar3Pos] = useState(carManager.greenCarCoords[3]);
-  const [[GCar4X, GCar4Y],  setGCar4Pos] = useState(carManager.greenCarCoords[4]);
-  const [[GCar5X, GCar5Y],  setGCar5Pos] = useState(carManager.greenCarCoords[5]);
-  const [[GCar6X, GCar6Y],  setGCar6Pos] = useState(carManager.greenCarCoords[6]);
-  const [[GCar7X, GCar7Y],  setGCar7Pos] = useState(carManager.greenCarCoords[7]);
-  const [[GCar8X, GCar8Y],  setGCar8Pos] = useState(carManager.greenCarCoords[8]);
-  const [[GCar9X, GCar9Y],  setGCar9Pos] = useState(carManager.greenCarCoords[9]);
-  const [[GCar10X, GCar10Y],  setGCar10Pos] = useState(carManager.greenCarCoords[10]);
-  const [[GCar11X, GCar11Y],  setGCar11Pos] = useState(carManager.greenCarCoords[11]);
-  const [[GCar12X, GCar12Y],  setGCar12Pos] = useState(carManager.greenCarCoords[12]);
-  const [[GCar13X, GCar13Y],  setGCar13Pos] = useState(carManager.greenCarCoords[13]);
-  const [[GCar14X, GCar14Y],  setGCar14Pos] = useState(carManager.greenCarCoords[14]);
-
-  // useEffect to set up an observer for the game state
-  useEffect(() => {
-    game.observe(setKnightPos);
-    carManager.observe(setBCar0Pos);
-    carManager.observe( setBCar1Pos, setBCar2Pos, setBCar3Pos, setBCar4Pos, setBCar5Pos, setBCar6Pos,
-      setBCar7Pos, setBCar8Pos, setBCar9Pos, setBCar10Pos, setBCar11Pos, setBCar12Pos, setBCar13Pos, setBCar14Pos, setBCar0Pos, 
-      setGCar1Pos, setGCar2Pos, setGCar3Pos, setGCar4Pos, setGCar5Pos, setGCar6Pos, setGCar7Pos, setGCar8Pos, setGCar9Pos, setGCar10Pos, 
-    setGCar11Pos, setGCar12Pos, setGCar13Pos, setGCar14Pos, setGCar0Pos);
-  console.log("game:", game);
-  console.log("carManager:", carManager);
-  // Add more logs as needed to debug specific state or prop issues
-}, [game, carManager]);
-
-  //useEffect(() => game.observe(setBluePos))
-  //useEffect(() => game.observe(setGreenPos))
-  */
+ 
     // Function to render a single square on the board
   function renderHeader(i) {
-    const x = 0              // Calculate x-coordinate (column) of the square
-    const y = 0  // Calculate y-coordinate (row) of the square
     return (
       <div key={i} style={headerStyle}>
         {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
@@ -128,7 +75,9 @@ export const Board = ({game, carManager}) => {
     const y = Math.floor(i / 6);  // Calculate y-coordinate (row) of the square
     const isKnight = x === knightX && y === knightY;
     const isBlueCar = carManager.hasBlueCar(x,y);//blueCarPositions.some(([bx, by]) => x === bx && y === by);
+    const blueId = carManager.findBlueId(x,y);
     const isGreenCar = carManager.hasGreenCar(x,y);// greenCarPositions.some(([gx, gy]) => x === gx && y === gy);
+    const greenId = carManager.findGreenId(x,y);
     //console.log("x:", x, "y:", y, "isKnight:", isKnight);
     //console.log("isBlueCar:", isBlueCar, "isGreenCar:", isGreenCar);
     
@@ -137,8 +86,8 @@ export const Board = ({game, carManager}) => {
         <ColumnGrid x={x} y={y} game={game} carManager={carManager}>
           <Piece isKnight={isKnight} />
           {/*In future add variable for model. This way the correct blue visual can be selected from the bank to represent to car*/}
-          <Piece isBlueCar={isBlueCar} />
-          <Piece isGreenCar={isGreenCar} />
+          <Piece isBlueCar={isBlueCar} id = {blueId} carManager = {carManager} />
+          <Piece isGreenCar={isGreenCar} id = {greenId} carManager = {carManager}/>
         </ColumnGrid>
       </div>
     );

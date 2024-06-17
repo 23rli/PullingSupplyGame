@@ -6,21 +6,24 @@ Then have it so when a user drags a vehicle, its only draggable if the units bef
 This progresses until the unit dragged finishes. It then makes some changes and teleports back to the first block to repeat the cycle.
 */
 
-import { BlueCarVisual } from "./BlueCarVisual"
+import { BlueCar } from "./BlueCar/BlueCar"
 
-import { GreenCarVisual } from "./GreenCarVisual";
+import { GreenCar } from "./GreenCar/GreenCar";
 // CarManager.js
 
 export class CarManager {
     constructor() {
-        this.greenCarsCoords = Array(15).fill([0, 3]);
-        this.blueCarsCoords = Array(15).fill([0, 2]);
-        this.blueStats = [];
-        this.greenStats = [];
+        this.greenCars = [];
+        for(let i = 0; i < 15; i++){
+            this.greenCars.push(new GreenCar(i));
+        }
+        this.blueCars = [];
+        for(let i = 0; i < 15; i++){
+            this.blueCars.push(new BlueCar(i));
+        }
         this.count = 0;
         this.produced = 0;
-        this.blueVisuals = BlueCarVisual;
-        this.greenVisuals = GreenCarVisual;
+
         this.observers = [];
     }
 
@@ -37,21 +40,21 @@ export class CarManager {
         console.log("arrived in moveCar")
         console.log(toX + " " + toY + " " + id + " " + isBlue)
         if (isBlue) {
-            this.blueCarsCoords[id] = [toX, toY];
+            this.blueCars[id].coords = [toX, toY];
         } else {
             this.greenCarsCoords[id] = [toX, toY];
         }
         this.emitChange();
+        console.log(this.blueCarsCoords[0])
+        console.log(this.blueCarsCoords[1])
     }
 
     canMoveCar(toX, toY, id, isBlue) {
-        console.log("arrived in canmovecar")
-        const [x, y] = isBlue ? this.blueCarsCoords[id] : this.greenCarsCoords[id];
+        console.log(id)
+        const [x, y] = isBlue ? this.blueCars[id].coords : this.greenCars[id].coords;
         const dx = toX - x;
         const dy = toY - y;
-        console.log(dx + " " + dy)
-        console.log((dx === 1) || (dx === 0 && Math.abs(dy) > 0))
-        return (dx === 1) || (dx === 0 && Math.abs(dy) > 0);
+        return ((dx === 1) || (dx === 0 && Math.abs(dy) > 0) && !this.hasBlueCar(toX, toY) && !this.hasGreenCar(toX, toY));
     }
 
     emitChange() {
@@ -62,8 +65,9 @@ export class CarManager {
     }
 
     hasBlueCar(x, y) {
-        for (let i = 0; i < this.blueCarsCoords.length; i++) {
-            if (this.blueCarsCoords[i][0] === x && this.blueCarsCoords[i][1] === y)  {
+        for (let i = 0; i < this.blueCars.length; i++) {
+            if (this.blueCars[i].coords[0] === x && this.blueCars[i].coords[1] === y )  {
+                console.log(this.blueCars[i].coords[0] === x && this.blueCars[i].coords[1] === y )
                 return true;
             }
         }
@@ -71,29 +75,32 @@ export class CarManager {
     }
 
     hasGreenCar(x,y){
-        for (let i = 0; i < this.blueCarsCoords.length; i++) {
-            if ((this.greenCarsCoords[i][0] === x && this.greenCarsCoords[i][1] === y)) {
+        for (let i = 0; i < this.greenCars.length; i++) {
+            if ((this.greenCars[i].coords[0] === x && this.greenCars[i].coords[1] === y)) {
                 return true;
             }
         }
         return false;
     }
 
+    /*The code can;t seem to find the id via x and y when dragging the object */
     findBlueId(x, y){
-        for (let i = 0; i < this.blueCarsCoords.length; i++) {
-            if (this.blueCarsCoords[i][0] === x && this.blueCarsCoords[i][1] === y)  {
+        for (let i = 0; i < this.blueCars.length; i++) {
+            if (this.blueCars[i].coords[0] == x && this.blueCars[i].coords[1] == y)  {
+                console.log(i)
                 return i;
             }
         }
-        return 0;
+        return 14;
     }
 
     findGreenId(x, y){
-        for (let i = 0; i < this.greenCarsCoords.length; i++) {
-            if (this.greenCarsCoords[i][0] === x && this.greenCarsCoords[i][1] === y)  {
+        for (let i = 0; i < this.greenCars.length; i++) {
+            if (this.greenCars[i].coords[0] == x && this.greenCars[i].coords[1] == y)  {
+                console.log(i);
                 return i;
             }
         }
-        return 0;
+        return 5;
     }
 }
