@@ -29,9 +29,7 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
-  const carManager = useMemo(() => new CarManager(), []);
-   // const GreenCarInitializer = useMemo(() => new GreenCarInitializer(), []);
-  
+  const carManager = useMemo(() => new CarManager(), []);  
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
@@ -40,5 +38,4 @@ export const TutorialApp = () => {
     </div>
   )
 
-  //BlueCarInitializer = {BlueCarInitializer} GreenCarInitializer = {GreenCarInitializer}
 }

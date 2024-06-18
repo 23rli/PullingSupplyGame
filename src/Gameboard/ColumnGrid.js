@@ -11,9 +11,6 @@ import { Overlay, OverlayType } from './Overlay.js'
 import { ColumnContainer } from './ColumnContainer.js'
 
 
-import { Piece } from '../Pieces/Piece.js'
-import { CarManager } from '../Pieces/CarManager.js'
-
 //import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
 // BoardSquare component that represents each square on the chessboard
@@ -25,23 +22,25 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
-        console.log(item);
-        if (item.id == ItemTypes.KNIGHT) {
+        console.log(item.id.type)
+        //console.log(item.id.id)
+        if (item.id === ItemTypes.KNIGHT) {
           return game.canMoveKnight(x, y);
-        } else if (item.id.type == ItemTypes.BCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, true);
-        } else if (item.type == ItemTypes.GCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, false);
+        } else if (item.id.type === ItemTypes.BCAR) {
+          return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars);
+        } else if (item.type === ItemTypes.GCAR) {
+          return carManager.canMoveCar(x, y, item.id.id, false, carManager.blueCars, carManager.greenCars);
         }
         return false;
       },
       drop: (item) => { 
-        if (item.id == ItemTypes.KNIGHT) {
+        //console.log(x + " " + y + " " + item.id.id)
+        if (item.id === ItemTypes.KNIGHT) {
           game.moveKnight(x, y);
-        } else if (item.id.type == ItemTypes.BCAR) {
-          console.log()
+        } else if (item.id.type === ItemTypes.BCAR) {
+          //console.log(x + " " + y + " " +item.id.id)
           carManager.moveCar(x, y, item.id.id, true);
-        } else if (item.id.type == ItemTypes.GCAR) {
+        } else if (item.id.type === ItemTypes.GCAR) {
           carManager.moveCar(x, y, item.id.id, false);
         }
       },  // Moves the knight to this square when dropped

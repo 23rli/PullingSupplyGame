@@ -24,13 +24,7 @@ export class Game {
     this.knightPosition = [toX, toY]  // Update the knight's position
     this.emitChange()  // Notify all observers of the change
   }
-
-  moveSprite(toX, toY, isBC, isGC, ) {
-    // toY = gravitateUp(toX, toY);
-     this.knightPosition = [toX, toY]  // Update the knight's position
-     this.emitChange()  // Notify all observers of the change
-   }
-
+  
   // Method to check if the knight can move to a specified position
   canMoveKnight(toX, toY) {
     const [x, y] = this.knightPosition  // Current position of the knight

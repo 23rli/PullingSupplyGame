@@ -36,18 +36,7 @@ export const Knight = ({id}) => {
           opacity: isDragging ? 0.5 : 1,  // Changing opacity when dragging 
         }}
       />
-      {/*
-      <div
-        ref={drag}  // Assigning the drag source ref to this div
-        style={{
-          ...knightStyle,  // Applying knightStyle
-          opacity: isDragging ? 0.5 : 1,  // Changing opacity when dragging
-        }}
-      >
-        
-        <img src="/path/to/butter.jpg" alt="butter" /> 
-      </div>
-      */}
+      
     </>
   )
 }

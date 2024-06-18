@@ -34,14 +34,18 @@ const headerStyle = { width: '100%', height: '10%'}
  */
 export const Board = ({game, carManager}) => {
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  const [blueCarsCoords, setBlueCarsCoords] = useState(carManager.blueCarsCoords);
-  const [greenCarsCoords, setGreenCarsCoords] = useState(carManager.greenCarsCoords);
+  const [blueCars, setBlueCars] = useState(carManager.blueCars);
+  const [greenCars, setGreenCars] = useState(carManager.greenCars);
+
+
 
    // useEffect to set up an observer for the game state
    useEffect(() => {
     game.observe(setKnightPos);
-    carManager.observe(setBlueCarsCoords);
-    carManager.observe(setGreenCarsCoords);
+    carManager.observe(({ updateBlueCars, updateGreenCars }) => {
+      setBlueCars([...updateBlueCars]);
+      setGreenCars([...updateGreenCars]);
+    });
   }, [game, carManager]);
  
     // Function to render a single square on the board
@@ -74,13 +78,11 @@ export const Board = ({game, carManager}) => {
     const x = i % 6;              // Calculate x-coordinate (column) of the square
     const y = Math.floor(i / 6);  // Calculate y-coordinate (row) of the square
     const isKnight = x === knightX && y === knightY;
-    const isBlueCar = carManager.hasBlueCar(x,y);//blueCarPositions.some(([bx, by]) => x === bx && y === by);
-    const blueId = carManager.findBlueId(x,y);
-    const isGreenCar = carManager.hasGreenCar(x,y);// greenCarPositions.some(([gx, gy]) => x === gx && y === gy);
-    const greenId = carManager.findGreenId(x,y);
-    //console.log("x:", x, "y:", y, "isKnight:", isKnight);
-    //console.log("isBlueCar:", isBlueCar, "isGreenCar:", isGreenCar);
-    
+    const isBlueCar = carManager.hasBlueCar(x,y,blueCars);//blueCarPositions.some(([bx, by]) => x === bx && y === by);
+    const blueId = carManager.findBlueId(x,y, blueCars);
+    const isGreenCar = carManager.hasGreenCar(x,y, greenCars);// greenCarPositions.some(([gx, gy]) => x === gx && y === gy);
+    const greenId = carManager.findGreenId(x,y, greenCars);
+
     return (
       <div key={i} style={columnStyle}>
         <ColumnGrid x={x} y={y} game={game} carManager={carManager}>
