@@ -2,12 +2,7 @@
 import { useEffect, useState } from 'react'
 
 // Importing the BoardSquare component from the same directory
-import { ColumnGrid } from './ColumnGrid.js'
-
-// Importing the BoardSquare component from the same directory
 import { ResourceGrid } from './ResourceGrid.js'
-
-import { ColumnHeader } from './ColumnHeader.js'
 
 import { BoardHeader } from './ResourceBoard.js'
 

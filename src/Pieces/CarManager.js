@@ -36,28 +36,61 @@ export class CarManager {
             this.observers = this.observers.filter(o => o !== observer);
         };
     }
+    gravitateUp(x,y){
+        let startY = y - 1;
+        while(!(this.hasBlueCar(x, startY, this.blueCars) && this.hasGreenCar(x, startY, this.greenCars)) && y > 0){
+            startY -= 1;
+        }
+        return startY;
+
+    }
+
+    deleteCar(isBlue, id){
+        if(isBlue){
+            this.blueCars[id].complete = true;
+        }else{
+            this.greenCars[id].complete = true;
+        }
+        console.log(this.blueCars)
+        this.emitChange()
+    }
 
     moveCar(toX, toY, id, isBlue) {
-        console.log(toX + " " + toY + " " + id + " " +isBlue + this.blueCars[id].coords)
-        if (isBlue) {
+
+        if(toX == 5){
+            this.deleteCar(isBlue, id)
+            if(isBlue){
+                this.blueCars[id].coords = [6, 0];
+            }else{
+                this.greenCars[id].coords = [6, 0];
+            }
+            console.log(this.blueCars)
+        }else if (isBlue) {
+            console.log(toX + " " + toY + " " + id + " " +isBlue + this.blueCars[id].coords)
+            //toY = this.gravitateUp(toX, toY)
             if(this.blueCars[id].coords[0] == 0 && this.blueCars[id].coords[1] == 2){
                 this.blueCars[id].coords = [toX, toY];
                 console.log(this.blueCars.length)
                 this.blueCars.push(new BlueCar(this.blueCars.length))
             }else{
+                
                 this.blueCars[id].coords = [toX, toY];
             }
         } else {
-            if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 2){
+            console.log(toX + " " + toY + " " + id + " " +isBlue + this.greenCars[id].coords)
+            if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 3){
                 this.greenCars[id].coords = [toX, toY];
                 console.log(this.greenCars.length)
                 this.greenCars.push(new GreenCar(this.greenCars.length))
             }else{
+                //toY = this.gravitateUp(toX, toY)
                 this.greenCars[id].coords = [toX, toY];
             }
         }
         this.emitChange();
     }
+
+    
 
     canMoveCar(toX, toY, id, isBlue, bCars, gCars) {
         //console.log(isBlue)

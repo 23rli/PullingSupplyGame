@@ -10,6 +10,7 @@ export class GreenCar{
     this.type = ItemTypes.GCAR;
     this.id = id;
     this.coords = [0,3];
+    this.complete = false;
     this.x = 0;
     this.y = 0;
   }

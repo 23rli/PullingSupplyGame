@@ -9,6 +9,7 @@ export class BlueCar{
     this.type = ItemTypes.BCAR;
     this.id = id;
     this.coords = [0,2];
+    this.complete = false;
     this.x = 0;
     this.y = 0;
   }

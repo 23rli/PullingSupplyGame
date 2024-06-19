@@ -16,7 +16,7 @@ export const GreenCarVisual = ({id, carManager}) => {
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
     }),
-    [carManager],  // Dependency array (empty means no dependencies)
+    [id,carManager],  // Dependency array (empty means no dependencies)
   )
 
   return (

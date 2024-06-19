@@ -10,10 +10,10 @@ export const Piece = ({ isKnight, type, id, carManager }) => {
   if (isKnight) {
     return <Knight id = {ItemTypes.KNIGHT}/>;
   }
-  if (type === ItemTypes.GCAR) {
+  if (type === ItemTypes.GCAR && !carManager.greenCars[id].complete) {
    return <GreenCarVisual id = {carManager.greenCars[id]} carManager = {carManager} />;
   }
-  if (type === ItemTypes.BCAR) {
+  if (type === ItemTypes.BCAR && !carManager.blueCars[id].complete) {
     {console.log(carManager.blueCars[id])}
     return <BlueCarVisual id = {carManager.blueCars[id]} carManager = {carManager}/>
   }

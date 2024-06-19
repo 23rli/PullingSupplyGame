@@ -44,13 +44,13 @@ export const Board = ({game, carManager}) => {
    // useEffect to set up an observer for the game state
    useEffect(() => {
     //const interval = setInterval(() => {
-    //  setTime(new Date());
-  //  }, 1000)
+   //   setTime(new Date());
+    //}, 1000)
 
     game.observe(setKnightPos);
     carManager.observe(({ updateBlueCars, updateGreenCars }) => {
       setBlueCars([...updateBlueCars]);
-      setGreenCars([...updateGreenCars]);
+     setGreenCars([...updateGreenCars]);
     });
 
     //return () => clearInterval(interval);
