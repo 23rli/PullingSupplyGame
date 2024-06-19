@@ -10,6 +10,7 @@ import {Header} from './Header.js'
 
 // Importing the Piece component from the same directory
 import { Piece } from '../Pieces/Piece.js'
+import { ItemTypes } from '../Pieces/ItemTypes.js'
 
 
 // Styling properties applied to the board element
@@ -36,17 +37,24 @@ export const Board = ({game, carManager}) => {
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
   const [blueCars, setBlueCars] = useState(carManager.blueCars);
   const [greenCars, setGreenCars] = useState(carManager.greenCars);
+  const [time, setTime] = useState(new Date());
 
 
 
    // useEffect to set up an observer for the game state
    useEffect(() => {
+    //const interval = setInterval(() => {
+    //  setTime(new Date());
+  //  }, 1000)
+
     game.observe(setKnightPos);
     carManager.observe(({ updateBlueCars, updateGreenCars }) => {
       setBlueCars([...updateBlueCars]);
       setGreenCars([...updateGreenCars]);
     });
-  }, [game, carManager]);
+
+    //return () => clearInterval(interval);
+  }, [game, carManager]); 
  
     // Function to render a single square on the board
   function renderHeader(i) {
@@ -78,18 +86,26 @@ export const Board = ({game, carManager}) => {
     const x = i % 6;              // Calculate x-coordinate (column) of the square
     const y = Math.floor(i / 6);  // Calculate y-coordinate (row) of the square
     const isKnight = x === knightX && y === knightY;
-    const isBlueCar = carManager.hasBlueCar(x,y,blueCars);//blueCarPositions.some(([bx, by]) => x === bx && y === by);
-    const blueId = carManager.findBlueId(x,y, blueCars);
-    const isGreenCar = carManager.hasGreenCar(x,y, greenCars);// greenCarPositions.some(([gx, gy]) => x === gx && y === gy);
-    const greenId = carManager.findGreenId(x,y, greenCars);
+
+    let type = '';
+    let id = -1;
+    
+    if(x === knightX && y === knightY){
+      type = ItemTypes.KNIGHT
+    }else if(carManager.hasBlueCar(x,y,blueCars)){
+      type = ItemTypes.BCAR
+      id = carManager.findBlueId(x,y, blueCars);
+    }else if(carManager.hasGreenCar(x,y,greenCars)){
+      type = ItemTypes.GCAR
+      id = carManager.findGreenId(x,y, greenCars);
+    }
+
+    
 
     return (
       <div key={i} style={columnStyle}>
         <ColumnGrid x={x} y={y} game={game} carManager={carManager}>
-          <Piece isKnight={isKnight} />
-          {/*In future add variable for model. This way the correct blue visual can be selected from the bank to represent to car*/}
-          <Piece isBlueCar={isBlueCar} id = {blueId} carManager = {carManager} />
-          <Piece isGreenCar={isGreenCar} id = {greenId} carManager = {carManager}/>
+          <Piece  isKnight = {isKnight} type = {type} id = {id} carManager = {carManager}/>
         </ColumnGrid>
       </div>
     );

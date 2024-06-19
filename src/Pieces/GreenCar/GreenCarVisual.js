@@ -3,9 +3,10 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
 import { ItemTypes } from '../ItemTypes.js'
+import { CarManager } from '../CarManager.js'
 
 // Knight component representing the knight piece on the chessboard
-export const GreenCarVisual = ({id}) => {
+export const GreenCarVisual = ({id, carManager}) => {
   // Setting up the drag source using the useDrag hook
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -15,7 +16,7 @@ export const GreenCarVisual = ({id}) => {
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
     }),
-    [],  // Dependency array (empty means no dependencies)
+    [carManager],  // Dependency array (empty means no dependencies)
   )
 
   return (

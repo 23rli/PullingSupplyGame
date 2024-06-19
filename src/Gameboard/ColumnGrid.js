@@ -22,19 +22,19 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
-        console.log(item.id.type)
-        //console.log(item.id.id)
+        console.log("canDrop: " + item.id.id)
+        console.log(item.id.id)
         if (item.id === ItemTypes.KNIGHT) {
           return game.canMoveKnight(x, y);
         } else if (item.id.type === ItemTypes.BCAR) {
           return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars);
-        } else if (item.type === ItemTypes.GCAR) {
+        } else if (item.id.type === ItemTypes.GCAR) {
           return carManager.canMoveCar(x, y, item.id.id, false, carManager.blueCars, carManager.greenCars);
         }
         return false;
       },
       drop: (item) => { 
-        //console.log(x + " " + y + " " + item.id.id)
+        console.log("drop: " + item.id.id)
         if (item.id === ItemTypes.KNIGHT) {
           game.moveKnight(x, y);
         } else if (item.id.type === ItemTypes.BCAR) {

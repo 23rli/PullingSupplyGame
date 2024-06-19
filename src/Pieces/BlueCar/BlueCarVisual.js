@@ -3,10 +3,12 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
 import { ItemTypes } from '../ItemTypes.js'
+import { CarManager } from '../CarManager.js';
 
 // Knight component representing the knight piece on the chessboard
-export const BlueCarVisual = ({id}) => {
+export const BlueCarVisual = ({id, carManager}) => {
   // Setting up the drag source using the useDrag hook
+
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: ItemTypes.BCAR,  // Type of the draggable item
@@ -15,9 +17,10 @@ export const BlueCarVisual = ({id}) => {
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
     }),
-    [],  // Dependency array (empty means no dependencies)
+    [id, carManager],  // Dependency array (empty means no dependencies)
   )
-
+  console.log("In BlueVisual: " + id.type + " " + id.id + " " + id.coords);
+  console.log("In BlueVisual: " +  "         " + "   " + id.id + " " + id.coords);
   return (
     <>
       {/* DragPreviewImage for showing a custom drag preview */}

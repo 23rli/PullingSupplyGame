@@ -20,8 +20,11 @@ export class CarManager {
 
     constructor() {
         this.greenCars.push(new GreenCar(0));
-        console.log(this.greenCars[0].type)
+        
         this.blueCars.push(new BlueCar(0));
+
+        console.log(this.greenCars[0].type)
+        console.log(this.blueCars[0].type)
 
     }
 
@@ -35,20 +38,29 @@ export class CarManager {
     }
 
     moveCar(toX, toY, id, isBlue) {
-        
+        console.log(toX + " " + toY + " " + id + " " +isBlue + this.blueCars[id].coords)
         if (isBlue) {
-            this.blueCars[id].coords = [toX, toY];
+            if(this.blueCars[id].coords[0] == 0 && this.blueCars[id].coords[1] == 2){
+                this.blueCars[id].coords = [toX, toY];
+                console.log(this.blueCars.length)
+                this.blueCars.push(new BlueCar(this.blueCars.length))
+            }else{
+                this.blueCars[id].coords = [toX, toY];
+            }
         } else {
-            this.greenCars[id].coords = [toX, toY];
+            if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 2){
+                this.greenCars[id].coords = [toX, toY];
+                console.log(this.greenCars.length)
+                this.greenCars.push(new GreenCar(this.greenCars.length))
+            }else{
+                this.greenCars[id].coords = [toX, toY];
+            }
         }
         this.emitChange();
-        for(let i = 0; i < this.blueCars.length; i++){
-            console.log("x: " +  this.blueCars[i].coords[0] + " y: " + this.blueCars[i].coords[1] + "id: " + this.blueCars[i].id) 
-        }
     }
 
     canMoveCar(toX, toY, id, isBlue, bCars, gCars) {
-        console.log(isBlue)
+        //console.log(isBlue)
         
         const [x, y] = isBlue? bCars[id].coords : gCars[id].coords;
         const dx = toX - x;
@@ -59,6 +71,7 @@ export class CarManager {
     emitChange() {
         const updateBlueCars = this.blueCars; // Shallow copy to avoid mutation
         const updateGreenCars = this.greenCars; // Shallow copy to avoid mutation
+        console.log(this.blueCars)
         this.observers.forEach(observer => observer && observer({
             updateBlueCars,
             updateGreenCars
@@ -88,7 +101,7 @@ export class CarManager {
     /*The code can;t seem to find the id via x and y when dragging the object */
     findBlueId(x, y, blueCars){
         for (let i = 0; i < blueCars.length; i++) {
-            if (blueCars[i].coords[0] == x && blueCars[i].coords[1] == y)  {
+            if (blueCars[i].coords[0] === x && blueCars[i].coords[1] === y)  {
                 //console.log(i)
                 return i;
             }
@@ -98,7 +111,7 @@ export class CarManager {
 
     findGreenId(x, y, greenCars){
         for (let i = 0; i < greenCars.length; i++) {
-            if (greenCars[i].coords[0] == x && greenCars[i].coords[1] == y)  {
+            if (greenCars[i].coords[0] === x && greenCars[i].coords[1] === y)  {
                 //console.log(i);
                 return i;
             }
