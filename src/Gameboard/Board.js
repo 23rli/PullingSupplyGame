@@ -1,6 +1,13 @@
 // Importing necessary hooks from React
 import { useEffect, useState } from 'react'
-
+import * as Mui from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 // Importing the BoardSquare component from the same directory
 import { ColumnGrid } from './ColumnGrid.js'
 
@@ -27,6 +34,7 @@ const boardStyle = {
 const columnStyle = { width: '16.666%', height: '11%' }
 const columnHeaderStyle = { width: '16.666%', height: '5%' }
 const headerStyle = { width: '100%', height: '10%'}
+const appBarStyle = {width: '100%', height: '5%'}
 
 
 /**
@@ -82,6 +90,36 @@ export const Board = ({game, carManager}) => {
     )
   }
 
+  const handleConverter = () =>{
+    
+  }
+
+  function renderAppBar(i){
+      return(
+        <div key={i} style={appBarStyle}>
+          <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                Motor City
+              </Typography>
+              <Button color = "inherit" variant="contained" onClick = {handleConverter}>Contained</Button>
+            </Toolbar>
+          </AppBar>
+        </Box>
+    </div>
+    );
+  }
+
   function renderColumnSpace(i) {
     const x = i % 6;              // Calculate x-coordinate (column) of the square
     const y = Math.floor(i / 6);  // Calculate y-coordinate (row) of the square
@@ -115,7 +153,9 @@ export const Board = ({game, carManager}) => {
 
  // Array to hold all the squares of the board
  const squares = [];
- squares.push(renderHeader(-7));
+ 
+//squares.push(renderHeader(-7));
+squares.push(renderAppBar(-8))
  for (let i = -6; i < 0; i += 1) {
    squares.push(renderColumnHeader(i));
  }
