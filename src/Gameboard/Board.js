@@ -8,6 +8,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import Divider from '@mui/material/Divider';
+
+
 
 import { DraggableDialog } from '../Converter/Window.js'
 // Importing the BoardSquare component from the same directory
@@ -21,6 +24,10 @@ import {Header} from './Header.js'
 import { Piece } from '../Pieces/Piece.js'
 import { ItemTypes } from '../Pieces/ItemTypes.js'
 
+
+const theme = createTheme();
+
+theme.spacing(2); // `${8 * 2}px` = '16px'
 
 // Styling properties applied to the board element
 // Styles for the board
@@ -91,10 +98,10 @@ export const Board = ({game, carManager, roundManager}) => {
       </div>
     )
   }
+  function handleAllocate(){
 
-  const handleConverter = () =>{
-    
   }
+
 
   function renderAppBar(i){
       return(
@@ -115,7 +122,8 @@ export const Board = ({game, carManager, roundManager}) => {
                 Motor City
               </Typography>
               <DraggableDialog/>
-              <Button color = "inherit" variant="contained" onClick = {handleConverter}>Contained</Button>
+              <Divider orientation="vertical" flexItem component="div" role="presentation"/>
+              <Button color = "inherit" onClick = {handleAllocate}> Allocate </Button>
             </Toolbar>
           </AppBar>
         </Box>

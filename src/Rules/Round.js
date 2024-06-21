@@ -10,6 +10,7 @@ export class Round{
             const blue = parseInt(Math.random() * 4 + 1)
             this.gameResources.push([red, yellow, blue]);
         }
+        this.roundResources = this.gameResources[0];
     }
 
     getResources(roundNum){

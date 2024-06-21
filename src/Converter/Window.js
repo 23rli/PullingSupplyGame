@@ -31,10 +31,27 @@ function PaperComponent(props) {
 
 export const DraggableDialog = () => {
   const [open, setOpen] = React.useState(false);
-  const [age, setAge] = React.useState('');
+  const [rRes, setRRes] = React.useState('');
+  const [bRes, setBRes] = React.useState('');
+  const [yRes, setYRes] = React.useState('');
+  const [ExChange, setExChange] = React.useState('');
 
-  const handleChange = (event) => {
-    setAge(Number(event.target.value) || '');
+  const handleRedChange = (event) => {
+    setRRes(Number(event.target.value) || '');
+  };
+  const handleYellowChange = (event) => {
+    setYRes(Number(event.target.value) || '');
+  };
+  const handleBlueChange = (event) => {
+    setBRes(Number(event.target.value) || '');
+  };
+
+  const handleExChange = (event) => {
+    setExChange(Number(event.target.value) || '');
+  };
+
+  const handleConversion = (event) => {
+    setExChange(Number(event.target.value) || '');
   };
 
   const handleClickOpen = () => {
@@ -57,6 +74,8 @@ export const DraggableDialog = () => {
       <Dialog
         open={open}
         onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
       >
@@ -68,73 +87,80 @@ export const DraggableDialog = () => {
             To subscribe to this website, please enter your email address here. We
             will send updates occasionally.
           </DialogContentText>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' , m: 5}}>
+            <FormControl sx={{ m: 1, minWidth: 175 }}>
+                <InputLabel id="red-resource-selection-label">Red Resources</InputLabel>
                 <Select
-                  labelId="demo-dialog-select-label"
-                  id="demo-dialog-select"
-                  value={age}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Age" />}
+                  labelId="red-resource-selection-label"
+                  id="red-resource-selection"
+                  value={rRes}
+                  onChange={handleRedChange}
+                  input={<OutlinedInput label="Red Resources" />}
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={1}>One</MenuItem>
+                  <MenuItem value={2}>Two</MenuItem>
+                  <MenuItem value={3}>Three</MenuItem>
+                  <MenuItem value={4}>Four</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+              <img src={require("./plus.png")} width={70} height={70} alt="Logo" />
+              <FormControl sx={{ m: 1, minWidth: 175 }}>
+                <InputLabel id="yellow-resource-selection-label">Yellow Resources</InputLabel>
                 <Select
-                  labelId="demo-dialog-select-label"
-                  id="demo-dialog-select"
-                  value={age}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Age" />}
+                  labelId="yellow-resource-selection-label"
+                  id="yellow-resource-selection"
+                  value={yRes}
+                  onChange={handleYellowChange}
+                  input={<OutlinedInput label="Yellow Resources" />}
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={1}>One</MenuItem>
+                  <MenuItem value={2}>Two</MenuItem>
+                  <MenuItem value={3}>Three</MenuItem>
+                  <MenuItem value={4}>Four</MenuItem>
+
                 </Select>
               </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+              <img src={require("./plus.png")} width={70} height={70} alt="Logo" />
+              <FormControl sx={{ m: 1, minWidth: 175 }}>
+                <InputLabel id="blue-resource-selection-label">Blue Resources</InputLabel>
                 <Select
-                  labelId="demo-dialog-select-label"
-                  id="demo-dialog-select"
-                  value={age}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Age" />}
+                  labelId="blue-resource-selection-label"
+                  id="blue-resource-selection"
+                  value={bRes}
+                  onChange={handleBlueChange}
+                  input={<OutlinedInput label="Blue Resources" />}
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={1}>One</MenuItem>
+                  <MenuItem value={2}>Two</MenuItem>
+                  <MenuItem value={3}>Three</MenuItem>
+                  <MenuItem value={4}>Four</MenuItem>
                 </Select>
               </FormControl>
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+              <img src={require("./equal.png")} width={75} height={75} alt="Logo" />
+              <FormControl sx={{ m: 1, minWidth: 200 }}>
+                <InputLabel id="demo-dialog-select-label">Exchanged Resource</InputLabel>
                 <Select
                   labelId="demo-dialog-select-label"
                   id="demo-dialog-select"
-                  value={age}
-                  onChange={handleChange}
-                  input={<OutlinedInput label="Age" />}
+                  value={ExChange}
+                  onChange={handleExChange}
+                  input={<OutlinedInput label="Exchanged Resource" />}
                 >
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={"b"}>Blue</MenuItem>
+                  <MenuItem value={"r"}>RED</MenuItem>
+                  <MenuItem value={"y"}>Yellow</MenuItem>
                 </Select>
               </FormControl>
 
@@ -144,7 +170,7 @@ export const DraggableDialog = () => {
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleExchange}>Exchange</Button>
+          <Button onClick={handleConversion}>Exchange</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
