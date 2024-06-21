@@ -1,141 +1,152 @@
 // Importing necessary hooks from React
-import { useEffect, useState } from 'react'
 
-// Importing the BoardSquare component from the same directory
-import { ResourceGrid } from './ResourceGrid.js'
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Paper from '@mui/material/Paper';
+import Draggable from 'react-draggable';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Divider from '@mui/material/Divider';
 
-import { BoardHeader } from './ResourceBoard.js'
 
-import {Header} from './Header.js'
-
-// Importing the Piece component from the same directory
-import { Piece } from '../Pieces/Piece.js'
-
-// Styling properties applied to the board element
-const boardStyle = {
-  width: '100%',      // Full width of the container
-  height: '100%',     // Full height of the container
-  display: 'flex',    // Flexbox layout
-  flexWrap: 'wrap',   // Wrap children to the next line
+function PaperComponent(props) {
+  return (
+    <Draggable
+      handle="#draggable-dialog-title"
+      cancel={'[class*="MuiDialogContent-root"]'}
+    >
+      <Paper {...props} />
+    </Draggable>
+  );
 }
 
-// Styling properties applied to each square element
-const columnStyle = { width: '16.666%', height: '17%' }
-const columnHeaderStyle = { width: '16.666%', height: '10%' }
-const headerStyle = { width: '25%', height: '15%'}
-const resourceBoardStyle = { width: '50%', height: '3%'}
-const resourceSlotStyle = { width: '3.333%', height: '6%'}
+export const DraggableDialog = () => {
+  const [open, setOpen] = React.useState(false);
+  const [age, setAge] = React.useState('');
 
-/**
- * The chessboard component
- * @param props The react props
- */
-export const Board = ({ game }) => {
-  // Destructuring knight's position from the state and a function to update it
-  const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  const [[], setGreenCarPos] = useState(GCarRules.GreenCars)
-  
-  // useEffect to set up an observer for the game state
-  useEffect(() => game.observe(setKnightPos))
-/*
-    // Function to render a single square on the board
-    function renderResourceSquare(i) {
-      const y = 1            // Calculate x-coordinate (column) of the square
-      const x = 0//Math.floor(i / 2)  // Calculate y-coordinate (row) of the square
-      return (
-        <div key={i} style={resourceSlotStyle}>
-          {/* Render the BoardSquare component, passing x and y coordinates and the game object }
-          <ResourceGrid x={x} y={y} game={game}>
-            {/* Render the Piece component, indicating if the piece is the knight }
-            <Piece isKnight={x === knightX && y === knightY} />
-          </ResourceGrid>
-        </div>
-      )
-    }
-*/
-    // Function to render a single square on the board
-  function renderHeader(i) {
-    const x = 0              // Calculate x-coordinate (column) of the square
-    const y = 0  // Calculate y-coordinate (row) of the square
-    return (
-      <div key={i} style={headerStyle}>
-        {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <Header>
-          
-        </Header>
-      </div>
-    )
-  }
-/*
-  // Function to render a single square on the board
-  function renderBoardHeader(i) {
-    const x = 1              // Calculate x-coordinate (column) of the square
-    const y = 0  // Calculate y-coordinate (row) of the square
-    return (
-      <div key={i} style={resourceBoardStyle}>
-        {/* Render the BoardSquare component, passing x and y coordinates and the game object }
-        <BoardHeader>
-          {/* Render the Piece component, indicating if the piece is the knight }
-          <Piece isKnight={x === knightX && y === knightY} />
-        </BoardHeader>
-      </div>
-    )
-  }
-*/
-  // Function to render a single square on the board
-  function renderColumnHeader(i) {
-    const x = i            // Calculate x-coordinate (column) of the square
-    const y = 0 // Calculate y-coordinate (row) of the square
-    return (
-      <div key={i} style={columnHeaderStyle}>
-        {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <ColumnHeader x={x} y={y} game={game}>
+  const handleChange = (event) => {
+    setAge(Number(event.target.value) || '');
+  };
 
-        </ColumnHeader>
-      </div>
-    )
-  }
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-  // Function to render a single square on the board
-  function renderColumnSpace(i) {
-    const x = i % 6              // Calculate x-coordinate (column) of the square
-    const y = Math.floor(i / 6)  // Calculate y-coordinate (row) of the square
-    return (
-      <div key={i} style={columnStyle}>
-        {/* Render the BoardSquare component, passing x and y coordinates and the game object */}
-        <ColumnGrid x={x} y={y} game={game}>
-          {/* Render the Piece component, indicating if the piece is the knight */}
-          <Piece isKnight={x === knightX && y === knightY} />
-          <Piece isGreenCar={x === knightX && y === knightY} />
-          <Piece isBlueCar={x === knightX && y === knightY} />
-        </ColumnGrid>
-      </div>
-    )
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  // Array to hold all the squares of the board
-  const squares = []
-  squares.push(renderHeader(0));
-  squares.push(renderHeader(1));
-  squares.push(renderHeader(2));
-  //squares.push(renderBoardHeader(1))
-  squares.push(renderHeader(3));
-  //for (let i = 3; i < 35; i += 1){
-   //squares.push(renderResourceSquare(1))
-  //}
-  for(let i = 0; i < 6; i += 1){
-    squares.push(renderColumnHeader(i))
-  }
-  for (let i = 0; i < 48; i += 1){
-   squares.push(renderColumnSpace(i))
-  }
-  
-/*
-  // Loop to generate 64 squares (8x8 grid)
-  for (let i = 0; i < 48; i += 1) {
-    squares.push(renderSquare(i))
-  }
-*/
-  // Render the board by displaying all the squares within a div styled as the board
-  return <div style={boardStyle}>{squares}</div>
+  const handleExchange = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant="outlined" color = "inherit" onClick={handleClickOpen}>
+        Converter
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperComponent={PaperComponent}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+          Converter
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText>
+          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={age}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Age" />}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={age}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Age" />}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={age}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Age" />}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={age}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Age" />}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+              </FormControl>
+
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleExchange}>Exchange</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
 }

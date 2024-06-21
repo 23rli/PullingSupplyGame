@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+
+import { DraggableDialog } from '../Converter/Window.js'
 // Importing the BoardSquare component from the same directory
 import { ColumnGrid } from './ColumnGrid.js'
 
@@ -32,7 +34,7 @@ const boardStyle = {
 
 // Styling properties applied to each square element
 const columnStyle = { width: '16.666%', height: '11%' }
-const columnHeaderStyle = { width: '16.666%', height: '5%' }
+const columnHeaderStyle = { width: '16.666%', height: '7%' }
 const headerStyle = { width: '100%', height: '10%'}
 const appBarStyle = {width: '100%', height: '5%'}
 
@@ -41,7 +43,7 @@ const appBarStyle = {width: '100%', height: '5%'}
  * The chessboard component
  * @param props The react props
  */
-export const Board = ({game, carManager}) => {
+export const Board = ({game, carManager, roundManager}) => {
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
   const [blueCars, setBlueCars] = useState(carManager.blueCars);
   const [greenCars, setGreenCars] = useState(carManager.greenCars);
@@ -112,6 +114,7 @@ export const Board = ({game, carManager}) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Motor City
               </Typography>
+              <DraggableDialog/>
               <Button color = "inherit" variant="contained" onClick = {handleConverter}>Contained</Button>
             </Toolbar>
           </AppBar>
