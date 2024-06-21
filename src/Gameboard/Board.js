@@ -25,9 +25,9 @@ import { Piece } from '../Pieces/Piece.js'
 import { ItemTypes } from '../Pieces/ItemTypes.js'
 
 
-const theme = createTheme();
+//const theme = createTheme();
 
-theme.spacing(2); // `${8 * 2}px` = '16px'
+//theme.spacing(2); // `${8 * 2}px` = '16px'
 
 // Styling properties applied to the board element
 // Styles for the board
@@ -54,6 +54,7 @@ export const Board = ({game, carManager, roundManager}) => {
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
   const [blueCars, setBlueCars] = useState(carManager.blueCars);
   const [greenCars, setGreenCars] = useState(carManager.greenCars);
+  const [round, setRound] = useState(roundManager);
   const [time, setTime] = useState(new Date());
 
 
@@ -71,7 +72,7 @@ export const Board = ({game, carManager, roundManager}) => {
     });
 
     //return () => clearInterval(interval);
-  }, [game, carManager]); 
+  }, [game, carManager, roundManager]); 
  
     // Function to render a single square on the board
   function renderHeader(i) {
@@ -121,7 +122,7 @@ export const Board = ({game, carManager, roundManager}) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Motor City
               </Typography>
-              <DraggableDialog/>
+              <DraggableDialog roundManager = {roundManager}/>
               <Divider orientation="vertical" flexItem component="div" role="presentation"/>
               <Button color = "inherit" onClick = {handleAllocate}> Allocate </Button>
             </Toolbar>

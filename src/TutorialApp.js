@@ -31,7 +31,7 @@ export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
   const carManager = useMemo(() => new CarManager(), []);  
-  const roundManager = useMemo(() => new Round(), []);  
+  const roundManager = useMemo(() => new Round(0, 15), []);  
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>

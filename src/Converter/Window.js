@@ -29,7 +29,7 @@ function PaperComponent(props) {
   );
 }
 
-export const DraggableDialog = () => {
+export const DraggableDialog = (roundManager) => {
   const [open, setOpen] = React.useState(false);
   const [rRes, setRRes] = React.useState('');
   const [bRes, setBRes] = React.useState('');
@@ -46,12 +46,27 @@ export const DraggableDialog = () => {
     setBRes(Number(event.target.value) || '');
   };
 
+
+  console.log("roundManager", roundManager);
+
+  const resources = roundManager.roundResources;
+
+  if (!roundManager) {
+    console.error("roundManager is undefined");
+    return null;
+  }
+
+  // Ensure roundManager has the expected properties before proceeding
+  if (typeof roundManager.roundNum === 'undefined' || typeof roundManager.roundResources === 'undefined') {
+    console.error("roundManager properties are not fully defined", roundManager);
+    return null;
+  }
   const handleExChange = (event) => {
-    setExChange(Number(event.target.value) || '');
+    setExChange(String(event.target.value) || '');
   };
 
   const handleConversion = (event) => {
-    setExChange(Number(event.target.value) || '');
+    //setExChange(String(event.target.value) || '');
   };
 
   const handleClickOpen = () => {
@@ -75,7 +90,7 @@ export const DraggableDialog = () => {
         open={open}
         onClose={handleClose}
         fullWidth
-        maxWidth="lg"
+        maxWidth="md"
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title"
       >
@@ -83,12 +98,67 @@ export const DraggableDialog = () => {
           Converter
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
-          <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' , m: 5}}>
-            <FormControl sx={{ m: 1, minWidth: 175 }}>
+        <Box
+          height={100}
+          my={4}
+          display="flex"
+          alignItems="center"
+          justifyContent= "center"
+          gap={4}
+          p={2}
+        >
+          <Box
+          sx={{
+            width: 250,
+            height: 200,
+            borderRadius: 1,
+            bgcolor: '#e53935',
+            '&:hover': {
+              bgcolor: '#ea605d',
+            },
+          }}
+          />
+          <Box
+          sx={{
+            width: 250,
+            height: 200,
+            borderRadius: 1,
+            bgcolor: '#ffeb3b',
+            '&:hover': {
+              bgcolor: '#ffef62',
+            },
+          }}
+          />
+          <Box
+          sx={{
+            width: 250,
+            height: 200,
+            borderRadius: 1,
+            bgcolor: '#2196f3',
+            '&:hover': {
+              bgcolor: '#4dabf5',
+            },
+          }}
+          >
+            <DialogContentText
+              variant = 'h1'
+            >
+
+            </DialogContentText>
+          </Box>
+          
+        </Box>
+          <Box 
+            component="form" 
+            sx={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              m: 5}}
+              alignItems="center"
+              justifyContent="center"
+
+          >
+            <FormControl sx={{ m: 1, minWidth: 180 }}>
                 <InputLabel id="red-resource-selection-label">Red Resources</InputLabel>
                 <Select
                   labelId="red-resource-selection-label"
@@ -107,7 +177,7 @@ export const DraggableDialog = () => {
                 </Select>
               </FormControl>
               <img src={require("./plus.png")} width={70} height={70} alt="Logo" />
-              <FormControl sx={{ m: 1, minWidth: 175 }}>
+              <FormControl sx={{ m: 1, minWidth: 200 }}>
                 <InputLabel id="yellow-resource-selection-label">Yellow Resources</InputLabel>
                 <Select
                   labelId="yellow-resource-selection-label"
@@ -127,7 +197,7 @@ export const DraggableDialog = () => {
                 </Select>
               </FormControl>
               <img src={require("./plus.png")} width={70} height={70} alt="Logo" />
-              <FormControl sx={{ m: 1, minWidth: 175 }}>
+              <FormControl sx={{ m: 1, minWidth: 180 }}>
                 <InputLabel id="blue-resource-selection-label">Blue Resources</InputLabel>
                 <Select
                   labelId="blue-resource-selection-label"
@@ -145,12 +215,13 @@ export const DraggableDialog = () => {
                   <MenuItem value={4}>Four</MenuItem>
                 </Select>
               </FormControl>
+              
               <img src={require("./equal.png")} width={75} height={75} alt="Logo" />
-              <FormControl sx={{ m: 1, minWidth: 200 }}>
-                <InputLabel id="demo-dialog-select-label">Exchanged Resource</InputLabel>
+              <FormControl sx={{ m: 1, minWidth: 180 }}>
+                <InputLabel id="exchange-resource-label">Exchanged Resource</InputLabel>
                 <Select
-                  labelId="demo-dialog-select-label"
-                  id="demo-dialog-select"
+                  labelId="exchange-resource-label"
+                  id="exchange-resource"
                   value={ExChange}
                   onChange={handleExChange}
                   input={<OutlinedInput label="Exchanged Resource" />}
@@ -159,7 +230,7 @@ export const DraggableDialog = () => {
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={"b"}>Blue</MenuItem>
-                  <MenuItem value={"r"}>RED</MenuItem>
+                  <MenuItem value={"r"}>Red</MenuItem>
                   <MenuItem value={"y"}>Yellow</MenuItem>
                 </Select>
               </FormControl>
