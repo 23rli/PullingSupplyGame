@@ -16,4 +16,8 @@ export class Round{
     getResources(roundNum){
         return this.gameResources[roundNum];
     }
+
+    setRoundNum(num){
+        this.roundNum = num;
+    }
 }

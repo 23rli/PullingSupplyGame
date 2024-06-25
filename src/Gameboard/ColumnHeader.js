@@ -1,3 +1,5 @@
+import { fontStyle } from "@mui/system";
+
 const headerStyle = {
   width: '100%',  // Full width of the parent container
   height: '100%', // Full height of the parent container
@@ -9,6 +11,8 @@ const headerStyle = {
   overflow: 'hidden',  // Hide overflow
   whiteSpace: 'nowrap',  // Prevent text wrapping
   textOverflow: 'ellipsis',  // Add ellipsis if text overflows
+
+  //IMport source sans pro  or font called play
 };
 
 // Square component representing each square on the chessboard

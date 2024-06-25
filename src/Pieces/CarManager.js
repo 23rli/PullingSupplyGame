@@ -28,6 +28,10 @@ export class CarManager {
 
     }
 
+    allocateResource(){
+        
+    }
+
     observe(observer) {
         this.observers.push(observer);
         this.emitChange();

@@ -1,5 +1,5 @@
 // Importing necessary hooks from React
-
+//Add Clause to update appbar when converter is used
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -29,7 +29,7 @@ function PaperComponent(props) {
   );
 }
 
-export const DraggableDialog = (roundManager) => {
+export const DraggableDialog = ({roundManager}) => {
   const [open, setOpen] = React.useState(false);
   const [rRes, setRRes] = React.useState('');
   const [bRes, setBRes] = React.useState('');
@@ -49,24 +49,36 @@ export const DraggableDialog = (roundManager) => {
 
   console.log("roundManager", roundManager);
 
-  const resources = roundManager.roundResources;
-
-  if (!roundManager) {
-    console.error("roundManager is undefined");
-    return null;
-  }
-
-  // Ensure roundManager has the expected properties before proceeding
-  if (typeof roundManager.roundNum === 'undefined' || typeof roundManager.roundResources === 'undefined') {
-    console.error("roundManager properties are not fully defined", roundManager);
-    return null;
-  }
   const handleExChange = (event) => {
     setExChange(String(event.target.value) || '');
   };
 
   const handleConversion = (event) => {
-    //setExChange(String(event.target.value) || '');
+    if(Number(rRes) + Number(bRes) + Number(yRes) != 4){
+      console.log(rRes)
+      console.log(bRes)
+      console.log(yRes)
+      console.log("Your values don't equal to four")
+    }else if(ExChange != 'y' && ExChange != 'r' && ExChange != 'b' ){
+      console.log("You forgot to set the resource you wish to exchange for")
+    }else if(rRes > roundManager.roundResources[0] || yRes > roundManager.roundResources[1] || bRes > roundManager.roundResources[2]){
+      console.log("You can't exchange nonexistant resources!")
+    }else{
+      roundManager.roundResources[0] -= rRes;
+      setRRes('')
+      roundManager.roundResources[1] -= yRes;
+      setYRes('')
+      roundManager.roundResources[2] -= bRes;
+      setBRes('')
+      if(ExChange == 'r'){
+        roundManager.roundResources[0] += 1;
+      }else if(ExChange == 'y'){
+        roundManager.roundResources[1] += 1;
+      }else{
+        roundManager.roundResources[2] += 1;
+      }
+      setExChange('')
+    }
   };
 
   const handleClickOpen = () => {
@@ -108,16 +120,33 @@ export const DraggableDialog = (roundManager) => {
           p={2}
         >
           <Box
-          sx={{
-            width: 250,
-            height: 200,
-            borderRadius: 1,
-            bgcolor: '#e53935',
-            '&:hover': {
-              bgcolor: '#ea605d',
-            },
-          }}
-          />
+            sx={{
+              width: 250,
+              height: 200,
+              borderRadius: 1,
+              bgcolor: '#e53935',
+              '&:hover': {
+                bgcolor: '#ea605d',
+              },
+            }}
+          >
+            <DialogContentText
+              variant = 'h1'
+              sx = {{fontSize: '120px', textAlign: 'left'}}
+            >
+              ' {roundManager.getResources(roundManager.roundNum)[0]}
+            </DialogContentText>
+            <DialogContentText
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx = {{fontSize: '30px', textAlign: 'left'}}
+            >
+              Red Resource
+            </DialogContentText>
+          </Box>
+
+
           <Box
           sx={{
             width: 250,
@@ -127,8 +156,23 @@ export const DraggableDialog = (roundManager) => {
             '&:hover': {
               bgcolor: '#ffef62',
             },
-          }}
-          />
+          }}>
+            <DialogContentText
+              variant = 'h1'
+              sx = {{fontSize: '120px', textAlign: 'left'}}
+            >
+              ' {roundManager.getResources(roundManager.roundNum)[1]}
+            </DialogContentText>
+            <DialogContentText
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx = {{fontSize: '30px', textAlign: 'left'}}
+            >
+              Yellow Resource
+            </DialogContentText>
+          </Box>
+
           <Box
           sx={{
             width: 250,
@@ -142,9 +186,19 @@ export const DraggableDialog = (roundManager) => {
           >
             <DialogContentText
               variant = 'h1'
+              sx = {{fontSize: '120px', textAlign: 'left'}}
             >
-
+              ' {roundManager.getResources(roundManager.roundNum)[2]}
             </DialogContentText>
+            <DialogContentText
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx = {{fontSize: '30px', textAlign: 'left'}}
+            >
+              Blue Resource
+            </DialogContentText>
+
           </Box>
           
         </Box>

@@ -9,6 +9,17 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
+import menuItemClasses from '@mui/material';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import { blue } from '@mui/material/colors'
+import { yellow } from '@mui/material/colors'
+import { grey } from '@mui/material/colors'
+import { red } from '@mui/material/colors'
+import { Engineering , Build, MiscellaneousServices } from '@mui/icons-material';
+
+
 
 
 
@@ -72,7 +83,7 @@ export const Board = ({game, carManager, roundManager}) => {
     });
 
     //return () => clearInterval(interval);
-  }, [game, carManager, roundManager]); 
+  }, [game, carManager]); 
  
     // Function to render a single square on the board
   function renderHeader(i) {
@@ -100,7 +111,7 @@ export const Board = ({game, carManager, roundManager}) => {
     )
   }
   function handleAllocate(){
-
+    carManager.allocateResource();
   }
 
 
@@ -122,6 +133,46 @@ export const Board = ({game, carManager, roundManager}) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Motor City
               </Typography>
+
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={roundManager.roundResources[0]} color="">
+                    <Build sx={{ color: red[300] }} />
+                  </Badge>
+                </IconButton>
+                <p>Red</p>
+              </MenuItem>
+
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={roundManager.roundResources[1]} color="">
+                    <MiscellaneousServices sx={{ color: yellow[300] }}/>
+                  </Badge>
+                </IconButton>
+                <p>Yellow</p>
+              </MenuItem>
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={roundManager.roundResources[2]} color="">
+                    <Engineering sx={{ color: blue[300] }} />
+                  </Badge>
+                </IconButton>
+                <p>Blue</p>
+              </MenuItem>
+              
+          
               <DraggableDialog roundManager = {roundManager}/>
               <Divider orientation="vertical" flexItem component="div" role="presentation"/>
               <Button color = "inherit" onClick = {handleAllocate}> Allocate </Button>
