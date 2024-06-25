@@ -8,7 +8,7 @@ export class BlueCar{
   constructor(id){
     this.type = ItemTypes.BCAR;
     this.id = id;
-    this.coords = [0,2];
+    this.coords = [0,0];
     this.complete = false;
     this.rResLimit = 3;
     this.yResLimit = 3;

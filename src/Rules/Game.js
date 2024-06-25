@@ -2,7 +2,7 @@
 // Defining the Game class
 export class Game {
   
-  knightPosition = [0, 0]
+  knightPosition = [0, 7]
 
   // Array to store observers (callbacks) that will be notified of changes
   observers = []

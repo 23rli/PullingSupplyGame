@@ -15,17 +15,16 @@ export function TransitionDialog() {
   const [open, setOpen] = React.useState(false);
   console.log("Reached Transition")
 
-  useEffect(() => {
-    // Open the dialog when the component mounts
+  const showDialog = () => {
     setOpen(true);
+    //setTimeout(() => {
+    //  setOpen(false);
+   // }, 2000);
+  };
 
-    // Set a timer to close the dialog after 2 seconds
-    const timer = setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-
-    // Clear the timer when the component unmounts to avoid memory leaks
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    // Automatically open the dialog when the component mounts
+    showDialog();
   }, []);
 
   const handleClose = () => {

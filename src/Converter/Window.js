@@ -80,6 +80,7 @@ export const DraggableDialog = ({roundManager}) => {
       }
       setExChange('')
       roundManager.carManager.emitChange();
+      roundManager.callTransition();
     }
   };
 
@@ -88,13 +89,12 @@ export const DraggableDialog = ({roundManager}) => {
   };
 
   const handleClose = () => {
+    roundManager.callTransition();
+    console.log("reached")
     setOpen(false);
-    return(<TransitionDialog/>);
   };
 
-  const handleExchange = () => {
-    setOpen(false);
-  };
+  
 
   return (
     <React.Fragment>

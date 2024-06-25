@@ -14,7 +14,6 @@ export const Piece = ({ isKnight, type, id, carManager }) => {
    return <GreenCarVisual id = {carManager.greenCars[id]} carManager = {carManager} />;
   }
   if (type === ItemTypes.BCAR && !carManager.blueCars[id].complete) {
-    {console.log(carManager.blueCars[id])}
     return <BlueCarVisual id = {carManager.blueCars[id]} carManager = {carManager}/>
   }
   return null; // Render nothing if no conditions are met

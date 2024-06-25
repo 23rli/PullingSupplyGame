@@ -9,7 +9,7 @@ export class GreenCar{
   constructor(id){
     this.type = ItemTypes.GCAR;
     this.id = id;
-    this.coords = [0,3];
+    this.coords = [0,1];
     this.complete = false;
     this.rResLimit = 3;
     this.yResLimit = 3;

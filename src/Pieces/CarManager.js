@@ -28,9 +28,6 @@ export class CarManager {
 
     }
 
-    allocateResource(){
-        
-    }
 
     observe(observer) {
         this.observers.push(observer);
@@ -72,7 +69,7 @@ export class CarManager {
         }else if (isBlue) {
             console.log(toX + " " + toY + " " + id + " " +isBlue + this.blueCars[id].coords)
             //toY = this.gravitateUp(toX, toY)
-            if(this.blueCars[id].coords[0] == 0 && this.blueCars[id].coords[1] == 2){
+            if(this.blueCars[id].coords[0] == 0 && this.blueCars[id].coords[1] == 0){
                 this.blueCars[id].coords = [toX, toY];
                 console.log(this.blueCars.length)
                 this.blueCars.push(new BlueCar(this.blueCars.length))
@@ -82,7 +79,7 @@ export class CarManager {
             }
         } else {
             console.log(toX + " " + toY + " " + id + " " +isBlue + this.greenCars[id].coords)
-            if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 3){
+            if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 1){
                 this.greenCars[id].coords = [toX, toY];
                 console.log(this.greenCars.length)
                 this.greenCars.push(new GreenCar(this.greenCars.length))
@@ -92,6 +89,54 @@ export class CarManager {
             }
         }
         this.emitChange();
+    }
+
+    checkMoveReqs(toX, toY, blueCar, greenCar){
+        if(blueCar != null){
+            const [x, y] = blueCar.coords;
+            if(x == 0){
+                
+            }else if(x == 1){
+                if(blueCar.rRes == blueCar.rResLimit && blueCar.wait){
+                    return true;
+                }
+            }else if(x == 2){
+                if(blueCar.yRes == blueCar.yResLimit && blueCar.wait){
+                    return true;
+                }
+            }else if(x == 3){
+                if(blueCar.bRes == blueCar.bResLimit && blueCar.wait){
+                    return true;
+                }
+            }else if(x == 4){
+                if(blueCar.wait){
+                    return true;
+                }
+            }
+            
+        }else{
+            const [x, y] = greenCar.coords;
+            if(x == 0){
+                
+            }else if(x == 1){
+                if(greenCar.rRes == greenCar.rResLimit && greenCar.wait){
+                    return true;
+                }
+            }else if(x == 2){
+                if(greenCar.yRes == greenCar.yResLimit && greenCar.wait){
+                    return true;
+                }
+            }else if(x == 3){
+                if(greenCar.bRes == greenCar.bResLimit && greenCar.wait){
+                    return true;
+                }
+            }else if(x == 4){
+                if(greenCar.wait){
+                    return true;
+                }
+            }
+            
+        }
     }
 
     
@@ -104,6 +149,7 @@ export class CarManager {
         const dy = toY - y;
         return (((dx === 1) || (dx === 0 && Math.abs(dy) > 0)) && (!this.hasBlueCar(toX, toY, bCars)) && (!this.hasGreenCar(toX, toY, gCars)));
     }
+
 
     emitChange() {
         const updateBlueCars = this.blueCars; // Shallow copy to avoid mutation

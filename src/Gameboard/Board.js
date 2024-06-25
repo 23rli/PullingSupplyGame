@@ -111,7 +111,8 @@ export const Board = ({game, roundManager}) => {
     )
   }
   function handleAllocate(){
-    roundManager.carManager.allocateResource();
+    roundManager.allocateResources();
+    roundManager.carManager.emitChange()
   }
 
 
