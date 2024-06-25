@@ -61,10 +61,10 @@ const appBarStyle = {width: '100%', height: '5%'}
  * The chessboard component
  * @param props The react props
  */
-export const Board = ({game, carManager, roundManager}) => {
+export const Board = ({game, roundManager}) => {
   const [[knightX, knightY], setKnightPos] = useState(game.knightPosition)
-  const [blueCars, setBlueCars] = useState(carManager.blueCars);
-  const [greenCars, setGreenCars] = useState(carManager.greenCars);
+  const [blueCars, setBlueCars] = useState(roundManager.carManager.blueCars);
+  const [greenCars, setGreenCars] = useState(roundManager.carManager.greenCars);
   const [round, setRound] = useState(roundManager);
   const [time, setTime] = useState(new Date());
 
@@ -77,13 +77,13 @@ export const Board = ({game, carManager, roundManager}) => {
     //}, 1000)
 
     game.observe(setKnightPos);
-    carManager.observe(({ updateBlueCars, updateGreenCars }) => {
+    roundManager.carManager.observe(({ updateBlueCars, updateGreenCars }) => {
       setBlueCars([...updateBlueCars]);
      setGreenCars([...updateGreenCars]);
     });
 
     //return () => clearInterval(interval);
-  }, [game, carManager]); 
+  }, [game, roundManager]); 
  
     // Function to render a single square on the board
   function renderHeader(i) {
@@ -111,7 +111,7 @@ export const Board = ({game, carManager, roundManager}) => {
     )
   }
   function handleAllocate(){
-    carManager.allocateResource();
+    roundManager.carManager.allocateResource();
   }
 
 
@@ -193,20 +193,20 @@ export const Board = ({game, carManager, roundManager}) => {
     
     if(x === knightX && y === knightY){
       type = ItemTypes.KNIGHT
-    }else if(carManager.hasBlueCar(x,y,blueCars)){
+    }else if(roundManager.carManager.hasBlueCar(x,y,blueCars)){
       type = ItemTypes.BCAR
-      id = carManager.findBlueId(x,y, blueCars);
-    }else if(carManager.hasGreenCar(x,y,greenCars)){
+      id = roundManager.carManager.findBlueId(x,y, blueCars);
+    }else if(roundManager.carManager.hasGreenCar(x,y,greenCars)){
       type = ItemTypes.GCAR
-      id = carManager.findGreenId(x,y, greenCars);
+      id = roundManager.carManager.findGreenId(x,y, greenCars);
     }
 
     
 
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} game={game} carManager={carManager}>
-          <Piece  isKnight = {isKnight} type = {type} id = {id} carManager = {carManager}/>
+        <ColumnGrid x={x} y={y} game={game} carManager={roundManager.carManager}>
+          <Piece  isKnight = {isKnight} type = {type} id = {id} carManager = {roundManager.carManager}/>
         </ColumnGrid>
       </div>
     );

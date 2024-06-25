@@ -11,8 +11,13 @@ export class GreenCar{
     this.id = id;
     this.coords = [0,3];
     this.complete = false;
-    this.x = 0;
-    this.y = 0;
+    this.rResLimit = 3;
+    this.yResLimit = 3;
+    this.bResLimit = 2;
+    this.rRes = 0
+    this.yRes = 0;
+    this.bRes = 0;
+    this.wait = false;
   }
 
   

@@ -31,12 +31,12 @@ export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const game = useMemo(() => new Game(), [])
   const carManager = useMemo(() => new CarManager(), []);  
-  const roundManager = useMemo(() => new Round(0, 15), []);  
+  const roundManager = useMemo(() => new Round(0, 15, carManager), []);  
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board game={game} carManager = {carManager} roundManager = {roundManager} />
+      <Board game={game} roundManager = {roundManager} />
     </div>
   )
 

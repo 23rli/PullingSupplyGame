@@ -1,7 +1,10 @@
 export class Round{
 
-    constructor(id, totalRounds){
-        this.roundNum = 0;
+    constructor(id, totalRounds, carManager){
+
+        //MACRO RESOURCES
+        this.id = id;
+        this.carManager = carManager;
         this.totalRounds = totalRounds;
         this.gameResources = [];
         for(let i = 0; i < totalRounds; i++){
@@ -10,7 +13,11 @@ export class Round{
             const blue = parseInt(Math.random() * 4 + 1)
             this.gameResources.push([red, yellow, blue]);
         }
+
+        //MICRO RESOURCES
         this.roundResources = this.gameResources[0];
+        this.roundNum = 0;
+        this.paintStatus = false;
     }
 
     getResources(roundNum){
@@ -20,4 +27,6 @@ export class Round{
     setRoundNum(num){
         this.roundNum = num;
     }
+
+    
 }

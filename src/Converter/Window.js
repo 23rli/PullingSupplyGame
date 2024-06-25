@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
+import {TransitionDialog} from '../TransitionScreen/Transition'
 
 
 function PaperComponent(props) {
@@ -78,6 +79,7 @@ export const DraggableDialog = ({roundManager}) => {
         roundManager.roundResources[2] += 1;
       }
       setExChange('')
+      roundManager.carManager.emitChange();
     }
   };
 
@@ -87,6 +89,7 @@ export const DraggableDialog = ({roundManager}) => {
 
   const handleClose = () => {
     setOpen(false);
+    return(<TransitionDialog/>);
   };
 
   const handleExchange = () => {
