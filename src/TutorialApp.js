@@ -20,7 +20,7 @@ const containerStyle = {
   height: '160vh',            // Full viewport height
   margin: 0,                  // Remove default margin
   padding: 0,                 // Remove default padding
-  backgroundColor: '#f0f0f0', // Light gray background color (you can change this to any color you prefer)
+  backgroundColor: '#2c387e', // Light gray background color (you can change this to any color you prefer)
 };
 
 

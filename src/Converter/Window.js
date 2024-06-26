@@ -133,12 +133,20 @@ export const DraggableDialog = ({roundManager}) => {
               },
             }}
           >
-            <DialogContentText
-              variant = 'h1'
-              sx = {{fontSize: '120px', textAlign: 'left'}}
-            >
-              ' {roundManager.getResources(roundManager.roundNum)[0]}
-            </DialogContentText>
+             <Box display="flex" alignItems="center">
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px', textAlign: 'left', color: '#e53935' }}
+                >
+                  '
+                </DialogContentText>
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px' }}
+                >
+                  {roundManager.getResources(roundManager.roundNum)[0]}
+                </DialogContentText>
+              </Box>
             <DialogContentText
               display="flex"
               justifyContent="center"
@@ -160,12 +168,20 @@ export const DraggableDialog = ({roundManager}) => {
               bgcolor: '#ffef62',
             },
           }}>
-            <DialogContentText
-              variant = 'h1'
-              sx = {{fontSize: '120px', textAlign: 'left'}}
-            >
-              ' {roundManager.getResources(roundManager.roundNum)[1]}
-            </DialogContentText>
+            <Box display="flex" alignItems="center">
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px', textAlign: 'left', color: '#ffeb3b' }}
+                >
+                  '
+                </DialogContentText>
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px' }}
+                >
+                  {roundManager.getResources(roundManager.roundNum)[1]}
+                </DialogContentText>
+              </Box>
             <DialogContentText
               display="flex"
               justifyContent="center"
@@ -187,12 +203,20 @@ export const DraggableDialog = ({roundManager}) => {
             },
           }}
           >
-            <DialogContentText
-              variant = 'h1'
-              sx = {{fontSize: '120px', textAlign: 'left'}}
-            >
-              ' {roundManager.getResources(roundManager.roundNum)[2]}
-            </DialogContentText>
+            <Box display="flex" alignItems="center">
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px', textAlign: 'left', color: '#2196f3' }}
+                >
+                  '
+                </DialogContentText>
+                <DialogContentText
+                  variant="h1"
+                  sx={{ fontSize: '120px' }}
+                >
+                  {roundManager.getResources(roundManager.roundNum)[2]}
+                </DialogContentText>
+              </Box>
             <DialogContentText
               display="flex"
               justifyContent="center"

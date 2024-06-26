@@ -17,7 +17,7 @@ export class GreenCar{
     this.rRes = 0
     this.yRes = 0;
     this.bRes = 0;
-    this.wait = false;
+    this.waited = true;
   }
 
   

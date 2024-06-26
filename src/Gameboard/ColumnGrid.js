@@ -22,8 +22,7 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
-        console.log("canDrop: " + item.id.id)
-        console.log(item.id.id)
+
         if (item.id === ItemTypes.KNIGHT) {
           return game.canMoveKnight(x, y);
         } else if (item.id.type === ItemTypes.BCAR) {
@@ -34,7 +33,6 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
         return false;
       },
       drop: (item) => { 
-        console.log("drop: " + item.id.id)
         if (item.id === ItemTypes.KNIGHT) {
           game.moveKnight(x, y);
         } else if (item.id.type === ItemTypes.BCAR) {

@@ -77,6 +77,8 @@ export class CarManager {
                 
                 this.blueCars[id].coords = [toX, toY];
             }
+
+            this.blueCars[id].waited = false;
         } else {
             console.log(toX + " " + toY + " " + id + " " +isBlue + this.greenCars[id].coords)
             if(this.greenCars[id].coords[0] == 0 && this.greenCars[id].coords[1] == 1){
@@ -87,6 +89,7 @@ export class CarManager {
                 //toY = this.gravitateUp(toX, toY)
                 this.greenCars[id].coords = [toX, toY];
             }
+            this.greenCars[id].waited = false;
         }
         this.emitChange();
     }
@@ -95,21 +98,21 @@ export class CarManager {
         if(blueCar != null){
             const [x, y] = blueCar.coords;
             if(x == 0){
-                
+                return true;
             }else if(x == 1){
-                if(blueCar.rRes == blueCar.rResLimit && blueCar.wait){
+                if(blueCar.rRes == blueCar.rResLimit && blueCar.waited){
                     return true;
                 }
             }else if(x == 2){
-                if(blueCar.yRes == blueCar.yResLimit && blueCar.wait){
+                if(blueCar.yRes == blueCar.yResLimit && blueCar.waited){
                     return true;
                 }
             }else if(x == 3){
-                if(blueCar.bRes == blueCar.bResLimit && blueCar.wait){
+                if(blueCar.bRes == blueCar.bResLimit && blueCar.waited){
                     return true;
                 }
             }else if(x == 4){
-                if(blueCar.wait){
+                if(blueCar.waited){
                     return true;
                 }
             }
@@ -117,21 +120,21 @@ export class CarManager {
         }else{
             const [x, y] = greenCar.coords;
             if(x == 0){
-                
+                return true;
             }else if(x == 1){
-                if(greenCar.rRes == greenCar.rResLimit && greenCar.wait){
+                if(greenCar.rRes == greenCar.rResLimit && greenCar.waited){
                     return true;
                 }
             }else if(x == 2){
-                if(greenCar.yRes == greenCar.yResLimit && greenCar.wait){
+                if(greenCar.yRes == greenCar.yResLimit && greenCar.waited){
                     return true;
                 }
             }else if(x == 3){
-                if(greenCar.bRes == greenCar.bResLimit && greenCar.wait){
+                if(greenCar.bRes == greenCar.bResLimit && greenCar.waited){
                     return true;
                 }
             }else if(x == 4){
-                if(greenCar.wait){
+                if(greenCar.waited){
                     return true;
                 }
             }
@@ -145,9 +148,15 @@ export class CarManager {
         //console.log(isBlue)
         
         const [x, y] = isBlue? bCars[id].coords : gCars[id].coords;
+        let moveReqs = false;
+        if(isBlue){
+            moveReqs = this.checkMoveReqs(toX, toY, bCars[id], null)
+        }else{
+            moveReqs = this.checkMoveReqs(toX, toY, null, gCars[id])
+        }
         const dx = toX - x;
         const dy = toY - y;
-        return (((dx === 1) || (dx === 0 && Math.abs(dy) > 0)) && (!this.hasBlueCar(toX, toY, bCars)) && (!this.hasGreenCar(toX, toY, gCars)));
+        return (((dx === 1 && moveReqs) || (dx === 0 && Math.abs(dy) > 0)) && (!this.hasBlueCar(toX, toY, bCars)) && (!this.hasGreenCar(toX, toY, gCars)));
     }
 
 

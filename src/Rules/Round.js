@@ -136,5 +136,9 @@ export class Round{
 
     }
 
+    advanceRound(){
+        this.roundNum ++;
+    }
+
     
 }
