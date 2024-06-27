@@ -19,7 +19,10 @@ export class Round{
         //MICRO RESOURCES
         this.roundResources = this.gameResources[0];
         this.roundNum = 0;
+        this.paintRoundBegan = -1;
         this.paintStatus = false;
+        this.dryStatus = false;
+        this.readyToPaint = false;
     }
 
     getResources(roundNum){
@@ -132,12 +135,99 @@ export class Round{
             }
     }
 
-    completeStepMove(){
+    completeStepMove(isBlue, id){
+        if(isBlue){
+            const [x, y] = this.carManager.blueCars[id].coords
+            if(x == 1){
+                if(this.carManager.blueCars[id].rRes == this.carManager.blueCars[id].rResLimit){
+                    this.carManager.blueCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+            }else if(x == 2){
+                if(this.carManager.blueCars[id].yRes == this.carManager.blueCars[id].yResLimit){
+                    this.carManager.blueCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+            }else if(x == 3){
+                if(this.carManager.blueCars[id].bRes == this.carManager.blueCars[id].bResLimit){
+                    this.carManager.blueCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+
+            }else if(x == 4){
+                if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+                    this.carManager.blueCars[id].waited = true;
+                }else if(this.paintRoundBegan == -1){
+                    this.readyToPaint = true;
+                }
+            }
+        }else{
+            const [x, y] = this.carManager.greenCars[id].coords
+            if(x == 1){
+                if(this.carManager.greenCars[id].rRes == this.carManager.greenCars[id].rResLimit){
+                    this.carManager.greenCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+            }else if(x == 2){
+                if(this.carManager.greenCars[id].yRes == this.carManager.greenCars[id].yResLimit){
+                    this.carManager.greenCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+            }else if(x == 3){
+                if(this.carManager.greenCars[id].bRes == this.carManager.greenCars[id].bResLimit){
+                    this.carManager.greenCars[id].waited = true;
+                    //stop gap = add glow when ready to move over.
+                }
+
+            }else if(x == 4){
+                if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+                    this.carManager.greenCars[id].waited = true;
+                }else if(this.paintRoundBegan == -1){
+                    this.readyToPaint = true;
+                }
+            }
+        }
 
     }
 
     advanceRound(){
         this.roundNum ++;
+        this.roundResources = this.gameResources[this.roundNum]
+        for(let i = 0; i < this.carManager.blueCars.length; i++){
+            this.completeStepMove(true, i)
+        }
+        for(let i = 0; i < this.carManager.greenCars.length; i++){
+            this.completeStepMove(false, i)
+        }
+
+        if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+            this.paintStatus = false;
+            this.dryStatus = false;
+            this.readyToPaint = false;
+            this.paintRoundBegan = -1;
+        }else if(this.paintStatus && this.roundNum - 1 == this.paintRoundBegan){
+            this.dryStatus = true;
+        }else if(this.readyToPaint){
+            this.paintStatus = true;
+            this.paintRoundBegan = this.roundNum;
+        }
+
+        this.carManager.emitChange();
+    }
+
+    checkPaintStatus(x,y){
+        if(x == 4){
+            let count = 0;
+            for(let i = 0; i < this.carManager.blueCars.length; i++){
+                if(this.carManager.blueCars[i].coords[0] == 4){
+                    count ++;
+                }
+            }
+
+            return !this.paintStatus && !(count >= 3);
+        }
+        return true;
+        
     }
 
     

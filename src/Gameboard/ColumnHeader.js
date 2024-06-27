@@ -16,7 +16,7 @@ const headerStyle = {
 };
 
 // Square component representing each square on the chessboard
-export const ColumnHeader = ({ x, y}) => {
+export const ColumnHeader = ({ x, y, roundManager}) => {
   // Determine background and text colors based on the column index (x)
   let backgroundColor = '';
   const color = 'black';
@@ -32,13 +32,16 @@ export const ColumnHeader = ({ x, y}) => {
       backgroundColor = 'yellow';
       title = 'Assembly';
   } else if (x === -3) {
-      backgroundColor = 'blue';
+      backgroundColor = 'lightBlue';
       title = 'Quality';
-  } else if (x === -2) {
+  } else if (x === -2 && !roundManager.paintStatus) {
       backgroundColor = 'white';
-      title = 'Paint and Dry';
+      title = 'Paint';
+  } else if (x === -2 && roundManager.paintStatus) {
+      backgroundColor = 'wheat';
+      title = 'Dry';
   } else {
-      backgroundColor = 'green';
+      backgroundColor = 'chartreuse';
       title = 'Done';
   }
 

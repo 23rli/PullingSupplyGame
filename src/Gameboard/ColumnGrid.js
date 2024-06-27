@@ -14,7 +14,7 @@ import { ColumnContainer } from './ColumnContainer.js'
 //import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
 // BoardSquare component that represents each square on the chessboard
-export const ColumnGrid = ({ x, y, children, game, carManager}) => {
+export const ColumnGrid = ({ x, y, children, game, carManager, roundManager}) => {
   // Setting up the drop target for the knight using the useDrop hook
   const products = [ItemTypes.KNIGHT, ItemTypes.GCAR, ItemTypes.BCAR];
 
@@ -26,9 +26,11 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
         if (item.id === ItemTypes.KNIGHT) {
           return game.canMoveKnight(x, y);
         } else if (item.id.type === ItemTypes.BCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars);
+          return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars) 
+                  && roundManager.checkPaintStatus(x,y);
         } else if (item.id.type === ItemTypes.GCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, false, carManager.blueCars, carManager.greenCars);
+          return carManager.canMoveCar(x, y, item.id.id, false, carManager.blueCars, carManager.greenCars)
+                  && roundManager.checkPaintStatus(x,y); //implement this function
         }
         return false;
       },
@@ -62,7 +64,8 @@ export const ColumnGrid = ({ x, y, children, game, carManager}) => {
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      <ColumnContainer x = {x} y = {y}>
+      {console.log(roundManager)}
+      <ColumnContainer x = {x} y = {y} roundManager = {roundManager}>
         {children}
         
       </ColumnContainer>

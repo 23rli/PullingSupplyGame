@@ -63,7 +63,7 @@ export const Board = ({ game, roundManager }) => {
     const y = 0;
     return (
       <div key={i} style={columnHeaderStyle}>
-        <ColumnHeader x={x} y={y}></ColumnHeader>
+        <ColumnHeader x={x} y={y} roundManager = {roundManager}></ColumnHeader>
       </div>
     );
   }
@@ -160,7 +160,7 @@ export const Board = ({ game, roundManager }) => {
 
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} game={game} carManager={roundManager.carManager}>
+        <ColumnGrid x={x} y={y} game={game} carManager={roundManager.carManager} roundManager = {roundManager}>
           <Piece isKnight={isKnight} type={type} id={id} carManager={roundManager.carManager} />
         </ColumnGrid>
       </div>

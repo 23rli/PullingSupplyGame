@@ -14,7 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const fabStyle = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
 
-export default function AlertDialogSlide(roundManager) {
+export default function AlertDialogSlide({roundManager}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -27,7 +27,7 @@ export default function AlertDialogSlide(roundManager) {
 
   const handleAgree = () => {
     setOpen(false);
-    roundManager.advanceRound()
+    roundManager.advanceRound();
   };
 
   return (
