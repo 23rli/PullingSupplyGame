@@ -155,7 +155,10 @@ export class Round{
                 }
 
             }else if(x == 4){
-                if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+                console.log("paint status: " + this.paintStatus)
+                console.log("dry status: " + this.dryStatus)
+                console.log("paint round begin status: " + this.roundNum + " " + this.paintRoundBegan + " " + (this.roundNum - 1 == this.paintRoundBegan))
+                if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
                     this.carManager.blueCars[id].waited = true;
                 }else if(this.paintRoundBegan == -1){
                     this.readyToPaint = true;
@@ -180,7 +183,7 @@ export class Round{
                 }
 
             }else if(x == 4){
-                if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+                if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
                     this.carManager.greenCars[id].waited = true;
                 }else if(this.paintRoundBegan == -1){
                     this.readyToPaint = true;
@@ -191,8 +194,15 @@ export class Round{
     }
 
     advanceRound(){
-        this.roundNum ++;
-        this.roundResources = this.gameResources[this.roundNum]
+        console.log(this.roundNum + " " + this.paintRoundBegan)
+        if(this.paintStatus && this.roundNum - 1 == this.paintRoundBegan){
+            this.dryStatus = true;
+            this.readyToPaint = false;
+        }
+
+        
+
+
         for(let i = 0; i < this.carManager.blueCars.length; i++){
             this.completeStepMove(true, i)
         }
@@ -200,18 +210,23 @@ export class Round{
             this.completeStepMove(false, i)
         }
 
-        if(this.paintStatus && this.dryStatus && this.roundNum - 2 == this.paintRoundBegan){
+        if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
             this.paintStatus = false;
             this.dryStatus = false;
-            this.readyToPaint = false;
             this.paintRoundBegan = -1;
-        }else if(this.paintStatus && this.roundNum - 1 == this.paintRoundBegan){
-            this.dryStatus = true;
-        }else if(this.readyToPaint){
+        }
+
+        if(this.readyToPaint){
             this.paintStatus = true;
             this.paintRoundBegan = this.roundNum;
         }
 
+
+
+        this.roundNum ++;
+        this.roundResources = this.gameResources[this.roundNum]
+
+        
         this.carManager.emitChange();
     }
 
@@ -224,7 +239,7 @@ export class Round{
                 }
             }
 
-            return !this.paintStatus && !(count >= 3);
+            return !this.readyToPaint && !(count >= 3);
         }
         return true;
         

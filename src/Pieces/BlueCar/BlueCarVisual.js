@@ -19,8 +19,6 @@ export const BlueCarVisual = ({id, carManager}) => {
     }),
     [id, carManager],  // Dependency array (empty means no dependencies)
   )
-  console.log("In BlueVisual: " + id.type + " " + id.id + " " + id.coords);
-  console.log("In BlueVisual: " +  "         " + "   " + id.id + " " + id.coords);
   return (
     <>
       {/* DragPreviewImage for showing a custom drag preview */}

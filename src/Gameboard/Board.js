@@ -20,6 +20,7 @@ import { ColumnHeader } from './ColumnHeader.js';
 import { Header } from './Header.js';
 import { Piece } from '../Pieces/Piece.js';
 import { ItemTypes } from '../Pieces/ItemTypes.js';
+import StatisticsModal from '../Statistics/StatusModal.js';
 
 // Styles
 const boardStyle = {
@@ -130,9 +131,10 @@ export const Board = ({ game, roundManager }) => {
                 </IconButton>
                 <p>Blue</p>
               </MenuItem>
+              <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
               <DraggableDialog roundManager={roundManager} />
-              <Divider orientation="vertical" flexItem component="div" role="presentation" />
-              <Button color="inherit" onClick={handleAllocate}> Allocate </Button>
+              <Button color="inherit" onClick={handleAllocate} sx={{ ml: 1 }}> Allocate </Button>
+              <StatisticsModal roundManager = {roundManager}/>
             </Toolbar>
           </AppBar>
         </Box>

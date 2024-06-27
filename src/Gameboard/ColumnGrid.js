@@ -64,7 +64,6 @@ export const ColumnGrid = ({ x, y, children, game, carManager, roundManager}) =>
       }}
     >
       {/* Render the Square component, passing whether the square is black */}
-      {console.log(roundManager)}
       <ColumnContainer x = {x} y = {y} roundManager = {roundManager}>
         {children}
         

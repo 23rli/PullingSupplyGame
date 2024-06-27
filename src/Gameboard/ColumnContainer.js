@@ -61,7 +61,6 @@ const getDividerColor = (x, roundManager) => {
 
 // Square component representing each square on the chessboard
 export const ColumnContainer = ({ x, y, children, roundManager }) => {
-    console.log(roundManager)
   const backgroundColor = getBackgroundColor(x, roundManager);
   const dividerColor = getDividerColor(x, roundManager)
 
