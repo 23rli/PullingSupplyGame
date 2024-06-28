@@ -1,12 +1,12 @@
 import {TransitionDialog} from '../TransitionScreen/Transition'
+import {Car} from '../Pieces/Cars/Car'
 
 export class Round{
 
-    constructor(id, totalRounds, carManager){
+    constructor(id, totalRounds){
 
         //MACRO RESOURCES
         this.id = id;
-        this.carManager = carManager;
         this.totalRounds = totalRounds;
         this.gameResources = [];
         for(let i = 0; i < totalRounds; i++){
@@ -15,6 +15,16 @@ export class Round{
             const blue = parseInt(Math.random() * 4 + 1)
             this.gameResources.push([red, yellow, blue]);
         }
+
+        //CONTROL RESOURCES
+
+        this.cars = [];
+        this.count = 0;
+        this.produced = 0
+        this.observers = [];
+
+        this.cars.push(new Car(0));
+        this.cars.push(new Car(0));
 
         //MICRO RESOURCES
         this.roundResources = this.gameResources[0];
@@ -243,6 +253,131 @@ export class Round{
         }
         return true;
         
+    }
+
+    observe(observer) {
+        this.observers.push(observer);
+        this.emitChange();
+        console.log(" CM Observer has passed");
+        return () => {
+            this.observers = this.observers.filter(o => o !== observer);
+        };
+    }
+
+
+    deleteCar(id){
+        this.cars[Number(id.slice(1))].complete = true;
+        this.emitChange()
+    }
+
+    moveCar(toX, toY, id) {
+        const index = Number(id.slice(1));
+
+        if(toX == 5){
+            this.deleteCar(id)
+            this.cars[index].coords = [6, 0];
+        }else if (id.charAt(0) === 'b' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == 0) {
+                this.cars[index].coords = [toX, toY];
+                this.cars.push(new Car("b" + this.cars.length))   
+        } else if (id.charAt(0) === 'g' && this.cars[index].coords[0] == 0 && this.greenCars[index].coords[1] == 1){
+                this.cars[index].coords = [toX, toY];
+                this.cars.push(new Car("g" + this.cars.length))
+        }else{
+            this.cars[index].coords = [toX, toY];
+        }
+        this.cars[index].waited = false;
+        this.emitChange();
+    }
+
+
+    checkMoveReqs(toX, toY, car){
+        if(car != null){
+            const [x, y] = car.coords;
+            if(x == 0){
+                return true;
+            }else if(x == 1){
+                if(car.rRes == car.rResLimit && car.waited){
+                    return true;
+                }
+            }else if(x == 2){
+                if(car.yRes == car.yResLimit && car.waited){
+                    return true;
+                }
+            }else if(x == 3){
+                if(car.bRes == car.bResLimit && car.waited){
+                    return true;
+                }
+            }else if(x == 4){
+                if(car.waited){
+                    return true;
+                }
+            }
+            
+        }
+            
+        }
+    }
+
+    
+
+    canMoveCar(toX, toY, id, isBlue, bCars, gCars) {
+        const index = Number(id.slice(1));
+        
+        const [x, y] = cars[index].coords;
+        let moveReqs = this.checkMoveReqs(toX, toY, cars[index])
+
+        const dx = toX - x;
+        const dy = toY - y;
+        return (((dx === 1 && moveReqs) || (dx === 0 && Math.abs(dy) > 0)) && (!this.hasCar(toX, toY, cars)));
+    }
+
+
+    emitChange() {
+        const updateCars = this.cars; // Shallow copy to avoid mutation
+        this.observers.forEach(observer => observer && observer({
+            updateCars
+        }));
+    }
+
+   
+    hasBlueCar(x, y, blueCars) {
+        for (let i = 0; i < blueCars.length; i++) {
+            if (blueCars[i].coords[0] === x && blueCars[i].coords[1] === y )  {
+                //console.log(this.blueCars[i].coords[0] === x && this.blueCars[i].coords[1] === y )
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasGreenCar(x,y, greenCars){
+        for (let i = 0; i < greenCars.length; i++) {
+            if ((greenCars[i].coords[0] === x && greenCars[i].coords[1] === y)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /*The code can;t seem to find the id via x and y when dragging the object */
+    findBlueId(x, y, blueCars){
+        for (let i = 0; i < blueCars.length; i++) {
+            if (blueCars[i].coords[0] === x && blueCars[i].coords[1] === y)  {
+                //console.log(i)
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    findGreenId(x, y, greenCars){
+        for (let i = 0; i < greenCars.length; i++) {
+            if (greenCars[i].coords[0] === x && greenCars[i].coords[1] === y)  {
+                //console.log(i);
+                return i;
+            }
+        }
+        return -1;
     }
 
     
