@@ -315,12 +315,12 @@ export class Round{
             
         }
             
-        }
     }
+    
 
     
 
-    canMoveCar(toX, toY, id, isBlue, bCars, gCars) {
+    canMoveCar(toX, toY, id, cars) {
         const index = Number(id.slice(1));
         
         const [x, y] = cars[index].coords;
@@ -340,41 +340,22 @@ export class Round{
     }
 
    
-    hasBlueCar(x, y, blueCars) {
-        for (let i = 0; i < blueCars.length; i++) {
-            if (blueCars[i].coords[0] === x && blueCars[i].coords[1] === y )  {
-                //console.log(this.blueCars[i].coords[0] === x && this.blueCars[i].coords[1] === y )
+    hasCar(x, y, cars) {
+        for (let i = 0; i < cars.length; i++) {
+            if (cars[i].coords[0] === x && cars[i].coords[1] === y )  {
                 return true;
             }
         }
         return false;
     }
 
-    hasGreenCar(x,y, greenCars){
-        for (let i = 0; i < greenCars.length; i++) {
-            if ((greenCars[i].coords[0] === x && greenCars[i].coords[1] === y)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /*The code can;t seem to find the id via x and y when dragging the object */
-    findBlueId(x, y, blueCars){
+    findId(x, y, cars){
         for (let i = 0; i < blueCars.length; i++) {
-            if (blueCars[i].coords[0] === x && blueCars[i].coords[1] === y)  {
+            if (cars[i].coords[0] === x && cars[i].coords[1] === y)  {
                 //console.log(i)
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    findGreenId(x, y, greenCars){
-        for (let i = 0; i < greenCars.length; i++) {
-            if (greenCars[i].coords[0] === x && greenCars[i].coords[1] === y)  {
-                //console.log(i);
-                return i;
+                return cars[i].id;
             }
         }
         return -1;
