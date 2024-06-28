@@ -23,7 +23,7 @@ export const Overlay = ({ type }) => {
         height: '100%',  // Full height of the parent
         width: '100%',  // Full width of the parent
         zIndex: 1,  // Ensure overlay is above other elements
-        opacity: 0.5,  // Semi-transparent
+        opacity: 0.75,  // Semi-transparent
         backgroundColor: color,  // Background color based on the overlay type
       }}
     />

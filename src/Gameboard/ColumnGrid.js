@@ -14,18 +14,16 @@ import { ColumnContainer } from './ColumnContainer.js'
 //import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
 // BoardSquare component that represents each square on the chessboard
-export const ColumnGrid = ({ x, y, children, game, carManager, roundManager}) => {
+export const ColumnGrid = ({ x, y, children, carManager, roundManager}) => {
   // Setting up the drop target for the knight using the useDrop hook
-  const products = [ItemTypes.KNIGHT, ItemTypes.GCAR, ItemTypes.BCAR];
+  const products = [ItemTypes.GCAR, ItemTypes.BCAR];
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
 
-        if (item.id === ItemTypes.KNIGHT) {
-          return game.canMoveKnight(x, y);
-        } else if (item.id.type === ItemTypes.BCAR) {
+        if (item.id.type === ItemTypes.BCAR) {
           return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars) 
                   && roundManager.checkPaintStatus(x,y);
         } else if (item.id.type === ItemTypes.GCAR) {
@@ -35,21 +33,19 @@ export const ColumnGrid = ({ x, y, children, game, carManager, roundManager}) =>
         return false;
       },
       drop: (item) => { 
-        if (item.id === ItemTypes.KNIGHT) {
-          game.moveKnight(x, y);
-        } else if (item.id.type === ItemTypes.BCAR) {
+        if (item.id.type === ItemTypes.BCAR) {
           //console.log(x + " " + y + " " +item.id.id)
           carManager.moveCar(x, y, item.id.id, true);
         } else if (item.id.type === ItemTypes.GCAR) {
           carManager.moveCar(x, y, item.id.id, false);
         }
-      },  // Moves the knight to this square when dropped
+      },  
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),  // Whether an item is currently being hovered over this square
         canDrop: !!monitor.canDrop(),  // Whether the item can be dropped on this square
       }),
     }),
-    [game, carManager],  // Dependency array containing game object
+    [carManager],  // Dependency array containing game object
   )
 
   return (

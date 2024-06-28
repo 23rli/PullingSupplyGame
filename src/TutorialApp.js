@@ -4,8 +4,6 @@ import { useMemo } from 'react'
 // Importing the Board component from the same directory
 import { Board } from './Gameboard/Board.js'
 
-// Importing the Game class from the same directory
-import { Game } from './Rules/Game.js'
 
 import {CarManager} from './Pieces/CarManager.js'
 import { Round } from './Rules/Round.js'
@@ -29,14 +27,13 @@ const containerStyle = {
  */
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
-  const game = useMemo(() => new Game(), [])
   const carManager = useMemo(() => new CarManager(), []);  
   const roundManager = useMemo(() => new Round(0, 15, carManager), []);  
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board game={game} roundManager = {roundManager} />
+      <Board roundManager = {roundManager} />
     </div>
   )
 

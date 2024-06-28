@@ -12,7 +12,7 @@ export class GreenCar{
     this.coords = [0,1];
     this.complete = false;
     this.rResLimit = 3;
-    this.yResLimit = 3;
+    this.yResLimit = 2;
     this.bResLimit = 2;
     this.rRes = 0
     this.yRes = 0;

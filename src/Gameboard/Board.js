@@ -17,7 +17,6 @@ import  AlertDialogSlide  from '../TransitionScreen/Transition.js';
 import { DraggableDialog } from '../Converter/Window.js';
 import { ColumnGrid } from './ColumnGrid.js';
 import { ColumnHeader } from './ColumnHeader.js';
-import { Header } from './Header.js';
 import { Piece } from '../Pieces/Piece.js';
 import { ItemTypes } from '../Pieces/ItemTypes.js';
 import StatisticsModal from '../Statistics/StatusModal.js';
@@ -36,28 +35,20 @@ const headerStyle = { width: '100%', height: '10%' }
 const appBarStyle = { width: '100%', height: '5%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
-export const Board = ({ game, roundManager }) => {
-  const [[knightX, knightY], setKnightPos] = useState(game.knightPosition);
+export const Board = ({ roundManager }) => {
+
   const [blueCars, setBlueCars] = useState(roundManager.carManager.blueCars);
   const [greenCars, setGreenCars] = useState(roundManager.carManager.greenCars);
   const [round, setRound] = useState(roundManager);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    game.observe(setKnightPos);
     roundManager.carManager.observe(({ updateBlueCars, updateGreenCars }) => {
       setBlueCars([...updateBlueCars]);
       setGreenCars([...updateGreenCars]);
     });
-  }, [game, roundManager]);
+  }, [ roundManager]);
 
-  function renderHeader(i) {
-    return (
-      <div key={i} style={headerStyle}>
-        <Header></Header>
-      </div>
-    );
-  }
 
   function renderColumnHeader(i) {
     const x = i;
@@ -145,14 +136,11 @@ export const Board = ({ game, roundManager }) => {
   function renderColumnSpace(i) {
     const x = i % 6;
     const y = Math.floor(i / 6);
-    const isKnight = x === knightX && y === knightY;
 
     let type = '';
     let id = -1;
 
-    if (x === knightX && y === knightY) {
-      type = ItemTypes.KNIGHT;
-    } else if (roundManager.carManager.hasBlueCar(x, y, blueCars)) {
+    if (roundManager.carManager.hasBlueCar(x, y, blueCars)) {
       type = ItemTypes.BCAR;
       id = roundManager.carManager.findBlueId(x, y, blueCars);
     } else if (roundManager.carManager.hasGreenCar(x, y, greenCars)) {
@@ -162,8 +150,8 @@ export const Board = ({ game, roundManager }) => {
 
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} game={game} carManager={roundManager.carManager} roundManager = {roundManager}>
-          <Piece isKnight={isKnight} type={type} id={id} carManager={roundManager.carManager} />
+        <ColumnGrid x={x} y={y} carManager={roundManager.carManager} roundManager = {roundManager}>
+          <Piece type={type} id={id} carManager={roundManager.carManager} />
         </ColumnGrid>
       </div>
     );
