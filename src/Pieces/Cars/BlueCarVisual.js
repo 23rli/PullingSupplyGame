@@ -3,7 +3,6 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 
 // Importing ItemTypes constant from the same directory
 import { ItemTypes } from '../ItemTypes.js'
-import { CarManager } from '../CarManager.js';
 
 // Knight component representing the knight piece on the chessboard
 export const BlueCarVisual = ({id, carManager}) => {

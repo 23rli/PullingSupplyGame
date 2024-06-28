@@ -3,7 +3,7 @@
 import {react} from 'react'
 import { ItemTypes } from '../ItemTypes.js'
 
-import { GreenCarVisual } from '../GreenCar/GreenCarVisual.js';
+import { GreenCarVisual } from './GreenCarVisual.js';
 
 export class GreenCar{
   constructor(id){

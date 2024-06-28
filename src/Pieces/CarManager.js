@@ -6,9 +6,9 @@ Then have it so when a user drags a vehicle, its only draggable if the units bef
 This progresses until the unit dragged finishes. It then makes some changes and teleports back to the first block to repeat the cycle.
 */
 
-import { BlueCar } from "./BlueCar/BlueCar"
+import { BlueCar } from "./Cars/BlueCar"
 
-import { GreenCar } from "./GreenCar/GreenCar";
+import { GreenCar } from "./Cars/GreenCar";
 // CarManager.js
 
 export class CarManager {

@@ -1,7 +1,7 @@
 // Importing the Knight component from the same directory
 import { ItemTypes } from './ItemTypes.js';
-import { BlueCarVisual } from './BlueCar/BlueCarVisual.js';
-import { GreenCarVisual } from './GreenCar/GreenCarVisual.js';
+import { BlueCarVisual } from './Cars/BlueCarVisual.js';
+import { GreenCarVisual } from './Cars/GreenCarVisual.js';
 
 // Piece component that conditionally renders different pieces based on props
 export const Piece = ({type, id, carManager }) => {
