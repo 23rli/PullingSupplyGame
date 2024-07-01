@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Divider from '@mui/material/Divider';
-import {TransitionDialog} from '../TransitionScreen/Transition'
+import {TransitionDialog} from '../TransitionScreen/NextRound'
 
 
 function PaperComponent(props) {

@@ -1,4 +1,3 @@
-import {TransitionDialog} from '../TransitionScreen/Transition'
 import {Car} from '../Pieces/Cars/Car'
 
 export class Round{
@@ -137,14 +136,10 @@ export class Round{
     }
 
     advanceRound(){
-        console.log(this.roundNum + " " + this.paintRoundBegan)
         if(this.paintStatus && this.roundNum - 1 == this.paintRoundBegan){
             this.dryStatus = true;
             this.readyToPaint = false;
         }
-
-        
-
 
         for(let i = 0; i < this.cars.length; i++){
             this.completeStepMove(this.cars[i].id)
@@ -164,7 +159,7 @@ export class Round{
         this.roundNum ++;
         this.roundResources = this.gameResources[this.roundNum]
         
-        this.carManager.emitChange();
+        this.emitChange();
     }
 
     checkPaintStatus(x,y){

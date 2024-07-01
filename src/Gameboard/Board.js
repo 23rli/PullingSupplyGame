@@ -13,13 +13,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { blue, yellow, grey, red } from '@mui/material/colors';
 import { Engineering, Build, MiscellaneousServices, Add as AddIcon } from '@mui/icons-material';
-import  AlertDialogSlide  from '../TransitionScreen/Transition.js';
-import { DraggableDialog } from '../Converter/Window.js';
+import  AlertDialogSlide  from '../Modals/TransitionScreen/NextRound.js';
+import { DraggableDialog } from '../Modals/Converter/Window.js';
 import { ColumnGrid } from './ColumnGrid.js';
 import { ColumnHeader } from './ColumnHeader.js';
 import { Piece } from '../Pieces/Piece.js';
 import { ItemTypes } from '../Pieces/ItemTypes.js';
-import StatisticsModal from '../Statistics/StatusModal.js';
+import StatisticsModal from '../Modals/Statistics/StatusModal.js';
 
 // Styles
 const boardStyle = {
@@ -87,7 +87,7 @@ export const Board = ({ roundManager }) => {
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
-                  color="inherit"
+                  sx = {{color: red[300] }}
                 >
                   <Badge badgeContent={roundManager.roundResources[0]} color="">
                     <Build sx={{ color: red[300] }} />
