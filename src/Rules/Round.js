@@ -23,8 +23,8 @@ export class Round{
         this.produced = 0
         this.observers = [];
 
-        this.cars.push(new Car(0));
-        this.cars.push(new Car(0));
+        this.cars.push(new Car('b0'));
+        this.cars.push(new Car('g1'));
 
         //MICRO RESOURCES
         this.roundResources = this.gameResources[0];
@@ -51,153 +51,86 @@ export class Round{
     allocateResources(){
         //Blue Resources:
             for(let i = 0; i < 8; i++){
-                let id = this.carManager.findBlueId(3, i, this.carManager.blueCars)
+                let id = this.findId(3, i, this.cars)
                 if(id != -1){
-                    const limit = this.carManager.blueCars[id].bResLimit;
-                    const res = this.carManager.blueCars[id].bRes;
+                    let index = id.slice(1);
+                    const limit = this.cars[index].bResLimit;
+                    const res = this.cars[index].bRes;
                     const need = limit - res;
                     let availableRes = this.roundResources[2];
                     if(availableRes >= need){
-                        this.carManager.blueCars[id].bRes += need;
+                        this.cars[index].bRes += need;
                         this.roundResources[2] -= need;
                     }else if(availableRes < need){
-                        this.carManager.blueCars[id].bRes += availableRes;
-                        this.roundResources[2] -= availableRes;
-                    }
-                }
-                id = this.carManager.findGreenId(3, i, this.carManager.greenCars)
-                if(id != -1){
-                    const limit = this.carManager.greenCars[id].bResLimit;
-                    const res = this.carManager.greenCars[id].bRes;
-                    const need = limit - res;
-                    let availableRes = this.roundResources[2];
-                    if(availableRes >= need){
-                        this.carManager.greenCars[id].bRes += need;
-                        this.roundResources[2] -= need;
-                    }else if(availableRes < need){
-                        this.carManager.greenCars[id].bRes += availableRes;
+                        this.cars[index].bRes += availableRes;
                         this.roundResources[2] -= availableRes;
                     }
                 }
             }
         //Yellow
             for(let i = 0; i < 8; i++){
-                let id = this.carManager.findBlueId(2, i, this.carManager.blueCars)
+                let id = this.findId(2, i, this.cars)
                 if(id != -1){
-                    const limit = this.carManager.blueCars[id].yResLimit;
-                    const res = this.carManager.blueCars[id].yRes;
+                    let index = id.slice(1);
+                    const limit = this.cars[index].yResLimit;
+                    const res = this.cars[index].yRes;
                     const need = limit - res;
                     let availableRes = this.roundResources[1];
                     if(availableRes >= need){
-                        this.carManager.blueCars[id].yRes += need;
+                        this.cars[index].yRes += need;
                         this.roundResources[1] -= need;
                     }else if(availableRes < need){
-                        this.carManager.blueCars[id].yRes += availableRes;
+                        this.cars[index].yRes += availableRes;
                         this.roundResources[1] -= availableRes;
                     }
                 }
-                id = this.carManager.findGreenId(2, i, this.carManager.greenCars)
-                if(id != -1){
-                    const limit = this.carManager.greenCars[id].yResLimit;
-                    const res = this.carManager.greenCars[id].yRes;
-                    const need = limit - res;
-                    let availableRes = this.roundResources[1];
-                    if(availableRes >= need){
-                        this.carManager.greenCars[id].yRes += need;
-                        this.roundResources[1] -= need;
-                    }else if(availableRes < need){
-                        this.carManager.greenCars[id].yRes += availableRes;
-                        this.roundResources[1] -= availableRes;
-                    }
-                }
+
             }
 
         //Red
             for(let i = 0; i < 8; i++){
-                let id = this.carManager.findBlueId(1, i, this.carManager.blueCars)
+                let id = this.findId(1, i, this.cars)
                 if(id != -1){
-                    const limit = this.carManager.blueCars[id].rResLimit;
-                    const res = this.carManager.blueCars[id].rRes;
+                    let index = id.slice(1);
+                    const limit = this.cars[index].rResLimit;
+                    const res = this.cars[index].rRes;
                     const need = limit - res;
                     let availableRes = this.roundResources[0];
                     if(availableRes >= need){
-                        this.carManager.blueCars[id].rRes += need;
+                        this.cars[index].rRes += need;
                         this.roundResources[0] -= need;
                     }else if(availableRes < need){
-                        this.carManager.blueCars[id].rRes += availableRes;
-                        this.roundResources[0] -= availableRes;
-                    }
-                }
-                id = this.carManager.findGreenId(1, i, this.carManager.greenCars)
-                if(id != -1){
-                    const limit = this.carManager.greenCars[id].rResLimit;
-                    const res = this.carManager.greenCars[id].rRes;
-                    const need = limit - res;
-                    let availableRes = this.roundResources[0];
-                    if(availableRes >= need){
-                        this.carManager.greenCars[id].rRes += need;
-                        this.roundResources[0] -= need;
-                    }else if(availableRes < need){
-                        this.carManager.greenCars[id].rRes += availableRes;
+                        this.cars[index].rRes += availableRes;
                         this.roundResources[0] -= availableRes;
                     }
                 }
             }
     }
 
-    completeStepMove(isBlue, id){
-        if(isBlue){
-            const [x, y] = this.carManager.blueCars[id].coords
-            if(x == 1){
-                if(this.carManager.blueCars[id].rRes == this.carManager.blueCars[id].rResLimit){
-                    this.carManager.blueCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
-            }else if(x == 2){
-                if(this.carManager.blueCars[id].yRes == this.carManager.blueCars[id].yResLimit){
-                    this.carManager.blueCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
-            }else if(x == 3){
-                if(this.carManager.blueCars[id].bRes == this.carManager.blueCars[id].bResLimit){
-                    this.carManager.blueCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
-
-            }else if(x == 4){
-                console.log("paint status: " + this.paintStatus)
-                console.log("dry status: " + this.dryStatus)
-                console.log("paint round begin status: " + this.roundNum + " " + this.paintRoundBegan + " " + (this.roundNum - 1 == this.paintRoundBegan))
-                if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
-                    this.carManager.blueCars[id].waited = true;
-                }else if(this.paintRoundBegan == -1){
-                    this.readyToPaint = true;
-                }
+    completeStepMove(id){
+        const index = id.slice(1)
+        const [x, y] = this.cars[index].coords
+        if(x == 1){
+            if(this.cars[index].rRes == this.cars[index].rResLimit){
+                this.cars[index].waited = true;
+                //stop gap = add glow when ready to move over.
             }
-        }else{
-            const [x, y] = this.carManager.greenCars[id].coords
-            if(x == 1){
-                if(this.carManager.greenCars[id].rRes == this.carManager.greenCars[id].rResLimit){
-                    this.carManager.greenCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
-            }else if(x == 2){
-                if(this.carManager.greenCars[id].yRes == this.carManager.greenCars[id].yResLimit){
-                    this.carManager.greenCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
-            }else if(x == 3){
-                if(this.carManager.greenCars[id].bRes == this.carManager.greenCars[id].bResLimit){
-                    this.carManager.greenCars[id].waited = true;
-                    //stop gap = add glow when ready to move over.
-                }
+        }else if(x == 2){
+            if(this.cars[index].yRes == this.cars[index].yResLimit){
+                this.cars[index].waited = true;
+                //stop gap = add glow when ready to move over.
+            }
+        }else if(x == 3){
+            if(this.cars[index].bRes == this.cars[index].bResLimit){
+                this.cars[index].waited = true;
+                //stop gap = add glow when ready to move over.
+            }
 
-            }else if(x == 4){
-                if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
-                    this.carManager.greenCars[id].waited = true;
-                }else if(this.paintRoundBegan == -1){
-                    this.readyToPaint = true;
-                }
+        }else if(x == 4){
+            if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
+                this.cars[index].waited = true;
+            }else if(this.paintRoundBegan == -1){
+                this.readyToPaint = true;
             }
         }
 
@@ -213,11 +146,8 @@ export class Round{
         
 
 
-        for(let i = 0; i < this.carManager.blueCars.length; i++){
-            this.completeStepMove(true, i)
-        }
-        for(let i = 0; i < this.carManager.greenCars.length; i++){
-            this.completeStepMove(false, i)
+        for(let i = 0; i < this.cars.length; i++){
+            this.completeStepMove(this.cars[i].id)
         }
 
         if(this.paintStatus && this.dryStatus && this.roundNum - 1 == this.paintRoundBegan){
@@ -231,11 +161,8 @@ export class Round{
             this.paintRoundBegan = this.roundNum;
         }
 
-
-
         this.roundNum ++;
         this.roundResources = this.gameResources[this.roundNum]
-
         
         this.carManager.emitChange();
     }
@@ -243,8 +170,8 @@ export class Round{
     checkPaintStatus(x,y){
         if(x == 4){
             let count = 0;
-            for(let i = 0; i < this.carManager.blueCars.length; i++){
-                if(this.carManager.blueCars[i].coords[0] == 4){
+            for(let i = 0; i < this.cars.length; i++){
+                if(this.cars[i].coords[0] == 4){
                     count ++;
                 }
             }
@@ -352,9 +279,8 @@ export class Round{
 
     /*The code can;t seem to find the id via x and y when dragging the object */
     findId(x, y, cars){
-        for (let i = 0; i < blueCars.length; i++) {
+        for (let i = 0; i < cars.length; i++) {
             if (cars[i].coords[0] === x && cars[i].coords[1] === y)  {
-                //console.log(i)
                 return cars[i].id;
             }
         }

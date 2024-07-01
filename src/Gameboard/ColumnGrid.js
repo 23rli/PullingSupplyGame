@@ -14,7 +14,7 @@ import { ColumnContainer } from './ColumnContainer.js'
 //import {BlueCarInitializer} from '../Pieces/BlueCarInitializer.js'
 
 // BoardSquare component that represents each square on the chessboard
-export const ColumnGrid = ({ x, y, children, carManager, roundManager}) => {
+export const ColumnGrid = ({ x, y, children, roundManager}) => {
   // Setting up the drop target for the knight using the useDrop hook
   const products = [ItemTypes.GCAR, ItemTypes.BCAR];
 
@@ -24,20 +24,19 @@ export const ColumnGrid = ({ x, y, children, carManager, roundManager}) => {
       canDrop: (item) => {
 
         if (item.id.type === ItemTypes.BCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, true, carManager.blueCars, carManager.greenCars) 
+          return roundManager.canMoveCar(x, y, item.id.id, roundManager.cars) 
                   && roundManager.checkPaintStatus(x,y);
         } else if (item.id.type === ItemTypes.GCAR) {
-          return carManager.canMoveCar(x, y, item.id.id, false, carManager.blueCars, carManager.greenCars)
-                  && roundManager.checkPaintStatus(x,y); //implement this function
+          return roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)
+                  && roundManager.checkPaintStatus(x,y); 
         }
         return false;
       },
       drop: (item) => { 
         if (item.id.type === ItemTypes.BCAR) {
-          //console.log(x + " " + y + " " +item.id.id)
-          carManager.moveCar(x, y, item.id.id, true);
+          roundManager.moveCar(x, y, item.id.id, true);
         } else if (item.id.type === ItemTypes.GCAR) {
-          carManager.moveCar(x, y, item.id.id, false);
+          roundManager.moveCar(x, y, item.id.id, false);
         }
       },  
       collect: (monitor) => ({
@@ -45,7 +44,7 @@ export const ColumnGrid = ({ x, y, children, carManager, roundManager}) => {
         canDrop: !!monitor.canDrop(),  // Whether the item can be dropped on this square
       }),
     }),
-    [carManager],  // Dependency array containing game object
+    [roundManager],  // Dependency array containing game object
   )
 
   return (

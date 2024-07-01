@@ -31,23 +31,20 @@ const boardStyle = {
 };
 const columnStyle = { width: '16.666%', height: '11%' }
 const columnHeaderStyle = { width: '16.666%', height: '7%' }
-const headerStyle = { width: '100%', height: '10%' }
 const appBarStyle = { width: '100%', height: '5%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
 export const Board = ({ roundManager }) => {
 
-  const [blueCars, setBlueCars] = useState(roundManager.carManager.blueCars);
-  const [greenCars, setGreenCars] = useState(roundManager.carManager.greenCars);
+  const [cars, setCars] = useState(roundManager.cars);
   const [round, setRound] = useState(roundManager);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    roundManager.carManager.observe(({ updateBlueCars, updateGreenCars }) => {
-      setBlueCars([...updateBlueCars]);
-      setGreenCars([...updateGreenCars]);
+    roundManager.observe(({ updateCars}) => {
+      setCars([...updateCars]);
     });
-  }, [ roundManager]);
+  }, [roundManager]);
 
 
   function renderColumnHeader(i) {
@@ -62,7 +59,7 @@ export const Board = ({ roundManager }) => {
 
   function handleAllocate() {
     roundManager.allocateResources();
-    roundManager.carManager.emitChange();
+    roundManager.emitChange();
   }
 
   function renderAppBar(i) {
@@ -138,20 +135,20 @@ export const Board = ({ roundManager }) => {
     const y = Math.floor(i / 6);
 
     let type = '';
-    let id = -1;
+    let id = roundManager.findId(x, y, cars);
 
-    if (roundManager.carManager.hasBlueCar(x, y, blueCars)) {
-      type = ItemTypes.BCAR;
-      id = roundManager.carManager.findBlueId(x, y, blueCars);
-    } else if (roundManager.carManager.hasGreenCar(x, y, greenCars)) {
-      type = ItemTypes.GCAR;
-      id = roundManager.carManager.findGreenId(x, y, greenCars);
+    if(id != -1){
+      if(id.charAt(0) === 'b'){
+        type = ItemTypes.BCAR;
+      }else if(id.charAt(0) === 'g'){
+        type = ItemTypes.GCAR
+      }
     }
-
+    
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} carManager={roundManager.carManager} roundManager = {roundManager}>
-          <Piece type={type} id={id} carManager={roundManager.carManager} />
+        <ColumnGrid x={x} y={y} roundManager = {roundManager}>
+          <Piece type={type} id={id} roundManager={roundManager} />
         </ColumnGrid>
       </div>
     );

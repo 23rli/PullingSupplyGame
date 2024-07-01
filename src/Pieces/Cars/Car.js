@@ -10,8 +10,9 @@ export class Car{
     this.yRes = 0;
     this.bRes = 0;
     this.waited = true;
-    this.coords = [0,1];
     this.complete = false;
+
+    this.coords = [0,1];
     this.rResLimit = 2;
     this.yResLimit = 2;
     this.bResLimit = 2;
@@ -20,7 +21,6 @@ export class Car{
     if(id.charAt(0) === 'b'){
         this.type = ItemTypes.BCAR;
         this.coords = [0,0];
-        this.complete = false;
         this.rResLimit = 3;
         this.yResLimit = 3;
         this.bResLimit = 2;
