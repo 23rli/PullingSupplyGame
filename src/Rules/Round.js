@@ -174,10 +174,57 @@ export class Round {
             this.paintRoundBegan = this.roundNum;
         }
 
-        this.roundNum++;
-        this.roundResources = this.gameResources[this.roundNum]
+        updateStatistics();
+
+        if(!this.endGame()){
+            this.roundNum++;
+            this.roundResources = this.gameResources[this.roundNum]
+        }else{
+            // Introduce end Game Mechanics
+        }
+            
 
         this.emitChange();
+    }
+
+    updateStatistics(){
+        let info = [];
+        for(let i = 0; i < this.totalRounds; i++){
+            if(i <= roundNum){
+                info.push(
+                    {
+                        i,
+                         mBlue, 
+                         mGreen, 
+                         aBlue, 
+                         aGreen, 
+                         qBlue, 
+                         qGreen, 
+                         pBlue, 
+                         pGreen, 
+                         dBlue,
+                         dGreen,
+                         doneBlue,
+                         doneGreen, 
+                         rRes, 
+                         yRes, 
+                         bRes, 
+                         rConRes, 
+                         yConRes, 
+                         bConRes, 
+                         unusedR, 
+                         unusedY, 
+                         unusedB   
+                    }
+                )
+            }else{
+                info.push(
+                    {
+                        
+                    }
+                )
+            }
+        }
     }
 
     checkPaintStatus(x, y) {

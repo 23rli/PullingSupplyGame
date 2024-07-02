@@ -34,10 +34,9 @@ const columnHeaderStyle = { width: '16.666%', height: '7%' }
 const appBarStyle = { width: '100%', height: '7%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
-export const Board = ({ roundManager }) => {
+export const Board = ({ roundManager, memory }) => {
 
   const [cars, setCars] = useState(roundManager.cars);
-  const [round, setRound] = useState(roundManager);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {

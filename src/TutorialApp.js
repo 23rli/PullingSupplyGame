@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 // Importing the Board component from the same directory
 import { Board } from './Gameboard/Board.js'
 import { Round } from './Rules/Round.js'
+import { Memory } from './Rules/ShortMemory.js' 
 
 
 // Styling properties applied to the container of the chessboard
@@ -25,11 +26,12 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const roundManager = useMemo(() => new Round(0, 15), []);
+  const memory = useMemo(() => new Memory(), []);
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board roundManager={roundManager} />
+      <Board roundManager={roundManager} memory = {memory} />
     </div>
   )
 

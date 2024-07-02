@@ -74,8 +74,18 @@ function createData(name, code, population, size) {
 
 function produceData(roundNum, mBlue, mGreen, aBlue, aGreen, qBlue, qGreen, pBlue, pGreen, dBlue,
   dGreen, doneBlue, doneGreen, rRes, yRes, bRes, rConRes, yConRes, bConRes, unusedR, unusedY, unusedB) {
-  const density = population / size;
-  return { name, code, population, size, density };
+  const wip = mBlue + mGreen + aBlue + aGreen + qBlue + qGreen + pBlue + pGreen + dBlue + dGreen;
+  return
+}
+
+function produceTableInfo(roundManager){
+  let info = [];
+
+  for(let i = 0; i < roundManager.totalRounds; i++){
+    info.push(produceData(i, ))
+  }
+
+  return info;
 }
 
 
@@ -113,6 +123,8 @@ export default function GameDataTable({ roundManager }) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  let info = produceTableInfo();
 
   return (
     <Paper sx={{ width: '90%', overflow: 'hidden' }}>
