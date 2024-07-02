@@ -16,7 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const fabStyle = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
 
-export default function AlertDialogSlide({roundManager}) {
+export default function AlertDialogSlide({ roundManager }) {
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
 
@@ -44,7 +44,7 @@ export default function AlertDialogSlide({roundManager}) {
 
   return (
     <React.Fragment>
-      <Fab color="primary" aria-label="add" variant='extended' size='large' style={fabStyle} onClick={handleClickOpen1}>
+      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyle} onClick={handleClickOpen1}>
         Next Round
       </Fab>
 
@@ -84,26 +84,26 @@ export default function AlertDialogSlide({roundManager}) {
           </DialogContentText>
 
           <Box
-          height={100}
-          my={4}
-          display="flex"
-          alignItems="center"
-          justifyContent= "center"
-          gap={4}
-          p={2}
-        >
-          <Box
-            sx={{
-              width: 250,
-              height: 200,
-              borderRadius: 1,
-              bgcolor: '#e53935',
-              '&:hover': {
-                bgcolor: '#ea605d',
-              },
-            }}
+            height={100}
+            my={4}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            gap={4}
+            p={2}
           >
-             <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                width: 250,
+                height: 200,
+                borderRadius: 1,
+                bgcolor: '#e53935',
+                '&:hover': {
+                  bgcolor: '#ea605d',
+                },
+              }}
+            >
+              <Box display="flex" alignItems="center">
                 <DialogContentText
                   variant="h1"
                   sx={{ fontSize: '120px', textAlign: 'left', color: '#e53935' }}
@@ -117,28 +117,28 @@ export default function AlertDialogSlide({roundManager}) {
                   {roundManager.getResources(roundManager.roundNum)[0]}
                 </DialogContentText>
               </Box>
-            <DialogContentText
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx = {{fontSize: '30px', textAlign: 'left'}}
-            >
-              Red Resource
-            </DialogContentText>
-          </Box>
+              <DialogContentText
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ fontSize: '30px', textAlign: 'left' }}
+              >
+                Red Resource
+              </DialogContentText>
+            </Box>
 
 
-          <Box
-          sx={{
-            width: 250,
-            height: 200,
-            borderRadius: 1,
-            bgcolor: '#ffeb3b',
-            '&:hover': {
-              bgcolor: '#ffef62',
-            },
-          }}>
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                width: 250,
+                height: 200,
+                borderRadius: 1,
+                bgcolor: '#ffeb3b',
+                '&:hover': {
+                  bgcolor: '#ffef62',
+                },
+              }}>
+              <Box display="flex" alignItems="center">
                 <DialogContentText
                   variant="h1"
                   sx={{ fontSize: '120px', textAlign: 'left', color: '#ffeb3b' }}
@@ -152,28 +152,28 @@ export default function AlertDialogSlide({roundManager}) {
                   {roundManager.getResources(roundManager.roundNum)[1]}
                 </DialogContentText>
               </Box>
-            <DialogContentText
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx = {{fontSize: '30px', textAlign: 'left'}}
-            >
-              Yellow Resource
-            </DialogContentText>
-          </Box>
+              <DialogContentText
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ fontSize: '30px', textAlign: 'left' }}
+              >
+                Yellow Resource
+              </DialogContentText>
+            </Box>
 
-          <Box
-          sx={{
-            width: 250,
-            height: 200,
-            borderRadius: 1,
-            bgcolor: '#2196f3',
-            '&:hover': {
-              bgcolor: '#4dabf5',
-            },
-          }}
-          >
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                width: 250,
+                height: 200,
+                borderRadius: 1,
+                bgcolor: '#2196f3',
+                '&:hover': {
+                  bgcolor: '#4dabf5',
+                },
+              }}
+            >
+              <Box display="flex" alignItems="center">
                 <DialogContentText
                   variant="h1"
                   sx={{ fontSize: '120px', textAlign: 'left', color: '#2196f3' }}
@@ -187,18 +187,18 @@ export default function AlertDialogSlide({roundManager}) {
                   {roundManager.getResources(roundManager.roundNum)[2]}
                 </DialogContentText>
               </Box>
-            <DialogContentText
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx = {{fontSize: '30px', textAlign: 'left'}}
-            >
-              Blue Resource
-            </DialogContentText>
+              <DialogContentText
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{ fontSize: '30px', textAlign: 'left' }}
+              >
+                Blue Resource
+              </DialogContentText>
+
+            </Box>
 
           </Box>
-          
-        </Box>
 
         </DialogContent>
         <DialogActions>

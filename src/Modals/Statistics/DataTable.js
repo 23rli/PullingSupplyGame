@@ -35,6 +35,9 @@ const columns = [
   { id: 'rRes', label: 'R', minWidth: 35 },
   { id: 'yRes', label: 'Y', minWidth: 35 },
   { id: 'bRes', label: 'B', minWidth: 35 },
+  { id: 'rConRes', label: 'R', minWidth: 35 },
+  { id: 'yConRes', label: 'Y', minWidth: 35 },
+  { id: 'bConRes', label: 'B', minWidth: 35 },
   { id: 'unusedR', label: 'R', minWidth: 35 },
   { id: 'unusedY', label: 'Y', minWidth: 35 },
   { id: 'unusedB', label: 'B', minWidth: 35 },
@@ -69,6 +72,17 @@ function createData(name, code, population, size) {
   return { name, code, population, size, density };
 }
 
+function produceData(roundNum, mBlue, mGreen, aBlue, aGreen, qBlue, qGreen, pBlue, pGreen, dBlue,
+  dGreen, doneBlue, doneGreen, rRes, yRes, bRes, rConRes, yConRes, bConRes, unusedR, unusedY, unusedB) {
+  const density = population / size;
+  return { name, code, population, size, density };
+}
+
+
+const rows1 = [
+
+]
+
 const rows = [
   createData('India', 'IN', 1324171354, 3287263),
   createData('China', 'CN', 1403500365, 9596961),
@@ -87,7 +101,7 @@ const rows = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-export default function GameDataTable({roundManager}) {
+export default function GameDataTable({ roundManager }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(12);
 
@@ -106,36 +120,39 @@ export default function GameDataTable({roundManager}) {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Manufacturing
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Assembly
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Quality
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Paint
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Dry
               </TableCell>
-              <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
-                
+              <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+
               </TableCell>
-              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Done
               </TableCell>
-              <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Resources
               </TableCell>
-              <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+              <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
+                Converted Resources
+              </TableCell>
+              <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                 Unused Resources
               </TableCell>
-              
+
             </TableRow>
             <TableRow>
               {columns.map((column) => (
@@ -143,7 +160,7 @@ export default function GameDataTable({roundManager}) {
                   key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
-                  sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}
+                  sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}
                 >
                   {column.label}
                   <Divider orientation="vertical" flexItem />
@@ -160,7 +177,7 @@ export default function GameDataTable({roundManager}) {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)'}}>
+                        <TableCell key={column.id} align={column.align} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}

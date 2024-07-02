@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { blue, yellow, grey, red } from '@mui/material/colors';
 import { Engineering, Build, MiscellaneousServices, Add as AddIcon } from '@mui/icons-material';
-import  AlertDialogSlide  from '../Modals/TransitionScreen/NextRound.js';
+import AlertDialogSlide from '../Modals/TransitionScreen/NextRound.js';
 import { DraggableDialog } from '../Modals/Converter/Window.js';
 import { ColumnGrid } from './ColumnGrid.js';
 import { ColumnHeader } from './ColumnHeader.js';
@@ -31,7 +31,7 @@ const boardStyle = {
 };
 const columnStyle = { width: '16.666%', height: '11%' }
 const columnHeaderStyle = { width: '16.666%', height: '7%' }
-const appBarStyle = { width: '100%', height: '5%' }
+const appBarStyle = { width: '100%', height: '7%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
 export const Board = ({ roundManager }) => {
@@ -41,7 +41,7 @@ export const Board = ({ roundManager }) => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    roundManager.observe(({ updateCars}) => {
+    roundManager.observe(({ updateCars }) => {
       setCars([...updateCars]);
     });
   }, [roundManager]);
@@ -52,7 +52,7 @@ export const Board = ({ roundManager }) => {
     const y = 0;
     return (
       <div key={i} style={columnHeaderStyle}>
-        <ColumnHeader x={x} y={y} roundManager = {roundManager}></ColumnHeader>
+        <ColumnHeader x={x} y={y} roundManager={roundManager}></ColumnHeader>
       </div>
     );
   }
@@ -66,7 +66,10 @@ export const Board = ({ roundManager }) => {
     return (
       <div key={i} style={appBarStyle}>
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
+          <AppBar
+            position="static"
+            sx={{ bgcolor: grey[800] }}
+          >
             <Toolbar>
               <IconButton
                 size="large"
@@ -80,49 +83,59 @@ export const Board = ({ roundManager }) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Motor City
               </Typography>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1  }}>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Round: {roundManager.roundNum}
               </Typography>
-              <MenuItem>
+              <MenuItem
+                sx={{ bgcolor: red[400] }}
+              >
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
-                  sx = {{color: red[300] }}
+
                 >
                   <Badge badgeContent={roundManager.roundResources[0]} color="">
-                    <Build sx={{ color: red[300] }} />
+                    <Build sx={{ color: red[100] }} />
                   </Badge>
                 </IconButton>
                 <p>Red</p>
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                sx={{
+                  bgcolor: yellow[600],
+                  color: grey[900]
+                }}
+              >
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
                   <Badge badgeContent={roundManager.roundResources[1]} color="">
-                    <MiscellaneousServices sx={{ color: yellow[300] }} />
+                    <MiscellaneousServices sx={{ color: yellow[100] }} />
                   </Badge>
                 </IconButton>
-                <p>Yellow</p>
+                <p
+                >Yellow: {roundManager.roundResources[1]} </p>
               </MenuItem>
-              <MenuItem>
+              <MenuItem
+                sx={{ bgcolor: blue[400] }}
+              >
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
                   <Badge badgeContent={roundManager.roundResources[2]} color="">
-                    <Engineering sx={{ color: blue[300] }} />
+                    <Engineering sx={{ color: blue[100] }} />
                   </Badge>
                 </IconButton>
                 <p>Blue</p>
               </MenuItem>
               <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
-              <DraggableDialog roundManager={roundManager} />
-              <Button color="inherit" onClick={handleAllocate} sx={{ ml: 1 }}> Allocate </Button>
-              <StatisticsModal roundManager = {roundManager}/>
+              <DraggableDialog roundManager={roundManager} sx={{ ml: 1 }} />
+              <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}> Allocate </Button>
+              <StatisticsModal roundManager={roundManager} />
             </Toolbar>
           </AppBar>
         </Box>
@@ -137,17 +150,17 @@ export const Board = ({ roundManager }) => {
     let type = '';
     let id = roundManager.findId(x, y, cars);
 
-    if(id != -1){
-      if(id.charAt(0) === 'b'){
+    if (id != -1) {
+      if (id.charAt(0) === 'b') {
         type = ItemTypes.BCAR;
-      }else if(id.charAt(0) === 'g'){
+      } else if (id.charAt(0) === 'g') {
         type = ItemTypes.GCAR
       }
     }
-    
+
     return (
       <div key={i} style={columnStyle}>
-        <ColumnGrid x={x} y={y} roundManager = {roundManager}>
+        <ColumnGrid x={x} y={y} roundManager={roundManager}>
           <Piece type={type} id={id} roundManager={roundManager} />
         </ColumnGrid>
       </div>
@@ -168,7 +181,7 @@ export const Board = ({ roundManager }) => {
   return (
     <div style={boardStyle}>
       {squares}
-      <AlertDialogSlide roundManager = {roundManager}/>
+      <AlertDialogSlide roundManager={roundManager} />
     </div>
   );
 }
