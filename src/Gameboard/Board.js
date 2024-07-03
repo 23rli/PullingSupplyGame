@@ -86,23 +86,29 @@ export const Board = ({ roundManager, memory }) => {
                 Round: {roundManager.roundNum}
               </Typography>
               <MenuItem
-                sx={{ bgcolor: red[400] }}
+                sx={{ 
+                  bgcolor: red[400],
+                  display: 'flex',
+                  alignItems: 'left',
+                  justifyContent: 'center',
+                   // optional, adds space between elements
+                 }}
               >
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
 
                 >
-                  <Badge badgeContent={roundManager.roundResources[0]} color="">
+                  <Badge  color="">
                     <Build sx={{ color: red[100] }} />
                   </Badge>
                 </IconButton>
-                <p>Red</p>
+                <p>Red: {roundManager.roundResources[0]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
               </MenuItem>
               <MenuItem
                 sx={{
-                  bgcolor: yellow[600],
-                  color: grey[900]
+                  bgcolor: "#c9bd32",
+                  color: grey[100]
                 }}
               >
                 <IconButton
@@ -110,12 +116,12 @@ export const Board = ({ roundManager, memory }) => {
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
-                  <Badge badgeContent={roundManager.roundResources[1]} color="">
+                  <Badge color="">
                     <MiscellaneousServices sx={{ color: yellow[100] }} />
                   </Badge>
                 </IconButton>
                 <p
-                >Yellow: {roundManager.roundResources[1]} </p>
+                >Yellow: {roundManager.roundResources[1]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
               </MenuItem>
               <MenuItem
                 sx={{ bgcolor: blue[400] }}
@@ -125,11 +131,11 @@ export const Board = ({ roundManager, memory }) => {
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
-                  <Badge badgeContent={roundManager.roundResources[2]} color="">
+                  <Badge b color="">
                     <Engineering sx={{ color: blue[100] }} />
                   </Badge>
                 </IconButton>
-                <p>Blue</p>
+                <p>Blue: {roundManager.roundResources[2]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
               </MenuItem>
               <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
               <DraggableDialog roundManager={roundManager} sx={{ ml: 1 }} />

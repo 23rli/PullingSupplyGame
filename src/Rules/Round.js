@@ -174,7 +174,7 @@ export class Round {
             this.paintRoundBegan = this.roundNum;
         }
 
-        updateStatistics();
+        //updateStatistics();
 
         if(!this.endGame()){
             this.roundNum++;
@@ -186,7 +186,7 @@ export class Round {
 
         this.emitChange();
     }
-
+    /*
     updateStatistics(){
         let info = [];
         for(let i = 0; i < this.totalRounds; i++){
@@ -226,7 +226,7 @@ export class Round {
             }
         }
     }
-
+    */
     checkPaintStatus(x, y) {
         if (x == 4) {
             let count = 0;

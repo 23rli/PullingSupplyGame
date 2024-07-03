@@ -1,14 +1,16 @@
 export class ShortMemory{
 
-    constructor(){
+    constructor(roundNum){
         this.cars = [];
         this.count = 0;
         this.produced = 0
         this.observers = [];
 
-        //MICRO RESOURCES
         this.roundResources = [];
-        this.roundNum = 0;
+        this.conResources = [];
+        this.endResources = [];
+
+        this.roundNum = roundNum;
         this.paintRoundBegan = -1;
         this.paintStatus = false;
         this.dryStatus = false;
@@ -16,6 +18,14 @@ export class ShortMemory{
     }
 
     setMemory(cars, count, produced, roundResources,rounNum, paintRoundBegain, paintStatus, dryStatus, readyToPaint){
+
+    }
+
+    updateObjectStats(){
+
+    }
+
+    updateResourceStats(){
 
     }
 
