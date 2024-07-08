@@ -1,4 +1,5 @@
 import { Car } from '../Pieces/Cars/Car'
+import { ShortMemory } from '../Rules/ShortMemory.js';
 
 export class Round {
 
@@ -15,41 +16,55 @@ export class Round {
             this.gameResources.push([red, yellow, blue]);
         }
 
+        //Memory:
+        
+        this.shortMemory = new ShortMemory(0)
+
         //CONTROL RESOURCES
 
         this.cars = [];
         this.count = 0;
-        this.produced = 0
+        this.produced = 0;
         this.observers = [];
 
-        this.cars.push(new Car('b0'));
-        this.cars.push(new Car('g1'));
+        this.cars.push(new Car('b0', null));
+        this.cars.push(new Car('g1', null));
 
         //MICRO RESOURCES
-        this.roundResources = this.gameResources[0];
+        this.roundResources = [...this.gameResources[0]]
         this.roundNum = 0;
         this.paintRoundBegan = -1;
         this.paintStatus = false;
         this.dryStatus = false;
         this.readyToPaint = false;
+
+        this.setShortTermMem()
+        console.log("round constructor")
+        console.log(this.shortMemory)
     }
 
     resetRound() {
-        this.cars = [];
-        this.count = 0;
-        this.produced = 0
-        this.observers = [];
 
-        this.cars.push(new Car('b0'));
-        this.cars.push(new Car('g1'));
+        this.cars = [];
+
+        for(let i = 0; i < this.shortMemory.cars.length; i++){
+            const temp = this.shortMemory.cars[i]
+            this.cars.push(new Car(temp.id, temp.rRes, temp.yRes, temp.bRes, temp.waited, temp.complete, temp.coords[0], temp.coords[1]))
+        }
+
+        this.count = this.shortMemory.count;
+        this.produced = this.shortMemory.produced;
 
         //MICRO RESOURCES
-        this.roundResources = this.gameResources[0];
-        this.roundNum = 0;
-        this.paintRoundBegan = -1;
-        this.paintStatus = false;
-        this.dryStatus = false;
-        this.readyToPaint = false;
+        this.roundResources = [...this.shortMemory.roundResources];
+        this.roundNum = this.shortMemory.roundNum;
+        this.paintRoundBegan = this.shortMemory.paintRoundBegan;
+        this.paintStatus = this.shortMemory.paintStatus;
+        this.dryStatus = this.shortMemory.dryStatus;
+        this.readyToPaint = this.shortMemory.readyToPaint;
+
+
+        this.emitChange();
     }
 
     getResources(roundNum) {
@@ -122,6 +137,9 @@ export class Round {
                 }
             }
         }
+
+        this.emitChange();
+        console.log(this.shortMemory)
     }
 
     completeStepMove(id) {
@@ -178,7 +196,9 @@ export class Round {
 
         if(!this.endGame()){
             this.roundNum++;
-            this.roundResources = this.gameResources[this.roundNum]
+            this.roundResources = [...this.gameResources[this.roundNum]]
+            this.setShortTermMem()
+            
         }else{
             // Introduce end Game Mechanics
         }
@@ -266,13 +286,15 @@ export class Round {
         } else if (id.charAt(0) === 'b' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == 0) {
             this.cars[index].coords = [toX, toY];
             this.cars.push(new Car("b" + this.cars.length))
-        } else if (id.charAt(0) === 'g' && this.cars[index].coords[0] == 0 && this.greenCars[index].coords[1] == 1) {
+        } else if (id.charAt(0) === 'g' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == 1) {
             this.cars[index].coords = [toX, toY];
             this.cars.push(new Car("g" + this.cars.length))
         } else {
             this.cars[index].coords = [toX, toY];
         }
         this.cars[index].waited = false;
+
+        console.log(this.shortMemory)
         this.emitChange();
     }
 
@@ -352,6 +374,11 @@ export class Round {
             return true;
         }
         return false;
+    }
+
+    setShortTermMem(){
+        this.shortMemory.setMemory(this.cars, this.count, this.produced, this.roundResources,
+            this.roundNum, this.paintRoundBegin, this.paintStatus, this.dryStatus, this.readyToPaint)
     }
 
 

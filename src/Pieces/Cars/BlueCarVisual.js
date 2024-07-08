@@ -5,7 +5,7 @@ import { DragPreviewImage, useDrag } from 'react-dnd'
 import { ItemTypes } from '../ItemTypes.js'
 
 // Knight component representing the knight piece on the chessboard
-export const BlueCarVisual = ({ id, carManager }) => {
+export const BlueCarVisual = ({ id, roundManager }) => {
   // Setting up the drag source using the useDrag hook
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -16,7 +16,7 @@ export const BlueCarVisual = ({ id, carManager }) => {
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
     }),
-    [id, carManager],  // Dependency array (empty means no dependencies)
+    [id, roundManager],  // Dependency array (empty means no dependencies)
   )
   return (
     <>

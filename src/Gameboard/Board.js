@@ -21,6 +21,8 @@ import { Piece } from '../Pieces/Piece.js';
 import { ItemTypes } from '../Pieces/ItemTypes.js';
 import StatisticsModal from '../Modals/Statistics/StatusModal.js';
 
+
+
 // Styles
 const boardStyle = {
   width: '90vw',       // 90% of viewport width
@@ -34,9 +36,10 @@ const columnHeaderStyle = { width: '16.666%', height: '7%' }
 const appBarStyle = { width: '100%', height: '7%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
-export const Board = ({ roundManager, memory }) => {
+export const Board = ({ roundManager, longMemory }) => {
 
   const [cars, setCars] = useState(roundManager.cars);
+
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -131,14 +134,14 @@ export const Board = ({ roundManager, memory }) => {
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
-                  <Badge b color="">
+                  <Badge color="">
                     <Engineering sx={{ color: blue[100] }} />
                   </Badge>
                 </IconButton>
                 <p>Blue: {roundManager.roundResources[2]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
               </MenuItem>
               <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
-              <DraggableDialog roundManager={roundManager} sx={{ ml: 1 }} />
+              <DraggableDialog roundManager={roundManager} longMemory = {longMemory} sx={{ ml: 1 }} />
               <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}> Allocate </Button>
               <StatisticsModal roundManager={roundManager} />
             </Toolbar>
@@ -186,7 +189,7 @@ export const Board = ({ roundManager, memory }) => {
   return (
     <div style={boardStyle}>
       {squares}
-      <AlertDialogSlide roundManager={roundManager} />
+      <AlertDialogSlide roundManager={roundManager} longMemory = {longMemory} />
     </div>
   );
 }

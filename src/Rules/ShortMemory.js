@@ -1,3 +1,5 @@
+import {Car} from "../Pieces/Cars/Car"
+
 export class ShortMemory{
 
     constructor(roundNum){
@@ -17,11 +19,26 @@ export class ShortMemory{
         this.readyToPaint = false;
     }
 
-    setMemory(cars, count, produced, roundResources,rounNum, paintRoundBegain, paintStatus, dryStatus, readyToPaint){
+    setMemory(cars, count, produced, roundResources,roundNum, paintRoundBegin, paintStatus, dryStatus, readyToPaint){
+        this.cars = [];
+
+        for(let i = 0; i < cars.length; i++){
+            this.cars.push(new Car(cars[i].id, cars[i].rRes, cars[i].yRes, cars[i].bRes, cars[i].waited, cars[i].complete, cars[i].coords[0], cars[i].coords[1]))
+        }
+        
+        this.count = count;
+        this.produced = produced;
+        this.roundResources = [...roundResources];
+        this.roundNUm = roundNum;
+        this.paintRoundBegin = paintRoundBegin;
+        this.paintStatus = paintStatus;
+        this.dryStatus = dryStatus;
+        this.readyToPaint = readyToPaint
 
     }
 
     updateObjectStats(){
+        
 
     }
 
@@ -29,10 +46,14 @@ export class ShortMemory{
 
     }
 
+    uploadToLong(){
+
+    }
+
     observe(observer) {
         this.observers.push(observer);
         this.emitChange();
-        console.log(" CM Observer has passed");
+        console.log(" shortMemory Observer has passed");
         return () => {
             this.observers = this.observers.filter(o => o !== observer);
         };

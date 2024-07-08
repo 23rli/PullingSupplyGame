@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
+import { LongMemory } from '../../Rules/LongMemory';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -15,10 +16,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const fabStyle = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
+const fabStyle2 = { position: 'fixed', bottom: 30, right: 250 }; // Positioning the FAB
 
-export default function AlertDialogSlide({ roundManager }) {
+export default function AlertDialogSlide({ roundManager, longMemory }) {
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
 
   const handleClickOpen1 = () => {
     setOpen1(true);
@@ -28,6 +31,10 @@ export default function AlertDialogSlide({ roundManager }) {
     setOpen2(true);
   };
 
+  const handleClickOpen3 = () => {
+    setOpen3(true);
+  }
+
   const handleClose1 = () => {
     setOpen1(false);
   };
@@ -36,17 +43,52 @@ export default function AlertDialogSlide({ roundManager }) {
     setOpen2(false);
   };
 
+  const handleClose3 = () => {
+    setOpen3(false);
+  };
+
+
   const handleAgree = () => {
     setOpen1(false);
     roundManager.advanceRound();
+    longMemory.commit(roundManager.shortMemory);
     setOpen2(true);
+  };
+
+  const handleAgree2 = () => {
+    setOpen3(false);
+    roundManager.resetRound();
   };
 
   return (
     <React.Fragment>
-      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyle} onClick={handleClickOpen1}>
+      <Fab color="default" aria-label="NextRound" variant='extended' size='large' style={fabStyle} onClick={handleClickOpen1}>
         Next Round
       </Fab>
+
+      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyle2} onClick={handleClickOpen3}>
+        Reset Round
+      </Fab>
+
+      <Dialog
+        open={open3}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose3}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Would you like to Reset your progress to the beginning of this round?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            .....
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose3}>Disagree</Button>
+          <Button onClick={handleAgree2}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+
 
 
       <Dialog

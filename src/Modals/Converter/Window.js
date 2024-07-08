@@ -78,7 +78,7 @@ export const DraggableDialog = ({roundManager}) => {
         roundManager.roundResources[2] += 1;
       }
       setExChange('')
-      roundManager.carManager.emitChange();
+      roundManager.emitChange();
       roundManager.callTransition();
     }
   };
