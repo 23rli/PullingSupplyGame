@@ -7,7 +7,6 @@ export class ShortMemory{
         this.cars = [];
         this.count = 0;
         this.produced = 0
-        this.observers = [];
 
         this.roundResources = [];
         this.conResources = [];
@@ -22,7 +21,7 @@ export class ShortMemory{
 
 
 
-    setMemory( cars, count, produced, roundResources, conResources, roundNum, paintRoundBegin, paintStatus, dryStatus, readyToPaint){
+    setMemory( cars, count, produced, roundResources, conResources, roundNum, paintRoundBegan, paintStatus, dryStatus, readyToPaint){
         
         this.cars = [];
 
@@ -36,12 +35,15 @@ export class ShortMemory{
         this.conResources = [...conResources];
         this.roundNum = roundNum;
         console.log("round Number incoming: " + roundNum)
-        this.paintRoundBegin = paintRoundBegin;
+        console.log("paint round began incoming " + paintRoundBegan)
+        console.log("readyToPaint incoming" + readyToPaint)
+        this.paintRoundBegan = paintRoundBegan;
         this.paintStatus = paintStatus;
         this.dryStatus = dryStatus;
         this.readyToPaint = readyToPaint
 
     }
+    
 
     locationData(){
         /*
@@ -100,23 +102,5 @@ export class ShortMemory{
         return data;
 
     }
-
-
-    observe(observer) {
-        this.observers.push(observer);
-        this.emitChange();
-        console.log(" shortMemory Observer has passed");
-        return () => {
-            this.observers = this.observers.filter(o => o !== observer);
-        };
-    }
-
-    emitChange() {
-        const updateCars = this.cars; // Shallow copy to avoid mutation
-        this.observers.forEach(observer => observer && observer({
-            updateCars
-        }));
-    }
-
 
 }

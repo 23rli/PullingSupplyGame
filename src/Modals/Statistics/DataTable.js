@@ -35,7 +35,7 @@ const columns = [
   { id: 'unusedB', label: 'B', minWidth: 35 }
 ];
 
-function produceData(roundManager, longMemory, i) {
+function produceData( longMemory, i) {
   let data = longMemory.storage[i].locationData();
   let roundNum = i;
   let mBlue = data[0];
@@ -73,15 +73,10 @@ function produceData(roundManager, longMemory, i) {
 }
 
 function produceTableInfo({roundManager, longMemory}) {
-
-  console.log(longMemory)
-  if (!roundManager || !longMemory) {
-    return [];
-  }
-
   let info = [];
+  console.log(longMemory)
   for (let i = 0; i < roundManager.totalRounds; i++) {
-    info.push(produceData(roundManager, longMemory, i));
+    info.push(produceData(longMemory, i));
   }
   return info;
 }
@@ -98,8 +93,6 @@ export default function GameDataTable({ roundManager, longMemory }) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  console.log(longMemory)
 
   let info = produceTableInfo({roundManager, longMemory});
 

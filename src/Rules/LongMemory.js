@@ -1,31 +1,77 @@
 import { ShortMemory } from "./ShortMemory";
 
-export class LongMemory{
-    constructor(totalRounds){
+export class LongMemory {
+    constructor(totalRounds) {
         this.storage = [];
-        for(let i = 0; i < totalRounds; i++){
-            this.storage.push( new ShortMemory(i) )
+        for (let i = 0; i < totalRounds; i++) {
+            this.storage.push(new ShortMemory(i));
         }
     }
 
-    commitPosition({roundManager}){
-        console.log("In Commit Position")
-        console.log(roundManager.shortMemory)
+    commitPosition({ roundManager }) {
+        console.log("In Commit Position");
+        console.log("roundManager:", roundManager);
+        console.log("roundManager.shortMemory:", roundManager.shortMemory);
+        console.log("roundManager.roundNum:", roundManager.roundNum);
 
-        this.storage[roundManager.roundNum].setMemory(roundManager.shortMemory.cars, roundManager.shortMemory.count
-            , roundManager.shortMemory.produced, roundManager.shortMemory.roundResources
-            , roundManager.shortMemory.conResources, roundManager.shortMemory.endResources
-            , roundManager.shortMemory.roundNum, roundManager.shortMemory.paintRoundBegin
-            , roundManager.shortMemory.paintStatus, roundManager.shortMemory.dryStatus
-            , roundManager.shortMemory.readyToPaint
-         )
+        const {
+            cars,
+            count,
+            produced,
+            roundResources,
+            conResources,
+            endResources,
+            paintRoundBegan,
+            paintStatus,
+            dryStatus,
+            readyToPaint,
+        } = roundManager.shortMemory;
 
+        const { roundNum } = roundManager;
+
+        if (typeof roundNum === 'undefined' || !roundManager.shortMemory) {
+            console.error("roundManager.shortMemory or roundManager.roundNum is undefined");
+            return;
+        }
+
+        console.log("Values being passed to setMemory:");
+        console.log({
+            cars,
+            count,
+            produced,
+            roundResources,
+            conResources,
+            roundNum,
+            paintRoundBegan,
+            paintStatus,
+            dryStatus,
+            readyToPaint,
+        });
+
+        this.storage[roundNum].setMemory(
+            cars,
+            count,
+            produced,
+            roundResources,
+            conResources,
+            roundNum,
+            paintRoundBegan,
+            paintStatus,
+            dryStatus,
+            readyToPaint
+        );
     }
 
-    commitResources({roundManager}){
-        this.storage[roundManager.roundNum].roundResources = [...roundManager.shortMemory.roundResources]
-        this.storage[roundManager.roundNum].conResources = [...roundManager.convertedResources]
-        this.storage[roundManager.roundNum].endResources = [...roundManager.roundResources]
+    commitResources({ roundManager }) {
+        const { roundNum, gameResources, convertedResources, roundResources } = roundManager;
 
+        if (typeof roundNum === 'undefined' || !gameResources || !convertedResources || !roundResources) {
+            console.error("One or more properties are undefined in roundManager");
+            return;
+        }
+
+        this.storage[roundNum].roundResources = [...gameResources[roundNum]];
+        this.storage[roundNum].conResources = [...convertedResources];
+        this.storage[roundNum].endResources = [...roundResources];
     }
 }

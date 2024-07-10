@@ -375,7 +375,7 @@ export class Round {
         console.log(this.convertedResources)
         console.log("setShortTermMem roundNum: " + this.roundNum)
         this.shortMemory.setMemory(this.cars, this.count, this.produced, this.roundResources
-            , this.convertedResources, this.roundNum, this.paintRoundBegin, this.paintStatus, this.dryStatus, this.readyToPaint);
+            , this.convertedResources, this.roundNum, this.paintRoundBegan, this.paintStatus, this.dryStatus, this.readyToPaint);
         console.log("setShortTermMem completed")
         console.log(this.shortMemory)
         

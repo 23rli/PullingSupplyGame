@@ -185,7 +185,7 @@ export const Board = ({ roundManager, longMemory }) => {
   for (let i = 0; i < 48; i += 1) {
     squares.push(renderColumnSpace(i));
   }
-
+  
   return (
     <div style={boardStyle}>
       {squares}
