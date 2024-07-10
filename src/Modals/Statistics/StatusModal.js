@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function StatisticsModal({roundManager}) {
+export default function StatisticsModal({roundManager, longMemory}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -58,7 +58,7 @@ export default function StatisticsModal({roundManager}) {
           </Toolbar>
         </AppBar>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <GameDataTable roundManager = {roundManager} />
+          <GameDataTable roundManager = {roundManager} longMemory = {longMemory}/>
         </div>
       </Dialog>
     </React.Fragment>

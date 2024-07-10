@@ -18,7 +18,7 @@ export class Round {
 
         //Memory:
         
-        this.shortMemory = new ShortMemory(0)
+        this.shortMemory = new ShortMemory(0);
 
         //CONTROL RESOURCES
 
@@ -32,6 +32,7 @@ export class Round {
 
         //MICRO RESOURCES
         this.roundResources = [...this.gameResources[0]]
+        this.convertedResources = [...this.gameResources[0]]
         this.roundNum = 0;
         this.paintRoundBegan = -1;
         this.paintStatus = false;
@@ -67,18 +68,11 @@ export class Round {
         this.emitChange();
     }
 
-    getResources(roundNum) {
-        return this.gameResources[roundNum];
-    }
-
     setRoundNum(num) {
         this.roundNum = num;
     }
 
-    callTransition() {
-        console.log("reached")
-        // return(<TransitionDialog/>)
-    }
+
 
     allocateResources() {
         //Blue Resources:
@@ -194,9 +188,10 @@ export class Round {
 
         //updateStatistics();
 
-        if(!this.endGame()){
+        if(!this.endGame()){         
             this.roundNum++;
             this.roundResources = [...this.gameResources[this.roundNum]]
+            this.convertedResources = [...this.gameResources[this.roundNum]]
             this.setShortTermMem()
             
         }else{
@@ -377,8 +372,13 @@ export class Round {
     }
 
     setShortTermMem(){
-        this.shortMemory.setMemory(this.cars, this.count, this.produced, this.roundResources,
-            this.roundNum, this.paintRoundBegin, this.paintStatus, this.dryStatus, this.readyToPaint)
+        console.log(this.convertedResources)
+        console.log("setShortTermMem roundNum: " + this.roundNum)
+        this.shortMemory.setMemory(this.cars, this.count, this.produced, this.roundResources
+            , this.convertedResources, this.roundNum, this.paintRoundBegin, this.paintStatus, this.dryStatus, this.readyToPaint);
+        console.log("setShortTermMem completed")
+        console.log(this.shortMemory)
+        
     }
 
 

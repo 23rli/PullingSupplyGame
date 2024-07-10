@@ -143,7 +143,7 @@ export const Board = ({ roundManager, longMemory }) => {
               <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
               <DraggableDialog roundManager={roundManager} longMemory = {longMemory} sx={{ ml: 1 }} />
               <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}> Allocate </Button>
-              <StatisticsModal roundManager={roundManager} />
+              <StatisticsModal roundManager={roundManager} longMemory = {longMemory} />
             </Toolbar>
           </AppBar>
         </Box>

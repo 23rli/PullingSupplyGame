@@ -3,6 +3,7 @@ import {Car} from "../Pieces/Cars/Car"
 export class ShortMemory{
 
     constructor(roundNum){
+        
         this.cars = [];
         this.count = 0;
         this.produced = 0
@@ -19,7 +20,10 @@ export class ShortMemory{
         this.readyToPaint = false;
     }
 
-    setMemory(cars, count, produced, roundResources,roundNum, paintRoundBegin, paintStatus, dryStatus, readyToPaint){
+
+
+    setMemory( cars, count, produced, roundResources, conResources, roundNum, paintRoundBegin, paintStatus, dryStatus, readyToPaint){
+        
         this.cars = [];
 
         for(let i = 0; i < cars.length; i++){
@@ -29,7 +33,9 @@ export class ShortMemory{
         this.count = count;
         this.produced = produced;
         this.roundResources = [...roundResources];
-        this.roundNUm = roundNum;
+        this.conResources = [...conResources];
+        this.roundNum = roundNum;
+        console.log("round Number incoming: " + roundNum)
         this.paintRoundBegin = paintRoundBegin;
         this.paintStatus = paintStatus;
         this.dryStatus = dryStatus;
@@ -37,18 +43,64 @@ export class ShortMemory{
 
     }
 
-    updateObjectStats(){
-        
+    locationData(){
+        /*
+            0 = # of Manufacturing Blue
+            1 = # of Manufacturing Green
+            2 = # of Assembly Blue
+            3 = # of Assembly Green
+            4 = # of Quality Blue
+            5 = # of Quality Green
+            6 = # of Paint Blue
+            7 = # of Paint Green
+            8 = # of Dry Blue
+            9 = # of Dry Green
+            10 = # of Done Blue
+            11 = # of Done Green
+
+        */
+        let data = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+        for(let i = 0; i < this.cars.length; i++){
+            if(this.cars[i].id.charAt(0) === 'b'){
+                if(this.cars[i].coords[0] == 1){
+                    data[0] += 1;
+                }else if(this.cars[i].coords[0] == 2){
+                    data[2] += 1;
+                }else if(this.cars[i].coords[0] == 3){
+                    data[4] += 1;
+                }else if(this.cars[i].coords[0] == 4){
+                    if(this.roundNum - 1 == this.paintRoundBegan){
+                        data[8] += 1;
+                    }else{
+                        data[6] += 1;
+                    }
+                }else if(this.cars[i].coords[0] == 6){
+                    data[10] += 1;
+                }
+            }else if(this.cars[i].id.charAt(0) === 'g'){
+                if(this.cars[i].coords[0] == 1){
+                    data[1] += 1;
+                }else if(this.cars[i].coords[0] == 2){
+                    data[3] += 1;
+                }else if(this.cars[i].coords[0] == 3){
+                    data[5] += 1;
+                }else if(this.cars[i].coords[0] == 4){
+                    if(this.roundNum - 1 == this.paintRoundBegan){
+                        data[9] += 1;
+                    }else{
+                        data[7] += 1;
+                    }
+                }else if(this.cars[i].coords[0] == 6){
+                    data[11] += 1;
+                }
+            }
+        }
+
+        return data;
 
     }
 
-    updateResourceStats(){
-
-    }
-
-    uploadToLong(){
-
-    }
 
     observe(observer) {
         this.observers.push(observer);

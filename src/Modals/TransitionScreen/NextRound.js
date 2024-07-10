@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 import { LongMemory } from '../../Rules/LongMemory';
+import { ShortMemory } from '../../Rules/ShortMemory';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -17,6 +18,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const fabStyle = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
 const fabStyle2 = { position: 'fixed', bottom: 30, right: 250 }; // Positioning the FAB
+
+function commitLongMem({roundManager, longMemory}){
+  roundManager.setShortTermMem();
+  console.log(roundManager)
+  longMemory.commitPosition({roundManager})
+  longMemory.commitResources({roundManager})
+}
 
 export default function AlertDialogSlide({ roundManager, longMemory }) {
   const [open1, setOpen1] = React.useState(false);
@@ -50,8 +58,9 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
 
   const handleAgree = () => {
     setOpen1(false);
+    console.log("button next round pressed")
+    commitLongMem({roundManager, longMemory})
     roundManager.advanceRound();
-    longMemory.commit(roundManager.shortMemory);
     setOpen2(true);
   };
 
@@ -156,7 +165,7 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[0]}
+                  {roundManager.roundResources[0]}
                 </DialogContentText>
               </Box>
               <DialogContentText
@@ -191,7 +200,7 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[1]}
+                  {roundManager.roundResources[1]}
                 </DialogContentText>
               </Box>
               <DialogContentText
@@ -226,7 +235,7 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[2]}
+                  {roundManager.roundResources[2]}
                 </DialogContentText>
               </Box>
               <DialogContentText

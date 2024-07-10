@@ -26,12 +26,13 @@ const containerStyle = {
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
   const roundManager = useMemo(() => new Round(0, 15), []);
-  const longMemory = useMemo(() => new LongMemory(), []);
+  const longMemory = useMemo(() => new LongMemory(roundManager.totalRounds), []);
+  console.log(longMemory)
   return (
     // Container div styled with containerStyle
     <div style={containerStyle}>
       {/* Render the Board component, passing the game object as a prop */}
-      <Board roundManager={roundManager}  Longmemory = {longMemory} />
+      <Board roundManager={roundManager}  longMemory = {longMemory} />
     </div>
   )
 

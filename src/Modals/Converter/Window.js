@@ -46,40 +46,47 @@ export const DraggableDialog = ({roundManager}) => {
     setBRes(Number(event.target.value) || '');
   };
 
-
-  console.log("roundManager", roundManager);
-
   const handleExChange = (event) => {
     setExChange(String(event.target.value) || '');
   };
 
   const handleConversion = (event) => {
     if(Number(rRes) + Number(bRes) + Number(yRes) != 4){
-      console.log(rRes)
-      console.log(bRes)
-      console.log(yRes)
       console.log("Your values don't equal to four")
     }else if(ExChange != 'y' && ExChange != 'r' && ExChange != 'b' ){
       console.log("You forgot to set the resource you wish to exchange for")
     }else if(rRes > roundManager.roundResources[0] || yRes > roundManager.roundResources[1] || bRes > roundManager.roundResources[2]){
       console.log("You can't exchange nonexistant resources!")
     }else{
+      console.log("handling conversion")
+      console.log(roundManager.convertedResources)
       roundManager.roundResources[0] -= rRes;
+      roundManager.convertedResources[0] -= rRes;
       setRRes('')
       roundManager.roundResources[1] -= yRes;
+      roundManager.convertedResources[1] -= yRes;
       setYRes('')
       roundManager.roundResources[2] -= bRes;
+      roundManager.convertedResources[2] -= bRes;
+
       setBRes('')
       if(ExChange == 'r'){
         roundManager.roundResources[0] += 1;
+        roundManager.convertedResources[0] += 1;
+
       }else if(ExChange == 'y'){
         roundManager.roundResources[1] += 1;
+        roundManager.convertedResources[1] += 1;
+
       }else{
         roundManager.roundResources[2] += 1;
+        roundManager.convertedResources[2] += 1;
       }
       setExChange('')
       roundManager.emitChange();
-      roundManager.callTransition();
+
+      console.log("conversion finished")
+      console.log(roundManager.convertedResources)
     }
   };
 
@@ -88,8 +95,6 @@ export const DraggableDialog = ({roundManager}) => {
   };
 
   const handleClose = () => {
-    roundManager.callTransition();
-    console.log("reached")
     setOpen(false);
   };
 
@@ -143,7 +148,7 @@ export const DraggableDialog = ({roundManager}) => {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[0]}
+                  {roundManager.roundResources[0]}
                 </DialogContentText>
               </Box>
             <DialogContentText
@@ -178,7 +183,7 @@ export const DraggableDialog = ({roundManager}) => {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[1]}
+                  {roundManager.roundResources[1]}
                 </DialogContentText>
               </Box>
             <DialogContentText
@@ -213,7 +218,7 @@ export const DraggableDialog = ({roundManager}) => {
                   variant="h1"
                   sx={{ fontSize: '120px' }}
                 >
-                  {roundManager.getResources(roundManager.roundNum)[2]}
+                  {roundManager.roundResources[2]}
                 </DialogContentText>
               </Box>
             <DialogContentText
