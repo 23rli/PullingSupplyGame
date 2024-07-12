@@ -1,13 +1,12 @@
 // Importing necessary hooks and components from react-dnd library
-import { DragPreviewImage, useDrag } from 'react-dnd'
+import { DragPreviewImage, useDrag } from 'react-dnd';
 
 // Importing ItemTypes constant from the same directory
-import { ItemTypes } from '../ItemTypes.js'
+import { ItemTypes } from '../ItemTypes.js';
 
-// Knight component representing the knight piece on the chessboard
-export const BlueCarVisual = ({ id, roundManager }) => {
+// BlueCarVisual component representing the blue car piece
+export const BlueCarVisual = ({ id, roundManager, imageURL }) => {
   // Setting up the drag source using the useDrag hook
-
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: ItemTypes.BCAR,  // Type of the draggable item
@@ -16,16 +15,17 @@ export const BlueCarVisual = ({ id, roundManager }) => {
         isDragging: !!monitor.isDragging(),  // Collecting the dragging state
       }),
     }),
-    [id, roundManager],  // Dependency array (empty means no dependencies)
-  )
+    [id, roundManager],  // Dependency array
+  );
+
   return (
     <>
       {/* DragPreviewImage for showing a custom drag preview */}
-      <DragPreviewImage connect={preview} src="./blueCar.png" />
+      <DragPreviewImage connect={preview} src={imageURL} />
       <img
         ref={drag}
-        src={require("./blueCar.png")}
-        alt="failure"
+        src={imageURL}  // Directly use the imageURL prop
+        alt="Blue Car"
         width="150px"
         style={{
           border: isDragging ? "5px solid pink" : "0px",
@@ -33,5 +33,5 @@ export const BlueCarVisual = ({ id, roundManager }) => {
         }}
       />
     </>
-  )
-}
+  );
+};

@@ -47,7 +47,7 @@ export class Car{
           this.coords = [0,0];
           this.rResLimit = 3;
           this.yResLimit = 3;
-          this.bResLimit = 2;
+          this.bResLimit = 3;
       }
     }
   }
