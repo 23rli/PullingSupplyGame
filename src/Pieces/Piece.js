@@ -2,8 +2,6 @@
 import { ItemTypes } from './ItemTypes.js';
 import { BlueCarVisual } from './Cars/BlueCarVisual.js';
 import { GreenCarVisual } from './Cars/GreenCarVisual.js';
-import blueCar from './Cars/blueCar.png';
-import greenCar from './Cars/greenCar.png';
 import blueCarRed1 from './Cars/Motor City Graphics/Model B - red 1.png'
 import blueCarRed2 from './Cars/Motor City Graphics/Model B - red 2.png'
 import blueCarRed3 from './Cars/Motor City Graphics/Model B - red 3.png'
@@ -13,18 +11,18 @@ import blueCarYellow3 from './Cars/Motor City Graphics/Model B - yellow 3.png'
 import blueCarBlue1 from './Cars/Motor City Graphics/Model B - blue 1.png'
 import blueCarBlue2 from './Cars/Motor City Graphics/Model B - blue 2.png'
 import blueCarBlue3 from './Cars/Motor City Graphics/Model B - blue 3.png'
-import greenCarRed1 from './Cars/Motor City Graphics/Model B - red 1.png'
-import greenCarRed2 from './Cars/Motor City Graphics/Model B - red 2.png'
-import greenCarYellow1 from './Cars/Motor City Graphics/Model B - yellow 1.png'
-import greenCarYellow2 from './Cars/Motor City Graphics/Model B - yellow 2.png'
-import greenCarBlue1 from './Cars/Motor City Graphics/Model B - blue 1.png'
-import greenCarBlue2 from './Cars/Motor City Graphics/Model B - blue 2.png'
+import greenCarRed1 from './Cars/Motor City Graphics/Model G - red 1.png'
+import greenCarRed2 from './Cars/Motor City Graphics/Model G - red 2.png'
+import greenCarYellow1 from './Cars/Motor City Graphics/Model G - yellow 1.png'
+import greenCarYellow2 from './Cars/Motor City Graphics/Model G - yellow 2.png'
+import greenCarBlue1 from './Cars/Motor City Graphics/Model G - blue 1.png'
+import greenCarBlue2 from './Cars/Motor City Graphics/Model G - blue 2.png'
 
 // Piece component that conditionally renders different pieces based on props
 export const Piece = ({ type, id, roundManager }) => {
   if (type !== '' && id !== -1) {
     const index = Number(id.slice(1));
-    let image = blueCar;
+    let image = blueCarRed1;
 
     if (type === ItemTypes.GCAR && !roundManager.cars[index].complete) {
       if(roundManager.cars[index].coords[0] == 1){
@@ -33,7 +31,7 @@ export const Piece = ({ type, id, roundManager }) => {
           }else if(roundManager.cars[index].rRes == 1){
             image = greenCarRed1;
           }else{
-            image = greenCar;
+            image = greenCarRed1;
           }
       }else if(roundManager.cars[index].coords[0] == 2){
           if(roundManager.cars[index].yRes == 2){
@@ -52,7 +50,7 @@ export const Piece = ({ type, id, roundManager }) => {
             image = greenCarYellow2;
           }
       }else{
-        image = greenCar;
+        image = greenCarRed1;
       }
     }
     if (type === ItemTypes.BCAR && !roundManager.cars[index].complete) {
@@ -64,7 +62,7 @@ export const Piece = ({ type, id, roundManager }) => {
         }else if(roundManager.cars[index].rRes == 1){
           image = blueCarRed1;
         }else{
-          image = blueCar;
+          image = blueCarRed1;
         }
       }else if(roundManager.cars[index].coords[0] == 2){
         if(roundManager.cars[index].yRes == 3){
@@ -87,7 +85,7 @@ export const Piece = ({ type, id, roundManager }) => {
           image = blueCarYellow3;
         }
       }else{
-        image = blueCar;
+        image = blueCarRed1;
       }
     }
 
@@ -96,7 +94,7 @@ export const Piece = ({ type, id, roundManager }) => {
       return <GreenCarVisual id={roundManager.cars[index]} roundManager={roundManager} imageURL = {image} />;
     }
     if (type === ItemTypes.BCAR && !roundManager.cars[index].complete) {
-      return <BlueCarVisual id={roundManager.cars[index]} roundManager={roundManager} imageURL={image} />;
+      return <BlueCarVisual id={roundManager.cars[index]} roundManager={roundManager} imageURL = {image} />;
     }
   }
   return null; // Render nothing if no conditions are met

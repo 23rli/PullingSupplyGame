@@ -25,6 +25,7 @@ const containerStyle = {
  */
 export const TutorialApp = () => {
   // useMemo to create a single instance of the Game object
+  
   const roundManager = useMemo(() => new Round(0, 15), []);
   const longMemory = useMemo(() => new LongMemory(roundManager.totalRounds), []);
   console.log(longMemory)

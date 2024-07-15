@@ -1,35 +1,87 @@
-// Importing necessary hooks and components from react-dnd library
-import { DragPreviewImage, useDrag } from 'react-dnd';
-
-// Importing ItemTypes constant from the same directory
+import React, { useState, useEffect } from 'react';
+import { useDrag, useDragLayer } from 'react-dnd';
 import { ItemTypes } from '../ItemTypes.js';
 
-// BlueCarVisual component representing the blue car piece
-export const GreenCarVisual = ({ id, roundManager, imageURL }) => {
-  // Setting up the drag source using the useDrag hook
+export const GreenCarVisual = ({ id, roundManager, imageURL = './greenCar.png' }) => {
+  const [currentImageURL, setCurrentImageURL] = useState(imageURL);
+
+  useEffect(() => {
+    setCurrentImageURL(imageURL);
+  }, [imageURL]);
+
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
-      type: ItemTypes.GCAR,  // Type of the draggable item
+      type: ItemTypes.GCAR,
       item: { id },
       collect: (monitor) => ({
-        isDragging: !!monitor.isDragging(),  // Collecting the dragging state
+        isDragging: !!monitor.isDragging(),
       }),
     }),
-    [id, roundManager],  // Dependency array
+    [id, roundManager],
   );
+
+  const layerStyles = {
+    position: 'fixed',
+    pointerEvents: 'none',
+    zIndex: 100,
+    left: 0,
+    top: 0,
+  };
+
+  const getItemStyles = (initialOffset, currentOffset) => {
+    if (!initialOffset || !currentOffset) {
+      return {
+        display: 'none',
+      };
+    }
+
+    const { x, y } = currentOffset;
+    const transform = `translate(${x}px, ${y}px)`;
+
+    return {
+      transform,
+      WebkitTransform: transform,
+    };
+  };
+
+  const CustomDragLayer = () => {
+    const {
+      itemType,
+      isDragging,
+      initialOffset,
+      currentOffset,
+    } = useDragLayer((monitor) => ({
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      initialOffset: monitor.getInitialSourceClientOffset(),
+      currentOffset: monitor.getSourceClientOffset(),
+      isDragging: monitor.isDragging(),
+    }));
+
+    if (!isDragging || itemType !== ItemTypes.GCAR) {
+      return null;
+    }
+
+    return (
+      <div style={layerStyles}>
+        <div style={getItemStyles(initialOffset, currentOffset)}>
+          <img src={currentImageURL} alt="Green Car" width="150px" />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
-      {/* DragPreviewImage for showing a custom drag preview */}
-      <DragPreviewImage connect={preview} src={imageURL} />
+      <CustomDragLayer />
       <img
         ref={drag}
-        src={imageURL}  // Directly use the imageURL prop
+        src={currentImageURL}
         alt="Green Car"
         width="150px"
         style={{
-          border: isDragging ? "5px solid pink" : "0px",
-          opacity: isDragging ? 0.5 : 1,  // Changing opacity when dragging 
+          display: isDragging ? "none" : "block", // Hide image when dragging
+          border: id.waited && id.coords[0] != 0 ? "5px solid green" : "none"
         }}
       />
     </>

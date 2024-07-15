@@ -34,23 +34,30 @@ const columns = [
   { id: 'unusedY', label: 'Y', minWidth: 35 },
   { id: 'unusedB', label: 'B', minWidth: 35 }
 ];
+//Add a piece to make zeros null;
 
+function cleanData(value){
+  if(value != 0 ){
+    return value;
+  }
+  return null;
+}
 function produceData( longMemory, i) {
   let data = longMemory.storage[i].locationData();
   let roundNum = i;
-  let mBlue = data[0];
-  let mGreen = data[1];
-  let aBlue = data[2];
-  let aGreen = data[3];
-  let qBlue = data[4];
-  let qGreen = data[5];
-  let pBlue = data[6];
-  let pGreen = data[7];
-  let dBlue = data[8];
-  let dGreen = data[9];
-  let WIP = data.slice(0, 10).reduce((a, b) => a + b, 0);
-  let doneBlue = data[10];
-  let doneGreen = data[11];
+  let mBlue = cleanData(data[0]);
+  let mGreen = cleanData(data[1]);
+  let aBlue = cleanData(data[2]);
+  let aGreen = cleanData(data[3]);
+  let qBlue = cleanData(data[4]);
+  let qGreen = cleanData(data[5]);
+  let pBlue = cleanData(data[6]);
+  let pGreen = cleanData(data[7]);
+  let dBlue = cleanData(data[8]);
+  let dGreen = cleanData(data[9]);
+  let WIP = cleanData(data.slice(0, 10).reduce((a, b) => a + b, 0));
+  let doneBlue = cleanData(data[10]);;
+  let doneGreen = cleanData(data[11]);;
 
   const resources = longMemory.storage[i].roundResources;
   const conResources = longMemory.storage[i].conResources;
