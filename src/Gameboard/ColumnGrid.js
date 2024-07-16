@@ -18,6 +18,19 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
 
   const [message, setMessage] = React.useState('');
   const [error, setError] = React.useState(false);
+  const [currentMessage, setCurrentMessage] = React.useState('');
+
+  // Function to handle setting error message and managing snackbar
+  const handleErrorMessage = (newMessage) => {
+    if (newMessage && newMessage !== currentMessage) {
+      setError(false); // Close the current snackbar
+      setTimeout(() => {
+        setMessage(newMessage);
+        setError(true); // Open the new snackbar with the new message
+        setCurrentMessage(newMessage);
+      }, 100); // Small delay to ensure the snackbar closes before opening a new one
+    }
+  };
 
   // Setting up the drop target for the knight using the useDrop hook
   const products = [ItemTypes.GCAR, ItemTypes.BCAR];
@@ -26,19 +39,14 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
-        if (!roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)) {
-          setMessage(roundManager.movementError());
-          setError(true); // Set the error to true
-          return false;
-        } else {
-          if (roundManager.checkPaintStatus(x, y)) {
-            return true;
-          } else {
-            setMessage("A painting process is already in progress. Please wait for its conclusion to add another vehicle")
-            setError(true); // Set the error to true
-            return false;
-          }
-        }
+        const newMessage = !roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)
+          ? roundManager.movementError()
+          : !roundManager.checkPaintStatus(x, y)
+            ? "A painting process is already in progress. Please wait for its conclusion to add another vehicle"
+            : null;
+
+        handleErrorMessage(newMessage);
+        return !newMessage;
       },
       drop: (item) => {
         if (item.id.type === ItemTypes.BCAR) {
@@ -52,7 +60,7 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
         canDrop: !!monitor.canDrop(),  // Whether the item can be dropped on this square
       }),
     }),
-    [roundManager],  // Dependency array containing game object
+    [roundManager, currentMessage],  // Dependency array containing game object
   )
 
   return (
@@ -60,8 +68,11 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
       <TransitionsSnackbar
         errorStatement={message}
         open={error}
-        onClose={() => setError(false)}
-        timeOpen={5000}
+        onClose={() => {
+          setError(false);
+          setCurrentMessage(''); // Reset currentMessage when Snackbar closes
+        }}
+        timeOpen={2000}
       />
       
       <div
@@ -87,4 +98,3 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
     </>
   )
 }
-
