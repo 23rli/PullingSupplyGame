@@ -17,7 +17,7 @@ export class Round {
         }
 
         //Memory:
-        
+
         this.shortMemory = new ShortMemory(0);
 
         //CONTROL RESOURCES
@@ -42,13 +42,15 @@ export class Round {
         this.setShortTermMem()
         console.log("round constructor")
         console.log(this.shortMemory)
+
+        this.errorStatement = "";
     }
 
     resetRound() {
 
         this.cars = [];
 
-        for(let i = 0; i < this.shortMemory.cars.length; i++){
+        for (let i = 0; i < this.shortMemory.cars.length; i++) {
             const temp = this.shortMemory.cars[i]
             this.cars.push(new Car(temp.id, temp.rRes, temp.yRes, temp.bRes, temp.waited, temp.complete, temp.coords[0], temp.coords[1]))
         }
@@ -188,16 +190,16 @@ export class Round {
 
         //updateStatistics();
 
-        if(!this.endGame()){         
+        if (!this.endGame()) {
             this.roundNum++;
             this.roundResources = [...this.gameResources[this.roundNum]]
             this.convertedResources = [...this.gameResources[this.roundNum]]
             this.setShortTermMem()
-            
-        }else{
+
+        } else {
             // Introduce end Game Mechanics
         }
-            
+
 
         this.emitChange();
     }
@@ -299,25 +301,37 @@ export class Round {
             const [x, y] = car.coords;
             if (x == 0) {
                 return true;
-            } else if (x == 1) {
-                if (car.rRes == car.rResLimit && car.waited) {
-                    return true;
-                }
-            } else if (x == 2) {
-                if (car.yRes == car.yResLimit && car.waited) {
-                    return true;
-                }
-            } else if (x == 3) {
-                if (car.bRes == car.bResLimit && car.waited) {
-                    return true;
-                }
-            } else if (x == 4) {
-                if (car.waited) {
-                    return true;
-                }
             }
-
+            if (car.waited) {
+                if (x == 1) {
+                    if (car.rRes == car.rResLimit) {
+                        return true;
+                    } else {
+                        this.errorStatement = "This Car doesn't have enough red resources"
+                    }
+                } else if (x == 2) {
+                    if (car.yRes == car.yResLimit) {
+                        return true;
+                    } else {
+                        this.errorStatement = "This Car doesn't have enough yellow resources"
+                    }
+                } else if (x == 3) {
+                    if (car.bRes == car.bResLimit) {
+                        return true;
+                    } else {
+                        this.errorStatement = "This Car doesn't have enough blue resources"
+                    }
+                } else if (x == 4) {
+                    if (car.waited) {
+                        return true;
+                    }
+                }
+            } else {
+                this.errorStatement = "This Car hasn't waited for a turn!"
+            }
         }
+
+        return false;
 
     }
 
@@ -332,7 +346,32 @@ export class Round {
 
         const dx = toX - x;
         const dy = toY - y;
-        return (((dx === 1 && moveReqs) || (dx === 0 && Math.abs(dy) > 0)) && (!this.hasCar(toX, toY, cars)));
+
+        if (dx === 1 && moveReqs) {
+            if (!this.hasCar(toX, toY, cars)) {
+                return true;
+            }else{
+                this.errorStatement = "There is already a car at this KanBan Location. Please find another."
+            }
+        } else {
+            this.errorStatement = "When moving a car forward along the supply chain, you can only shift it by 1 process (Column)"
+        }
+
+        if (dx === 0 && Math.abs(dy) > 0) {
+            if (!this.hasCar(toX, toY, cars)) {
+                this.errorStatement = '';
+                return true;
+            }else{
+                this.errorStatement = "There is already a car at this KanBan Location. Please find another."
+                return false;
+            }
+        }
+        
+        return false;
+    }
+
+    movementError() {
+        return this.errorStatement;
     }
 
 
@@ -371,14 +410,14 @@ export class Round {
         return false;
     }
 
-    setShortTermMem(){
+    setShortTermMem() {
         console.log(this.convertedResources)
         console.log("setShortTermMem roundNum: " + this.roundNum)
         this.shortMemory.setMemory(this.cars, this.count, this.produced, this.roundResources
             , this.convertedResources, this.roundNum, this.paintRoundBegan, this.paintStatus, this.dryStatus, this.readyToPaint);
         console.log("setShortTermMem completed")
         console.log(this.shortMemory)
-        
+
     }
 
 

@@ -1,34 +1,44 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
+import { styled } from '@mui/material/styles';
 
-const errorStyle = { position: 'fixed', bottom: 80, right: 250 }; // Positioning the error
+const errorStyle = { position: 'fixed', bottom: 100, right: 110 }; // Positioning the error
 
 function SlideTransition(props) {
-  return <Slide {...props} direction="right" />;
+  return <Slide {...props} direction="left" />;
 }
 
-export default function TransitionsSnackbar({ errorStatement }) {
-  const [open, setOpen] = React.useState(true);
+const StyledSnackbarContent = styled('div')(({ theme }) => ({
+  backgroundColor: 'darkred',
+  color: 'white',
+  fontSize: '1.2em',
+  padding: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
+  maxWidth: '400px'
+}));
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setOpen(false);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, []);
+export default function TransitionsSnackbar({ errorStatement, open, onClose, timeOpen }) {
+  useEffect(() => {
+    if (open) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, timeOpen);
+      return () => clearTimeout(timer);
+    }
+  }, [open, onClose]);
 
   return (
     <Snackbar
       open={open}
       TransitionComponent={SlideTransition}
-      message={errorStatement}
       autoHideDuration={6000}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      ContentProps={{
-        style: errorStyle,
-      }}
-    />
+      style={errorStyle} // Apply errorStyle here
+    >
+      <StyledSnackbarContent>
+        {errorStatement}
+      </StyledSnackbarContent>
+    </Snackbar>
   );
 }
-
