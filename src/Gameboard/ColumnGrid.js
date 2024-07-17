@@ -18,19 +18,17 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
 
   const [message, setMessage] = React.useState('');
   const [error, setError] = React.useState(false);
-  const [currentMessage, setCurrentMessage] = React.useState('');
 
-  // Function to handle setting error message and managing snackbar
-  const handleErrorMessage = (newMessage) => {
-    if (newMessage && newMessage !== currentMessage) {
-      setError(false); // Close the current snackbar
-      setTimeout(() => {
-        setMessage(newMessage);
-        setError(true); // Open the new snackbar with the new message
-        setCurrentMessage(newMessage);
-      }, 100); // Small delay to ensure the snackbar closes before opening a new one
+  React.useEffect(() => {
+    if (message.length > 0 && error == false && roundManager.errorDisplay == false) {
+      roundManager.errorDisplay = true;
+      setError(true);
+    } else {
+      roundManager.errorDisplay = false;
+      setError(false);
     }
-  };
+  }, [message]); // Watch for changes to the message
+  
 
   // Setting up the drop target for the knight using the useDrop hook
   const products = [ItemTypes.GCAR, ItemTypes.BCAR];
@@ -39,14 +37,20 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
     () => ({
       accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
       canDrop: (item) => {
-        const newMessage = !roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)
-          ? roundManager.movementError()
-          : !roundManager.checkPaintStatus(x, y)
-            ? "A painting process is already in progress. Please wait for its conclusion to add another vehicle"
-            : null;
-
-        handleErrorMessage(newMessage);
-        return !newMessage;
+        if (!roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)) {
+            if(roundManager.movementError() != message){
+              setMessage(roundManager.movementError());
+            }
+          return false;
+        } else {
+          if (roundManager.checkPaintStatus(x, y)) {
+            return true;
+          } else {
+            setMessage("A painting process is already in progress. Please wait for its conclusion to add another vehicle")
+            setError(true); // Set the error to true
+            return false;
+          }
+        }
       },
       drop: (item) => {
         if (item.id.type === ItemTypes.BCAR) {
@@ -60,7 +64,7 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
         canDrop: !!monitor.canDrop(),  // Whether the item can be dropped on this square
       }),
     }),
-    [roundManager, currentMessage],  // Dependency array containing game object
+    [roundManager],  // Dependency array containing game object
   )
 
   return (
@@ -70,9 +74,12 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
         open={error}
         onClose={() => {
           setError(false);
-          setCurrentMessage(''); // Reset currentMessage when Snackbar closes
+          roundManager.errorDisplay = false;
+          setTimeout(() => {
+            setMessage('');
+          }, 3000);  // 3000 milliseconds = 3 seconds
         }}
-        timeOpen={2000}
+        timeOpen={1000}
       />
       
       <div
@@ -98,3 +105,4 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
     </>
   )
 }
+

@@ -1,18 +1,23 @@
 import { ShortMemory } from "./ShortMemory";
 
 export class LongMemory {
-    constructor(totalRounds) {
+    constructor() {
         this.storage = [];
-        for (let i = 0; i < totalRounds; i++) {
-            this.storage.push(new ShortMemory(i));
-        }
+        this.round = 0;
+        this.storage.push(new ShortMemory(this.round));
     }
+    
 
     commitPosition({ roundManager }) {
         console.log("In Commit Position");
         console.log("roundManager:", roundManager);
         console.log("roundManager.shortMemory:", roundManager.shortMemory);
         console.log("roundManager.roundNum:", roundManager.roundNum);
+
+        if(this.round < roundManager.roundNum){
+            this.storage.push(new ShortMemory(roundManager.roundNum))
+            this.round ++;
+        }
 
         const {
             cars,
@@ -64,6 +69,11 @@ export class LongMemory {
 
     commitResources({ roundManager }) {
         const { roundNum, gameResources, convertedResources, roundResources } = roundManager;
+
+        if(this.round < roundManager.roundNum){
+            this.storage.push(new ShortMemory(roundManager.roundNum))
+            this.round ++;
+        }
 
         if (typeof roundNum === 'undefined' || !gameResources || !convertedResources || !roundResources) {
             console.error("One or more properties are undefined in roundManager");

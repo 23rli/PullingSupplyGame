@@ -79,10 +79,10 @@ function produceData( longMemory, i) {
   };
 }
 
-function produceTableInfo({roundManager, longMemory}) {
+function produceTableInfo({longMemory}) {
   let info = [];
   console.log(longMemory)
-  for (let i = 0; i < roundManager.totalRounds; i++) {
+  for (let i = 0; i < longMemory.storage.length; i++) {
     info.push(produceData(longMemory, i));
   }
   return info;
@@ -101,7 +101,7 @@ export default function GameDataTable({ roundManager, longMemory }) {
     setPage(0);
   };
 
-  let info = produceTableInfo({roundManager, longMemory});
+  let info = produceTableInfo({longMemory});
 
   return (
     <Paper sx={{ width: '90%', overflow: 'hidden' }}>

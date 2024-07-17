@@ -1,40 +1,52 @@
-// Importing the useMemo hook from React
-import { useMemo } from 'react'
-
-// Importing the Board component from the same directory
-import { Board } from './Gameboard/Board.js'
-import { Round } from './Rules/Round.js'
+import { useMemo, useState } from 'react';
+import { Board } from './Gameboard/Board.js';
+import { Round } from './Rules/Round.js';
 import { LongMemory } from './Rules/LongMemory.js';
 
-
-// Styling properties applied to the container of the chessboard
 const containerStyle = {
-  display: 'flex',            // Flexbox layout
-  justifyContent: 'center',   // Center horizontally
-  alignItems: 'center',       // Center vertically
-  width: '100vw',             // Full viewport width
-  height: '160vh',            // Full viewport height
-  margin: 0,                  // Remove default margin
-  padding: 0,                 // Remove default padding
-  backgroundColor: '#2c387e', // Light gray background color (you can change this to any color you prefer)
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '100vw',
+  height: '160vh',
+  margin: 0,
+  padding: 0,
+  backgroundColor: '#2c387e',
 };
 
+const StartScreen = ({ onStart }) => (
+  <div style={{ textAlign: 'center', color: 'white' }}>
+    <h1>Welcome to the Game!</h1>
+    <button onClick={onStart} style={{ padding: '10px 20px', fontSize: '16px' }}>Start Game</button>
+  </div>
+);
 
-/**
- * The Chessboard Tutorial Application
- */
+const EndScreen = ({ onRestart }) => (
+  <div style={{ textAlign: 'center', color: 'white' }}>
+    <h1>Game Over!</h1>
+    <button onClick={onRestart} style={{ padding: '10px 20px', fontSize: '16px' }}>Play Again</button>
+  </div>
+);
+
 export const TutorialApp = () => {
-  // useMemo to create a single instance of the Game object
-  
-  const roundManager = useMemo(() => new Round(0, 15), []);
-  const longMemory = useMemo(() => new LongMemory(roundManager.totalRounds), []);
-  console.log(longMemory)
-  return (
-    // Container div styled with containerStyle
-    <div style={containerStyle}>
-      {/* Render the Board component, passing the game object as a prop */}
-      <Board roundManager={roundManager}  longMemory = {longMemory} />
-    </div>
-  )
+  const [gameState, setGameState] = useState('start'); // 'start', 'playing', or 'end'
+  const roundManager = useMemo(() => new Round(0), []);
+  const longMemory = useMemo(() => new LongMemory(), []);
 
-}
+  const startGame = () => setGameState('playing');
+  const endGame = () => setGameState('end');
+
+  return (
+    <div style={containerStyle}>
+      {gameState === 'start' && (
+        <StartScreen onStart={startGame} />
+      )}
+      {gameState === 'playing' && (
+        <Board roundManager={roundManager} longMemory={longMemory} onEnd={endGame} />
+      )}
+      {gameState === 'end' && (
+        <EndScreen onRestart={startGame} />
+      )}
+    </div>
+  );
+};

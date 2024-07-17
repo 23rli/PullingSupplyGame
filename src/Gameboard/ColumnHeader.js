@@ -26,13 +26,13 @@ export const ColumnHeader = ({ x, y, roundManager }) => {
         backgroundColor = 'gray';
         title = 'Planning';
     } else if (x === -5) {
-        backgroundColor = 'red';
+        backgroundColor = 'rgba(255, 25, 25, 1)';
         title = 'Manufacturing';
     } else if (x === -4) {
         backgroundColor = 'rgba(255, 245, 0, 1)';
         title = 'Assembly';
     } else if (x === -3) {
-        backgroundColor = 'lightBlue';
+        backgroundColor = '#2196f3';
         title = 'Quality';
     } else if (x === -2 && !roundManager.paintStatus) {
         backgroundColor = 'white';

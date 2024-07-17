@@ -3,13 +3,12 @@ import { ShortMemory } from '../Rules/ShortMemory.js';
 
 export class Round {
 
-    constructor(id, totalRounds) {
+    constructor(id) {
 
         //MACRO RESOURCES
         this.id = id;
-        this.totalRounds = totalRounds;
         this.gameResources = [];
-        for (let i = 0; i < totalRounds; i++) {
+        for (let i = 0; i < 100; i++) {
             const red = parseInt(Math.random() * 10 + 1)
             const yellow = parseInt(Math.random() * 8 + 1)
             const blue = parseInt(Math.random() * 4 + 1)
@@ -44,6 +43,7 @@ export class Round {
         console.log(this.shortMemory)
 
         this.errorStatement = "";
+        this.errorDisplayed = false;
     }
 
     resetRound() {
@@ -203,47 +203,7 @@ export class Round {
 
         this.emitChange();
     }
-    /*
-    updateStatistics(){
-        let info = [];
-        for(let i = 0; i < this.totalRounds; i++){
-            if(i <= roundNum){
-                info.push(
-                    {
-                        i,
-                         mBlue, 
-                         mGreen, 
-                         aBlue, 
-                         aGreen, 
-                         qBlue, 
-                         qGreen, 
-                         pBlue, 
-                         pGreen, 
-                         dBlue,
-                         dGreen,
-                         doneBlue,
-                         doneGreen, 
-                         rRes, 
-                         yRes, 
-                         bRes, 
-                         rConRes, 
-                         yConRes, 
-                         bConRes, 
-                         unusedR, 
-                         unusedY, 
-                         unusedB   
-                    }
-                )
-            }else{
-                info.push(
-                    {
-                        
-                    }
-                )
-            }
-        }
-    }
-    */
+
     checkPaintStatus(x, y) {
         if (x == 4) {
             let count = 0;
@@ -302,35 +262,22 @@ export class Round {
             if (x == 0) {
                 return true;
             }
-            if (car.waited) {
-                if (x == 1) {
-                    if (car.rRes == car.rResLimit) {
-                        return true;
-                    } else {
-                        this.errorStatement = "This Car doesn't have enough red resources"
-                    }
-                } else if (x == 2) {
-                    if (car.yRes == car.yResLimit) {
-                        return true;
-                    } else {
-                        this.errorStatement = "This Car doesn't have enough yellow resources"
-                    }
-                } else if (x == 3) {
-                    if (car.bRes == car.bResLimit) {
-                        return true;
-                    } else {
-                        this.errorStatement = "This Car doesn't have enough blue resources"
-                    }
-                } else if (x == 4) {
-                    if (car.waited) {
-                        return true;
-                    }
-                }
-            } else {
-                this.errorStatement = "This Car hasn't waited for a turn!"
+            if(car.rRes < car.rResLimit && x == 1){
+                this.errorStatement = "This Car doesn't have enough red resources";
+                return false;
+            }else if(car.yRes < car.yResLimit && x == 2 ){
+                this.errorStatement = "This Car doesn't have enough yellow resources";
+                return false;
+            }else if(car.bRes < car.bResLimit && x == 3){
+                this.errorStatement = "This Car doesn't have enough blue resources";
+                return false;
+            }else if(!car.waited){
+                 this.errorStatement = "This Car hasn't waited the proper amount of turns!"
+                return false;
             }
-        }
 
+            return true;
+        }
         return false;
 
     }
@@ -343,30 +290,19 @@ export class Round {
 
         const [x, y] = cars[index].coords;
         let moveReqs = this.checkMoveReqs(toX, toY, cars[index])
+        console.log(toX + " " + toY + " " + x + " " + y)
 
         const dx = toX - x;
         const dy = toY - y;
-
-        if (dx === 1 && moveReqs) {
-            if (!this.hasCar(toX, toY, cars)) {
-                return true;
-            }else{
-                this.errorStatement = "There is already a car at this KanBan Location. Please find another."
-            }
-        } else {
-            this.errorStatement = "When moving a car forward along the supply chain, you can only shift it by 1 process (Column)"
-        }
-
-        if (dx === 0 && Math.abs(dy) > 0) {
-            if (!this.hasCar(toX, toY, cars)) {
-                this.errorStatement = '';
-                return true;
-            }else{
-                this.errorStatement = "There is already a car at this KanBan Location. Please find another."
-                return false;
+        if(dx !== 0){
+            if (dx === 1 && moveReqs) {
+                if (!this.hasCar(toX, toY, cars, index)) {
+                    this.errorStatement = '';
+                    return true;
+                }
             }
         }
-        
+        console.log(this.errorStatement)
         return false;
     }
 
@@ -383,9 +319,10 @@ export class Round {
     }
 
 
-    hasCar(x, y, cars) {
-        for (let i = 0; i < cars.length; i++) {
-            if (cars[i].coords[0] === x && cars[i].coords[1] === y) {
+    hasCar(x, y, cars, index) {
+        for (let i = 2; i < cars.length; i++) {
+            if (cars[i].coords[0] === x && cars[i].coords[1] === y && index != i + 1){
+                console.log(index + " " + i)
                 return true;
             }
         }
@@ -404,10 +341,7 @@ export class Round {
     }
 
     endGame() {
-        if (this.roundNum == this.totalRounds) {
-            return true;
-        }
-        return false;
+      
     }
 
     setShortTermMem() {

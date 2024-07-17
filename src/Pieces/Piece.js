@@ -2,6 +2,7 @@
 import { ItemTypes } from './ItemTypes.js';
 import { BlueCarVisual } from './Cars/BlueCarVisual.js';
 import { GreenCarVisual } from './Cars/GreenCarVisual.js';
+import blueCar from './Cars/blueCar.png'
 import blueCarRed1 from './Cars/Motor City Graphics/Model B - red 1.png'
 import blueCarRed2 from './Cars/Motor City Graphics/Model B - red 2.png'
 import blueCarRed3 from './Cars/Motor City Graphics/Model B - red 3.png'

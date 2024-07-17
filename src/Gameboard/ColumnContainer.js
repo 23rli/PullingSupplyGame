@@ -54,7 +54,7 @@ const getDividerColor = (x, roundManager) => {
     } else if (x == 4 && roundManager.paintStatus) {
         return 'rgba(245, 222, 179, 0.75)'; // Wheat with 75% opacity
     } else {
-        return 'rgba(127, 255, 0, 0.75)'; // Green with 75% opacity
+        return 'rgba(127, 255, 0, 0.50)'; // Green with 75% opacity
     }
 }
 
