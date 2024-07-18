@@ -1,19 +1,31 @@
 import { fontStyle } from "@mui/system";
 
 const headerStyle = {
-    width: '100%',  // Full width of the parent container
-    height: '100%', // Full height of the parent container
-    display: 'flex',  // Use flexbox for alignment
-    alignItems: 'center',  // Center the items vertically
-    justifyContent: 'center',  // Center the items horizontally
-    textAlign: 'center',  // Center the text
-    fontSize: 'calc(1em + 1vw)',  // Responsive font size
-    overflow: 'hidden',  // Hide overflow
-    whiteSpace: 'nowrap',  // Prevent text wrapping
-    textOverflow: 'ellipsis',  // Add ellipsis if text overflows
-
-    //IMport source sans pro  or font called play
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column', // Align items vertically
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontSize: 'calc(1em + 1vw)',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    backgroundColor: '#2c387e',
+    color: 'white', // Add default text color
 };
+
+const titleStyle = {
+    fontSize: 'calc(0.70em + 0.70vw)', // Larger font size for the title
+    fontWeight: 'bold', // Make the title bold
+};
+
+const subtitleStyle = {
+    fontSize: 'calc(0.5em + 0.3vw)', // Smaller font size for the subtitle
+    fontStyle: 'italic', // Italicize the subtitle
+};
+
 
 // Square component representing each square on the chessboard
 export const ColumnHeader = ({ x, y, roundManager }) => {
@@ -21,6 +33,7 @@ export const ColumnHeader = ({ x, y, roundManager }) => {
     let backgroundColor = '';
     const color = 'black';
     let title = '';
+    let subtitle = 'Wait Time: 1 Turn'
 
     if (x === -6) {
         backgroundColor = 'gray';
@@ -37,25 +50,29 @@ export const ColumnHeader = ({ x, y, roundManager }) => {
     } else if (x === -2 && !roundManager.paintStatus) {
         backgroundColor = 'white';
         title = 'Paint';
+        subtitle = 'Wait Time: 2 Turns'
     } else if (x === -2 && roundManager.paintStatus) {
         backgroundColor = 'wheat';
         title = 'Dry';
+        subtitle = 'Wait Time: 2 Turns'
     } else {
         backgroundColor = 'chartreuse';
         title = 'Done';
+        subtitle = ''
     }
 
     return (
         <div
             style={{
-                ...headerStyle,    // Apply base square styles
-                color,             // Text color
-                backgroundColor,   // Background color
-                border: '1px solid black',  // Black border
-                opacity: '75%'
+                ...headerStyle,
+                color,
+                backgroundColor,
+                border: '1px solid black',
+                opacity: '75%',
             }}
         >
-            {title}
+            <div style={titleStyle}>{title}</div>
+            <div style={subtitleStyle}>{subtitle}</div>
         </div>
     );
 };

@@ -62,6 +62,7 @@ export class Round {
 
         //MICRO RESOURCES
         this.roundResources = [...this.shortMemory.roundResources];
+        this.convertedResources = [...this.shortMemory.roundResources];
         this.roundNum = this.shortMemory.roundNum;
         this.paintRoundBegan = this.shortMemory.paintRoundBegan;
         this.paintStatus = this.shortMemory.paintStatus;
@@ -192,7 +193,7 @@ export class Round {
 
         //updateStatistics();
 
-        if (!this.endGame()) {
+        if (!this.endGame) {
             this.roundNum++;
             this.roundResources = [...this.gameResources[this.roundNum]]
             this.convertedResources = [...this.gameResources[this.roundNum]]

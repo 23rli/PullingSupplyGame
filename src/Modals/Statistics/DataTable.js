@@ -24,6 +24,7 @@ const columns = [
   { id: 'WIP', label: 'WIP', minWidth: 60 },
   { id: 'doneBlue', label: 'B', minWidth: 35 },
   { id: 'doneGreen', label: 'G', minWidth: 35 },
+  { id: 'revenue', label: 'Revenue', minWidth: 35 },
   { id: 'rRes', label: 'R', minWidth: 35 },
   { id: 'yRes', label: 'Y', minWidth: 35 },
   { id: 'bRes', label: 'B', minWidth: 35 },
@@ -58,6 +59,7 @@ function produceData( longMemory, i) {
   let WIP = cleanData(data.slice(0, 10).reduce((a, b) => a + b, 0));
   let doneBlue = cleanData(data[10]);;
   let doneGreen = cleanData(data[11]);;
+  let revenue = doneBlue * 3 + doneGreen * 2
 
   const resources = longMemory.storage[i].roundResources;
   const conResources = longMemory.storage[i].conResources;
@@ -75,7 +77,7 @@ function produceData( longMemory, i) {
 
   return {
     roundNum, mBlue, mGreen, aBlue, aGreen, qBlue, qGreen, pBlue, pGreen, dBlue, dGreen,
-    WIP, doneBlue, doneGreen, rRes, yRes, bRes, rConRes, yConRes, bConRes, unusedR, unusedY, unusedB
+    WIP, doneBlue, doneGreen, revenue, rRes, yRes, bRes, rConRes, yConRes, bConRes, unusedR, unusedY, unusedB
   };
 }
 
@@ -117,9 +119,11 @@ export default function GameDataTable({ roundManager, longMemory }) {
               <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Dry</TableCell>
               <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}></TableCell>
               <TableCell align="left" colSpan={2} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Done</TableCell>
+              <TableCell align="left" colSpan={1} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}></TableCell>
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Resources</TableCell>
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Converted Resources</TableCell>
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Unused Resources</TableCell>
+              
             </TableRow>
             <TableRow>
               {columns.map((column) => (

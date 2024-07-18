@@ -16,8 +16,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const fabStyle = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
-const fabStyle2 = { position: 'fixed', bottom: 30, right: 250 }; // Positioning the FAB
+const fabStyleNR = { position: 'fixed', bottom: 30, right: 100 }; // Positioning the FAB
+const fabStyleReset = { position: 'fixed', bottom: 30, right: 250 }; // Positioning the FAB
+const fabStyleEnd = { position: 'fixed', bottom: 30, right: 400 }; // Positioning the FAB
 
 function commitLongMem({roundManager, longMemory}){
   roundManager.setShortTermMem();
@@ -27,63 +28,81 @@ function commitLongMem({roundManager, longMemory}){
 }
 
 export default function AlertDialogSlide({ roundManager, longMemory }) {
-  const [open1, setOpen1] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
+  const [openNRPrompt, setOpenNRPrompt] = React.useState(false);
+  const [openResReport, setOpenResReport] = React.useState(false);
+  const [openReset, setOpenReset] = React.useState(false);
+  const [openEnd, setOpenEnd] = React.useState(false);
 
-  const handleClickOpen1 = () => {
-    setOpen1(true);
+  const handleClickOpenNRPrompt = () => {
+    setOpenNRPrompt(true);
   };
 
-  const handleClickOpen2 = () => {
-    setOpen2(true);
+  const handleClickOpenResReport = () => {
+    setOpenResReport(true);
   };
 
-  const handleClickOpen3 = () => {
-    setOpen3(true);
+  const handleClickOpenReset = () => {
+    setOpenReset(true);
+  }
+  const handleClickOpenEnd = () => {
+    setOpenReset(true);
   }
 
-  const handleClose1 = () => {
-    setOpen1(false);
+  const handleCloseNRPrompt = () => {
+    setOpenNRPrompt(false);
   };
 
-  const handleClose2 = () => {
-    setOpen2(false);
+  const handleCloseResReport = () => {
+    setOpenResReport(false);
   };
 
-  const handleClose3 = () => {
-    setOpen3(false);
+  const handleCloseReset = () => {
+    setOpenReset(false);
+  };
+
+  const handleCloseEnd = () => {
+    setOpenEnd(false);
   };
 
 
-  const handleAgree = () => {
-    setOpen1(false);
+  const handleAgreeNR = () => {
+    setOpenNRPrompt(false);
     console.log("button next round pressed")
     commitLongMem({roundManager, longMemory})
     roundManager.advanceRound();
-    setOpen2(true);
+    setOpenResReport(true);
   };
 
-  const handleAgree2 = () => {
-    setOpen3(false);
+  const handleAgreeReset = () => {
+    setOpenReset(false);
     roundManager.resetRound();
+  };
+
+  const handleAgreeEnd = () => {
+    setOpenEnd(false);
+    roundManager.endGame = true;
   };
 
   return (
     <React.Fragment>
-      <Fab color="default" aria-label="NextRound" variant='extended' size='large' style={fabStyle} onClick={handleClickOpen1}>
+      <Fab color="default" aria-label="NextRound" variant='extended' size='large' style={fabStyleNR} onClick={handleClickOpenNRPrompt}>
         Next Round
       </Fab>
 
-      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyle2} onClick={handleClickOpen3}>
+      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyleReset} onClick={handleClickOpenReset}>
         Reset Round
       </Fab>
 
+      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyleEnd} onClick={handleClickOpenEnd}>
+        End Game
+      </Fab>
+
+
       <Dialog
-        open={open3}
+        open={openReset}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose3}
+        onClose={handleCloseReset}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{"Would you like to Reset your progress to the beginning of this round?"}</DialogTitle>
@@ -93,18 +112,37 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose3}>Disagree</Button>
-          <Button onClick={handleAgree2}>Agree</Button>
+          <Button onClick={handleCloseReset}>Disagree</Button>
+          <Button onClick={handleAgreeReset}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openEnd}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleCloseEnd}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Would you like to End the Game (Game will end when you finish this round)?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            .....
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseEnd}>Disagree</Button>
+          <Button onClick={handleAgreeEnd}>Agree</Button>
         </DialogActions>
       </Dialog>
 
 
 
       <Dialog
-        open={open1}
+        open={openNRPrompt}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose1}
+        onClose={handleCloseNRPrompt}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{"Would you like to proceed to the next round?"}</DialogTitle>
@@ -114,18 +152,18 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose1}>Disagree</Button>
-          <Button onClick={handleAgree}>Agree</Button>
+          <Button onClick={handleCloseNRPrompt}>Disagree</Button>
+          <Button onClick={handleAgreeNR}>Agree</Button>
         </DialogActions>
       </Dialog>
 
       <Dialog
-        open={open2}
+        open={openResReport}
         TransitionComponent={Transition}
         keepMounted
         fullWidth
         maxWidth="md"
-        onClose={handleClose2}
+        onClose={handleCloseResReport}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{"Welcome to Round: " + roundManager.roundNum}</DialogTitle>
@@ -253,7 +291,7 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose2}>Close</Button>
+          <Button onClick={handleCloseResReport}>Close</Button>
         </DialogActions>
       </Dialog>
 

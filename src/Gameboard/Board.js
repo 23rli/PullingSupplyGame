@@ -23,29 +23,28 @@ import StatisticsModal from '../Modals/Statistics/StatusModal.js';
 
 // Styles
 const boardStyle = {
-  width: '90vw',       // 90% of viewport width
-  height: '150vh',      // 90% of viewport height
-  display: 'flex',     // Flexbox layout
-  flexWrap: 'wrap',    // Wrap children to the next line
-  boxSizing: 'border-box',  // Include padding and border in the element's total width and height
+  width: '90vw',
+  height: '150vh',
+  display: 'flex',
+  flexWrap: 'wrap',
+  boxSizing: 'border-box',
 };
-const columnStyle = { width: '16.666%', height: '11%' }
-const columnHeaderStyle = { width: '16.666%', height: '7%' }
-const appBarStyle = { width: '100%', height: '7%' }
-const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
+const columnStyle = { width: '16.666%', height: '11%' };
+const columnHeaderStyle = { width: '16.666%', height: '7%' };
+const appBarStyle = { width: '100%', height: '7%' };
+const fabStyle = { position: 'fixed', bottom: 16, right: 16 };
 
-export const Board = ({ roundManager, longMemory, onEnd}) => {
+export const Board = ({ roundManager, longMemory, onEnd }) => {
   const [cars, setCars] = useState(roundManager.cars);
   const [draggedItem, setDraggedItem] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   const endGame = () => {
-    // Call this when the game ends
     onEnd();
   };
 
   const checkGameOver = () => {
-    // Add your logic to check if the game is over
-    if (roundManager.endGame == true) {
+    if (roundManager.endGame) {
       endGame();
     }
   };
@@ -63,6 +62,26 @@ export const Board = ({ roundManager, longMemory, onEnd}) => {
       setCars([...updateCars]);
     });
   }, [roundManager]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsedTime((prevTime) => prevTime + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (elapsedTime === 120) {
+      // Stop the converter after 2 minutes
+      roundManager.stopConverter();
+    }
+    if (elapsedTime === 180) {
+      // Automatically move to the next round after 3 minutes
+      roundManager.nextRound();
+      setElapsedTime(0); // Reset timer for the next round
+    }
+  }, [elapsedTime, roundManager]);
 
   function renderColumnHeader(i) {
     const x = i;
