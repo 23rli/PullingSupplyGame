@@ -44,6 +44,8 @@ export class Round {
 
         this.errorStatement = "";
         this.errorDisplayed = false;
+
+        this.endGame = false;
     }
 
     resetRound() {

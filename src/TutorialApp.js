@@ -14,6 +14,17 @@ const containerStyle = {
   backgroundColor: '#2c387e',
 };
 
+const screenStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '100vw',
+  height: '100vh',
+  margin: 0,
+  padding: 0,
+  backgroundColor: '#2c387e',
+};
+
 const StartScreen = ({ onStart }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Welcome to the Game!</h1>
@@ -37,16 +48,22 @@ export const TutorialApp = () => {
   const endGame = () => setGameState('end');
 
   return (
-    <div style={containerStyle}>
+    <>
       {gameState === 'start' && (
-        <StartScreen onStart={startGame} />
+        <div style={screenStyle}>
+          <StartScreen onStart={startGame} />
+        </div>
       )}
       {gameState === 'playing' && (
-        <Board roundManager={roundManager} longMemory={longMemory} onEnd={endGame} />
+        <div style={containerStyle}>
+          <Board roundManager={roundManager} longMemory={longMemory} onEnd={endGame} />
+        </div>
       )}
       {gameState === 'end' && (
-        <EndScreen onRestart={startGame} />
+        <div style={screenStyle}>
+          <EndScreen onRestart={startGame} />
+        </div>
       )}
-    </div>
+    </>
   );
 };

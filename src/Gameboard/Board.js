@@ -34,9 +34,21 @@ const columnHeaderStyle = { width: '16.666%', height: '7%' }
 const appBarStyle = { width: '100%', height: '7%' }
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 }; // Positioning the FAB
 
-export const Board = ({ roundManager, longMemory }) => {
+export const Board = ({ roundManager, longMemory, onEnd}) => {
   const [cars, setCars] = useState(roundManager.cars);
   const [draggedItem, setDraggedItem] = useState(null);
+
+  const endGame = () => {
+    // Call this when the game ends
+    onEnd();
+  };
+
+  const checkGameOver = () => {
+    // Add your logic to check if the game is over
+    if (roundManager.endGame == true) {
+      endGame();
+    }
+  };
 
   const handleDragStart = (item) => {
     setDraggedItem(item);
