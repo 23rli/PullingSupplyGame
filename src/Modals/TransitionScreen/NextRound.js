@@ -27,7 +27,7 @@ function commitLongMem({roundManager, longMemory}){
   longMemory.commitResources({roundManager})
 }
 
-export default function AlertDialogSlide({ roundManager, longMemory }) {
+export default function AlertDialogSlide({ roundManager, longMemory, endGame }) {
   const [openNRPrompt, setOpenNRPrompt] = React.useState(false);
   const [openResReport, setOpenResReport] = React.useState(false);
   const [openReset, setOpenReset] = React.useState(false);
@@ -45,7 +45,7 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
     setOpenReset(true);
   }
   const handleClickOpenEnd = () => {
-    setOpenReset(true);
+    setOpenEnd(true);
   }
 
   const handleCloseNRPrompt = () => {
@@ -79,7 +79,9 @@ export default function AlertDialogSlide({ roundManager, longMemory }) {
   };
 
   const handleAgreeEnd = () => {
+    console.log("reached handleagreeend")
     setOpenEnd(false);
+    endGame();
     roundManager.endGame = true;
   };
 

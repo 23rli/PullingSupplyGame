@@ -32,10 +32,11 @@ const StartScreen = ({ onStart }) => (
   </div>
 );
 
-const EndScreen = ({ onRestart }) => (
+const EndScreen = ({ onRestart, backToHomePage }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Game Over!</h1>
     <button onClick={onRestart} style={{ padding: '10px 20px', fontSize: '16px' }}>Play Again</button>
+    <button onClick={backToHomePage} style={{ padding: '10px 20px', fontSize: '16px' }}>Back to Homepage</button>
   </div>
 );
 
@@ -44,6 +45,7 @@ export const TutorialApp = () => {
   const roundManager = useMemo(() => new Round(0), []);
   const longMemory = useMemo(() => new LongMemory(), []);
 
+  const homepage = () => setGameState('start')
   const startGame = () => setGameState('playing');
   const endGame = () => setGameState('end');
 
@@ -56,14 +58,15 @@ export const TutorialApp = () => {
       )}
       {gameState === 'playing' && (
         <div style={containerStyle}>
-          <Board roundManager={roundManager} longMemory={longMemory} onEnd={endGame} />
+          <Board roundManager={roundManager} longMemory={longMemory} endGame={endGame} />
         </div>
       )}
       {gameState === 'end' && (
         <div style={screenStyle}>
-          <EndScreen onRestart={startGame} />
+          <EndScreen onRestart={startGame} backToHomePage = {homepage}/>
         </div>
       )}
     </>
   );
 };
+ 

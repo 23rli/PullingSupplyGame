@@ -200,7 +200,7 @@ export class Round {
             this.setShortTermMem()
 
         } else {
-            // Introduce end Game Mechanics
+            this.endGame = true;
         }
 
 

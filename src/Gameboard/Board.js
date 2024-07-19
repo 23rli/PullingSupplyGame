@@ -34,20 +34,10 @@ const columnHeaderStyle = { width: '16.666%', height: '7%' };
 const appBarStyle = { width: '100%', height: '7%' };
 const fabStyle = { position: 'fixed', bottom: 16, right: 16 };
 
-export const Board = ({ roundManager, longMemory, onEnd }) => {
+export const Board = ({ roundManager, longMemory, endGame }) => {
   const [cars, setCars] = useState(roundManager.cars);
   const [draggedItem, setDraggedItem] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
-
-  const endGame = () => {
-    onEnd();
-  };
-
-  const checkGameOver = () => {
-    if (roundManager.endGame) {
-      endGame();
-    }
-  };
 
   const handleDragStart = (item) => {
     setDraggedItem(item);
@@ -191,7 +181,7 @@ export const Board = ({ roundManager, longMemory, onEnd }) => {
   return (
     <div style={boardStyle}>
       {squares}
-      <AlertDialogSlide roundManager={roundManager} longMemory={longMemory} />
+      <AlertDialogSlide roundManager={roundManager} longMemory={longMemory} endGame={endGame} />
     </div>
   );
 };
