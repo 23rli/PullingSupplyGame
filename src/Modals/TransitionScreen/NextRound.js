@@ -27,7 +27,7 @@ function commitLongMem({roundManager, longMemory}){
   longMemory.commitResources({roundManager})
 }
 
-export default function AlertDialogSlide({ roundManager, longMemory, endGame }) {
+export default function AlertDialogSlide({ roundManager, longMemory, endGame, autoAdvance }) {
   const [openNRPrompt, setOpenNRPrompt] = React.useState(false);
   const [openResReport, setOpenResReport] = React.useState(false);
   const [openReset, setOpenReset] = React.useState(false);
@@ -84,6 +84,10 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame }) 
     endGame();
     roundManager.endGame = true;
   };
+
+  if(roundManager.autoAdvance == true){
+    handleAgreeNR();
+  }
 
   return (
     <React.Fragment>

@@ -38,6 +38,9 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   const [cars, setCars] = useState(roundManager.cars);
   const [draggedItem, setDraggedItem] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [timePerRound, setTimePerRound] = useState(180);
+  const [activeConverter, setActiveConverter] = useState(true);
+  const [autoAdvance, setAutoAdvance] = useState(true);
 
   const handleDragStart = (item) => {
     setDraggedItem(item);
@@ -62,15 +65,19 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   }, []);
 
   useEffect(() => {
-    if (elapsedTime === 120) {
-      // Stop the converter after 2 minutes
-      roundManager.stopConverter();
-    }
-    if (elapsedTime === 180) {
-      // Automatically move to the next round after 3 minutes
-      roundManager.nextRound();
-      setElapsedTime(0); // Reset timer for the next round
-    }
+      if(roundManager.roundNum >= 10){
+        setTimePerRound(90);
+      }
+      if (elapsedTime === (timePerRound/3) * 2) {
+        // Stop the converter after 2 minutes
+        setActiveConverter(false);
+      }
+      if (elapsedTime === timePerRound) {
+        // Automatically move to the next round after 3 minutes
+        setAutoAdvance(true);
+        setElapsedTime(0); // Reset timer for the next round
+        setActiveConverter(true);
+      }
   }, [elapsedTime, roundManager]);
 
   function renderColumnHeader(i) {
@@ -94,9 +101,6 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
         <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static" sx={{ bgcolor: grey[800] }}>
             <Toolbar>
-              <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                <MenuIcon />
-              </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Motor City
               </Typography>
@@ -127,10 +131,55 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
                 </IconButton>
                 <p>Blue: {roundManager.roundResources[2]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
               </MenuItem>
-              <Divider orientation="vertical" flexItem component="div" role="presentation" sx={{ ml: 2 }} />
-              <DraggableDialog roundManager={roundManager} longMemory={longMemory} sx={{ ml: 1 }} />
-              <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}>Allocate</Button>
-              <StatisticsModal roundManager={roundManager} longMemory={longMemory} />
+              <Divider 
+                orientation="vertical" 
+                flexItem 
+                component="div" 
+                role="presentation" 
+                sx={{ 
+                  ml: 5, 
+                  backgroundColor: 'transparent', 
+                  borderColor: 'transparent', // Make border transparent if there is any
+                  boxShadow: 'none' // Remove any box shadow
+                }} 
+              />
+                {activeConverter  && (
+                <DraggableDialog roundManager={roundManager} longMemory={longMemory} sx={{ ml: 1 }} />
+                )}
+                {!activeConverter  && (
+                  <Button disabled>Converter</Button>
+                )}
+                <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}>Allocate</Button>
+                <StatisticsModal roundManager={roundManager} longMemory={longMemory} sx={{ ml: 2 }} />
+              <Divider 
+                orientation="vertical" 
+                flexItem 
+                component="div" 
+                role="presentation" 
+                sx={{ 
+                  ml: 5, 
+                  backgroundColor: 'transparent', 
+                  borderColor: 'transparent', // Make border transparent if there is any
+                  boxShadow: 'none' // Remove any box shadow
+                }} 
+              />
+              <Typography variant="h6" component="div" >
+              {elapsedTime%60 > 50 && (
+                <>
+                  Timer: {Math.floor((timePerRound - elapsedTime)/60) + ":0" + (timePerRound%60 - elapsedTime%60)}
+                </>
+              )}
+              {elapsedTime%60 <= 50 && elapsedTime%60 > 0 && (
+                <>
+                  Timer: {Math.floor((timePerRound - elapsedTime)/60) + ":" + ((timePerRound - elapsedTime)%60)}
+                </>
+              )}
+              {elapsedTime%60 == 0  && (
+                <>
+                  Timer: {Math.floor((timePerRound - elapsedTime)/60) + ":00" }
+                </>
+              )}
+              </Typography>
             </Toolbar>
           </AppBar>
         </Box>
@@ -181,7 +230,7 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   return (
     <div style={boardStyle}>
       {squares}
-      <AlertDialogSlide roundManager={roundManager} longMemory={longMemory} endGame={endGame} />
+      <AlertDialogSlide roundManager={roundManager} longMemory={longMemory} endGame={endGame} autoAdvance={autoAdvance} />
     </div>
   );
 };
