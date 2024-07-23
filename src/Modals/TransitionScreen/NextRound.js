@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
+
 import { LongMemory } from '../../Rules/LongMemory';
 import { ShortMemory } from '../../Rules/ShortMemory';
 
@@ -27,7 +28,7 @@ function commitLongMem({roundManager, longMemory}){
   longMemory.commitResources({roundManager})
 }
 
-export default function AlertDialogSlide({ roundManager, longMemory, endGame, autoAdvance }) {
+export default function AlertDialogSlide({ roundManager, longMemory, endGame, autoAdvance, resetTimer }) {
   const [openNRPrompt, setOpenNRPrompt] = React.useState(false);
   const [openResReport, setOpenResReport] = React.useState(false);
   const [openReset, setOpenReset] = React.useState(false);
@@ -70,6 +71,7 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
     console.log("button next round pressed")
     commitLongMem({roundManager, longMemory})
     roundManager.advanceRound();
+    resetTimer();
     setOpenResReport(true);
   };
 
@@ -79,15 +81,15 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
   };
 
   const handleAgreeEnd = () => {
-    console.log("reached handleagreeend")
     setOpenEnd(false);
     endGame();
     roundManager.endGame = true;
   };
 
-  if(roundManager.autoAdvance == true){
+  const handleAgreeForce = () => {
     handleAgreeNR();
-  }
+    autoAdvance = false;
+  };
 
   return (
     <React.Fragment>
@@ -102,6 +104,23 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
       <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyleEnd} onClick={handleClickOpenEnd}>
         End Game
       </Fab>
+
+      <Dialog
+        open={autoAdvance}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Would you like to Reset your progress to the beginning of this round?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            .....
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleAgreeForce}>Agree</Button>
+        </DialogActions>
+      </Dialog>
 
 
       <Dialog

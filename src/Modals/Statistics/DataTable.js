@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import { writeFile, utils } from 'xlsx';
 
 const columns = [
   { id: 'roundNum', label: 'Round', minWidth: 60 },
@@ -35,15 +37,15 @@ const columns = [
   { id: 'unusedY', label: 'Y', minWidth: 35 },
   { id: 'unusedB', label: 'B', minWidth: 35 }
 ];
-//Add a piece to make zeros null;
 
 function cleanData(value){
-  if(value != 0 ){
+  if(value !== 0 ){
     return value;
   }
   return null;
 }
-function produceData( longMemory, i) {
+
+function produceData(longMemory, i) {
   let data = longMemory.storage[i].locationData();
   let roundNum = i;
   let mBlue = cleanData(data[0]);
@@ -57,9 +59,9 @@ function produceData( longMemory, i) {
   let dBlue = cleanData(data[8]);
   let dGreen = cleanData(data[9]);
   let WIP = cleanData(data.slice(0, 10).reduce((a, b) => a + b, 0));
-  let doneBlue = cleanData(data[10]);;
-  let doneGreen = cleanData(data[11]);;
-  let revenue = doneBlue * 3 + doneGreen * 2
+  let doneBlue = cleanData(data[10]);
+  let doneGreen = cleanData(data[11]);
+  let revenue = doneBlue * 3 + doneGreen * 2;
 
   const resources = longMemory.storage[i].roundResources;
   const conResources = longMemory.storage[i].conResources;
@@ -81,9 +83,8 @@ function produceData( longMemory, i) {
   };
 }
 
-function produceTableInfo({longMemory}) {
+function produceTableInfo({ longMemory }) {
   let info = [];
-  console.log(longMemory)
   for (let i = 0; i < longMemory.storage.length; i++) {
     info.push(produceData(longMemory, i));
   }
@@ -103,10 +104,20 @@ export default function GameDataTable({ roundManager, longMemory }) {
     setPage(0);
   };
 
-  let info = produceTableInfo({longMemory});
+  const info = produceTableInfo({ longMemory });
+
+  const exportToExcel = () => {
+    const wb = utils.book_new();
+    const ws = utils.json_to_sheet(info);
+    utils.book_append_sheet(wb, ws, 'Game Data');
+    writeFile(wb, 'GameData.xlsx');
+  };
 
   return (
     <Paper sx={{ width: '90%', overflow: 'hidden' }}>
+      <Button variant="contained" color="primary" onClick={exportToExcel}>
+        Export to Excel
+      </Button>
       <TableContainer sx={{ maxHeight: '90%' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -123,7 +134,6 @@ export default function GameDataTable({ roundManager, longMemory }) {
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Resources</TableCell>
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Converted Resources</TableCell>
               <TableCell align="left" colSpan={3} sx={{ borderRight: '1px solid rgba(224, 224, 224, 1)' }}>Unused Resources</TableCell>
-              
             </TableRow>
             <TableRow>
               {columns.map((column) => (
