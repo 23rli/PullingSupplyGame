@@ -2,7 +2,7 @@
 import { ItemTypes } from './ItemTypes.js';
 import { BlueCarVisual } from './Cars/BlueCarVisual.js';
 import { GreenCarVisual } from './Cars/GreenCarVisual.js';
-import blueCar from './Cars/blueCar.png'
+import blueCarEmpty from './Cars/Motor City Graphics/Model B - empty.png'
 import blueCarRed1 from './Cars/Motor City Graphics/Model B - red 1.png'
 import blueCarRed2 from './Cars/Motor City Graphics/Model B - red 2.png'
 import blueCarRed3 from './Cars/Motor City Graphics/Model B - red 3.png'
@@ -12,6 +12,7 @@ import blueCarYellow3 from './Cars/Motor City Graphics/Model B - yellow 3.png'
 import blueCarBlue1 from './Cars/Motor City Graphics/Model B - blue 1.png'
 import blueCarBlue2 from './Cars/Motor City Graphics/Model B - blue 2.png'
 import blueCarBlue3 from './Cars/Motor City Graphics/Model B - blue 3.png'
+import greenCarEmpty from './Cars/Motor City Graphics/Model G - empty.png'
 import greenCarRed1 from './Cars/Motor City Graphics/Model G - red 1.png'
 import greenCarRed2 from './Cars/Motor City Graphics/Model G - red 2.png'
 import greenCarYellow1 from './Cars/Motor City Graphics/Model G - yellow 1.png'
@@ -32,7 +33,7 @@ export const Piece = ({ type, id, roundManager }) => {
           }else if(roundManager.cars[index].rRes == 1){
             image = greenCarRed1;
           }else{
-            image = greenCarRed1;
+            image = greenCarEmpty;
           }
       }else if(roundManager.cars[index].coords[0] == 2){
           if(roundManager.cars[index].yRes == 2){
@@ -40,7 +41,7 @@ export const Piece = ({ type, id, roundManager }) => {
           }else if(roundManager.cars[index].yRes == 1){
             image = greenCarYellow1;
           }else{
-            image = greenCarRed2;
+            image = greenCarEmpty;
           }
       }else if(roundManager.cars[index].coords[0] == 3){
           if(roundManager.cars[index].bRes == 2){
@@ -48,10 +49,10 @@ export const Piece = ({ type, id, roundManager }) => {
           }else if(roundManager.cars[index].bRes == 1){
             image = greenCarBlue1;
           }else{
-            image = greenCarYellow2;
+            image = greenCarEmpty;
           }
       }else{
-        image = greenCarRed1;
+        image = greenCarEmpty;
       }
     }
     if (type === ItemTypes.BCAR && !roundManager.cars[index].complete) {
@@ -63,7 +64,7 @@ export const Piece = ({ type, id, roundManager }) => {
         }else if(roundManager.cars[index].rRes == 1){
           image = blueCarRed1;
         }else{
-          image = blueCarRed1;
+          image = blueCarEmpty;
         }
       }else if(roundManager.cars[index].coords[0] == 2){
         if(roundManager.cars[index].yRes == 3){
@@ -73,7 +74,7 @@ export const Piece = ({ type, id, roundManager }) => {
         }else if(roundManager.cars[index].yRes == 1){
           image = blueCarYellow1;
         }else{
-          image = blueCarRed3;
+          image = blueCarEmpty;
         }
       }else if(roundManager.cars[index].coords[0] == 3){
         if(roundManager.cars[index].bRes == 3){
@@ -83,10 +84,10 @@ export const Piece = ({ type, id, roundManager }) => {
         }else if(roundManager.cars[index].bRes == 1){
           image = blueCarBlue1;
         }else{
-          image = blueCarYellow3;
+          image = blueCarEmpty;
         }
       }else{
-        image = blueCarRed1;
+        image = blueCarEmpty;
       }
     }
 
