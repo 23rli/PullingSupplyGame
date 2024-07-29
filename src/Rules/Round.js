@@ -1,5 +1,5 @@
-import { Car } from '../Pieces/Cars/Car'
-import { ShortMemory } from '../Rules/ShortMemory.js';
+import { Car } from '../Pieces/Cars/Car.js'
+import { ShortMemory } from './ShortMemory.js';
 
 export class Round {
 
