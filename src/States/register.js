@@ -1,14 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Example from './example'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { store } from './ReduxStore/store';
-import { Provider} from 'react-redux'
 
 import axios from 'axios';
 
-function App() {
+function register() {
 
   const[test, setTest] = React.useState('')
   const[comment, setComment] = React.useState('')
@@ -24,10 +18,8 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <DndProvider backend={HTML5Backend}>
-        <Example />
-          <form onSubmit={submitHandler}>
+    <div>
+        <form onSubmit={submitHandler}>
             <label htmlFor='test'>test</label> 
             <input id = 'test' type = 'text' value = {test} onChange = {(e) => setTest(e.target.value)}/>
             <label htmlFor='comment'>comment</label> 
@@ -36,17 +28,9 @@ function App() {
               <button type = 'button'>Cancel</button>
               <button type = 'submit'>Submit</button>
             </div>
-          </form>
-      </DndProvider>
+        </form>
     </div>
   )
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Provider store = {store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
-);
+export default register;
