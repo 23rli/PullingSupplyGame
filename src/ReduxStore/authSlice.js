@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-export const register = createAsyncThunk('auth/register', async({username}) =>{
+export const register = createAsyncThunk('auth/register', async({test, comment}) =>{
     try {
-        const res = await axios.post('http://localhost:8080', {username});
+        const res = await axios.post('http://localhost:8080', {test, comment});
         return res.data;
     } catch (err) {
         console.log(err)
@@ -33,7 +33,7 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(register.fulfilled, (state, action) => {
-                state.user = action.payload.username;
+                state.user = action.payload.test;
                 state.isRegistered = true;
                 state.loading = false;
                 state.error = null;

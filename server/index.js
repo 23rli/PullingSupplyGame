@@ -16,7 +16,7 @@ var db  = mysql.createPool({
   database        : 'MotorCity'
 });
 
-app.post('/signup', (req, res) =>{
+app.post('/register', (req, res) =>{
     const test = req.body.test;
     const comment = req.body.comment;
     db.query("INSERT into test (name, comment) VALUES (?, ?)", [test, comment], (err, result) => {

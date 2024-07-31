@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 import Example from './example'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { store } from './ReduxStore/store';
-import { Provider} from 'react-redux'
 
 import axios from 'axios';
 
@@ -16,7 +14,7 @@ function App() {
 
   const submitHandler = e => {
     e.preventDefault()
-    axios.post('http://localhost:8080/signup', {test: test, comment: comment}).then((data) => {
+    axios.post('http://localhost:8080/register', {test: test, comment: comment}).then((data) => {
       console.log(data)
       setTest('');
       setComment('');
@@ -45,8 +43,6 @@ function App() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store = {store}>
       <App />
-    </Provider>
   </React.StrictMode>
 );

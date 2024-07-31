@@ -1,4 +1,5 @@
 import { ShortMemory } from "./ShortMemory";
+import
 
 export class LongMemory {
     constructor() {

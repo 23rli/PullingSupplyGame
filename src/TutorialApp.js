@@ -28,7 +28,8 @@ const screenStyle = {
 const StartScreen = ({ onStart }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Welcome to the Game!</h1>
-    <button onClick={onStart} style={{ padding: '10px 20px', fontSize: '16px' }}>Start Game</button>
+    <button onClick={onStart} style={{ padding: '10px 20px', fontSize: '16px' }}>Team Game</button>
+    <button onClick={onStart} style={{ padding: '10px 20px', fontSize: '16px' }}>Individual Game</button>
   </div>
 );
 
