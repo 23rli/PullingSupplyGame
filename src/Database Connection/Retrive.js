@@ -7,9 +7,6 @@ function register() {
 
   const[test, setTest] = React.useState('')
   const[comment, setComment] = React.useState('')
-  const user = useSelector((state) => state.auth.user)
-  const error = useSelector((state) => state.auth.error)
-  const dispatch = useDispatch();
 
   const submitHandler = e => {
     e.preventDefault()
