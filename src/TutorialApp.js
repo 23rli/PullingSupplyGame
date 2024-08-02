@@ -33,11 +33,11 @@ const buttonStyle = {
   margin: '10px 0' // Adds margin between buttons
 };
 
-const StartScreen = ({ onStart }) => (
+const StartScreen = ({ onStart, roundManager }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Welcome to the Game!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <CreateGroupGame/>
+      <CreateGroupGame roundManager = {roundManager}/>
       <button onClick={onStart} style={buttonStyle}>Individual Game</button>
     </div>
   </div>
@@ -66,7 +66,7 @@ export const TutorialApp = () => {
     <>
       {gameState === 'start' && (
         <div style={screenStyle}>
-          <StartScreen onStart={startGame} />
+          <StartScreen onStart={startGame} roundManager={roundManager} />
         </div>
       )}
       {gameState === 'playing' && (

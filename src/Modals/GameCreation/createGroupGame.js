@@ -7,10 +7,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { FormControlLabel } from '@mui/material';
+import { Checkbox } from '@mui/material';
 
 import axios from 'axios';
 
-export default function CreateGroupGame() {
+export function CreateGroupGame() {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -76,7 +78,7 @@ export default function CreateGroupGame() {
     };
 
     const handleCloseCreate = () => {
-        setCreate(false);
+        setOpenCreate(false);
     };
     const handleOpenWaiJoin = () => {
         setOpenJoin(false);
@@ -93,14 +95,14 @@ export default function CreateGroupGame() {
     };
 
     const handleCloseWaitCreate = () => {
-        setOpenWait(false);
+        setOpenWaitCreate(false);
     };
 
 
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleOpen}>
+            <Button variant="outlined" onClick={handleOpenIntro}>
                 Team Game
             </Button>
             <Dialog
@@ -113,7 +115,7 @@ export default function CreateGroupGame() {
                     <Button onClick={handleOpenCreate}>Create Game</Button>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleCloseIntro}>Cancel</Button>
                 </DialogActions>
             </Dialog>
 
@@ -129,7 +131,7 @@ export default function CreateGroupGame() {
                         const formJson = Object.fromEntries(formData.entries());
                         const email = formJson.email;
                         console.log(email);
-                        handleClose();
+                        handleCloseCreate();
                     },
                 }}
             >
@@ -154,10 +156,28 @@ export default function CreateGroupGame() {
                         required
                         margin="dense"
                         id="name"
+                        name="blueRevenue"
+                        label="Blue Revenue per Car"
+                        type="number"
+                        variant="standard"
+                        defaultValue={3.00}
+                        inputProps={{
+                            step: 0.01, // Allows input of decimals
+                            min: "0",   // Minimum value (optional)
+                        }}
+                        disabled={!blueChecked}
+                    />
+
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
                         name="blueWIPPenalty"
                         label="Blue WIP Penalty"
                         type="number"
                         variant="standard"
+                        defaultValue={1.50}
                         inputProps={{
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
@@ -181,10 +201,27 @@ export default function CreateGroupGame() {
                         required
                         margin="dense"
                         id="name"
+                        name="greenRevenue"
+                        label="Green Revenue per Car"
+                        type="number"
+                        variant="standard"
+                        defaultValue={2.00}
+                        inputProps={{
+                            step: 0.01, // Allows input of decimals
+                            min: "0",   // Minimum value (optional)
+                        }}
+                        disabled={!greenChecked}
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
                         name="greenWIPPenalty"
                         label="Green WIP Penalty"
                         type="number"
                         variant="standard"
+                        defaultValue={1.00}
                         inputProps={{
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
@@ -208,10 +245,27 @@ export default function CreateGroupGame() {
                         required
                         margin="dense"
                         id="name"
+                        name="redRevenue"
+                        label="Red Revenue per Car"
+                        type="number"
+                        variant="standard"
+                        defaultValue={2.50}
+                        inputProps={{
+                            step: 0.01, // Allows input of decimals
+                            min: "0",   // Minimum value (optional)
+                        }}
+                        disabled={!blueChecked}
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
                         name="redWIPPenalty"
                         label="Red WIP Penalty"
                         type="number"
                         variant="standard"
+                        defaultValue={1.25}
                         inputProps={{
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
@@ -235,10 +289,27 @@ export default function CreateGroupGame() {
                         required
                         margin="dense"
                         id="name"
+                        name="yellowRevenue"
+                        label="Yellow Revenue per Car"
+                        type="number"
+                        variant="standard"
+                        defaultValue={2.50}
+                        inputProps={{
+                            step: 0.01, // Allows input of decimals
+                            min: "0",   // Minimum value (optional)
+                        }}
+                        disabled={!blueChecked}
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
                         name="yellowWIPPenalty"
                         label="Yellow WIP Penalty"
                         type="number"
                         variant="standard"
+                        defaultValue={1.25}
                         inputProps={{
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
@@ -249,7 +320,7 @@ export default function CreateGroupGame() {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleCloseCreate}>Cancel</Button>
                     <Button type="submit">Subscribe</Button>
                 </DialogActions>
             </Dialog>
@@ -264,50 +335,38 @@ export default function CreateGroupGame() {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleClose();
+                        const code = formJson.code;
+                        //axios.post
                     },
                 }}
             >
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
+                        To join a game, input the 6 digit code provided by your game creator
                     </DialogContentText>
                     <TextField
                         autoFocus
                         required
                         margin="dense"
                         id="name"
-                        name="email"
-                        label="Email Address"
-                        type="email"
+                        name="code"
+                        label="6 Digit Game Code"
+                        type="number"
                         fullWidth
                         variant="standard"
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit">Subscribe</Button>
+                    <Button onClick={handleCloseJoin}>Cancel</Button>
+                    <Button type="submit">Join</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog
                 open={openWaitCreate}
                 onClose={handleCloseWaitCreate}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleClose();
-                    },
-                }}
+
             >
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
@@ -328,7 +387,6 @@ export default function CreateGroupGame() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
                     <Button type="submit">Subscribe</Button>
                 </DialogActions>
             </Dialog>
@@ -336,17 +394,6 @@ export default function CreateGroupGame() {
             <Dialog
                 open={openWaitJoin}
                 onClose={handleCloseWaitJoin}
-                PaperProps={{
-                    component: 'form',
-                    onSubmit: (event) => {
-                        event.preventDefault();
-                        const formData = new FormData(event.currentTarget);
-                        const formJson = Object.fromEntries(formData.entries());
-                        const email = formJson.email;
-                        console.log(email);
-                        handleClose();
-                    },
-                }}
             >
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
@@ -354,20 +401,9 @@ export default function CreateGroupGame() {
                         To subscribe to this website, please enter your email address here. We
                         will send updates occasionally.
                     </DialogContentText>
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="name"
-                        name="email"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
+                    
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
                     <Button type="submit">Subscribe</Button>
                 </DialogActions>
             </Dialog>
