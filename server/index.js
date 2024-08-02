@@ -55,6 +55,8 @@ app.post('/registergame', (req, res) =>{
         ], (err, result) => {
         if (err){
             console.log(err)
+        }else{
+            res.send({gameId: result.insertId})
         }
     })
 })
@@ -66,6 +68,8 @@ app.post('/registeruser', (req, res) =>{
     db.query("INSERT into users (username, privledge, game) VALUES (?, ?, ?)", [username, privledge, gameId], (err, result) => {
         if (err){
             console.log(err)
+        }else{
+            res.send({userId: result.insertId})
         }
     })
 })
@@ -158,6 +162,8 @@ app.post('/registerround', (req, res) =>{
             ], (err, result) => {
         if (err){
             console.log(err)
+        }else{
+            res.send({roundId: result.insertId})
         }
     })
 })

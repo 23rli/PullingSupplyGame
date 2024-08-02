@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function createIndiGame() {
+export default function CreateIndiGame() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
