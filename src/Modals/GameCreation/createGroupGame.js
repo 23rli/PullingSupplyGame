@@ -254,7 +254,7 @@ export function CreateGroupGame() {
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
                         }}
-                        disabled={!blueChecked}
+                        disabled={!redChecked}
                     />
                     <TextField
                         autoFocus
@@ -298,7 +298,7 @@ export function CreateGroupGame() {
                             step: 0.01, // Allows input of decimals
                             min: "0",   // Minimum value (optional)
                         }}
-                        disabled={!blueChecked}
+                        disabled={!yellowChecked}
                     />
                     <TextField
                         autoFocus

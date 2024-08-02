@@ -39,9 +39,15 @@ app.post('/registergame', (req, res) =>{
     const yellowPenalty = req.body.yellowPenalty;
     const rolls = req.body.rolls;
     const mode = req.body.mode;
+    const code = req.body.code;
+    const blueRevenue = req.body.blueRevenue;
+    const greenRevenue = req.body.greenRevenue;
+    const redRevenue = req.body.redRevenue;
+    const yellowRevenue = req.body.yellowRevenue;
     db.query("INSERT into gameData (blue_car, blue_penalty, green_car, green_penalty,"
-        + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode) VALUES" 
-        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode, code, blue_revenue," 
+        + " green_revenue, red_revenue, yellow_revenue) VALUES  "
+        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
             blueCar,
             bluePenalty,
             greenCar, 
@@ -51,12 +57,17 @@ app.post('/registergame', (req, res) =>{
             yellowCar,
             yellowPenalty,
             rolls,
-            mode
+            mode,
+            code,
+            blueRevenue,
+            greenRevenue,
+            redRevenue,
+            yellowRevenue
         ], (err, result) => {
         if (err){
             console.log(err)
         }else{
-            res.send({gameId: result.insertId})
+            res.send({gameId: result.insertId, mode: result.mode, code: result.code})
         }
     })
 })

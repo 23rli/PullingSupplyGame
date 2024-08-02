@@ -6,7 +6,8 @@ export class Round {
     constructor(id) {
 
         //MACRO RESOURCES
-        this.id = id;
+        this.gameId = id;
+        this.userId = 0;
         this.gameResources = [];
         for (let i = 0; i < 100; i++) {
             const red = parseInt(Math.random() * 10 + 1)
@@ -47,6 +48,7 @@ export class Round {
 
         this.endGame = false;
     }
+
 
     resetRound() {
 

@@ -38,6 +38,7 @@ const StartScreen = ({ onStart, roundManager }) => (
     <h1>Welcome to the Game!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <CreateGroupGame roundManager = {roundManager}/>
+      <CreateIndiGame roundManager = {roundManager}/>
       <button onClick={onStart} style={buttonStyle}>Individual Game</button>
     </div>
   </div>

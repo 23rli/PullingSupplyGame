@@ -7,8 +7,92 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export function CreateIndiGame() {
-  const [open, setOpen] = React.useState(false);
+export function CreateIndiGame({roundManager}) {
+  const [open, setOpen] = useState(false);
+  const [blueChecked, setBlueChecked] = useState(false);
+    const [greenChecked, setGreenChecked] = useState(false);
+    const [redChecked, setRedChecked] = useState(false);
+    const [yellowChecked, setYellowChecked] = useState(false);
+
+    const handleBlueCheckChange = (event) => {
+        setBlueChecked(event.target.checked);
+    };
+
+    const handleCloseBlue = () => {
+        setBlueChecked(false); // Reset the checkbox state when closing the dialog
+    };
+
+    const handleGreenCheckChange = (event) => {
+        setGreenChecked(event.target.checked);
+    };
+
+    const handleCloseGreen = () => {
+        setGreenChecked(false); // Reset the checkbox state when closing the dialog
+    };
+
+    const handleRedCheckChange = (event) => {
+        setRedChecked(event.target.checked);
+    };
+
+    const handleCloseRed = () => {
+        setRedChecked(false); // Reset the checkbox state when closing the dialog
+    };
+
+    const handleYellowCheckChange = (event) => {
+        setYellowChecked(event.target.checked);
+    };
+
+    const handleCloseYellow = () => {
+        setYellowChecked(false); // Reset the checkbox state when closing the dialog
+    };
+
+    const handleCreateGame = async ( username, blueCar, bluePenalty, greenCar, greenPenalty, 
+      redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
+      redRevenue, yellowRevenue
+    ) => {
+      try {
+          const response = await  axios.post('http://localhost:8080/registergame', 
+            {blueCar: blueCar, 
+            bluePenalty: bluePenalty,
+            greenCar: greenCar,
+            greenPenalty: greenPenalty,
+            redCar: redCar,
+            redPenalty: redPenalty,
+            yellowCar: yellowCar,
+            yellowPenalty: yellowPenalty,
+            rolls: rolls,
+            mode: 0,
+            code: code,
+            blueRevenue: blueRevenue,
+            greenRevenue: greenRevenue,
+            redRevenue: redRevenue,
+            yellowRevenue: yellowRevenue
+            }).then((data) => {
+          console.log(data)
+        });
+          roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
+          handleCreateUser(username)
+      } catch (error) {
+          console.error('Error registering:', error);
+      }
+    }
+
+      const handleCreateUser = async (username) => {
+        try {
+            const response = await  axios.post('http://localhost:8080/registeruser', 
+              {
+                username: username,
+                privledge: "player",
+                gameId = roundManager.gameId
+              }).then((data) => {
+            console.log(data)
+          });
+            roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+      };
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,29 +116,216 @@ export function CreateIndiGame() {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
+            const username = formJson.username;
+            const blueRevenue = formJson.blueRevenue;
+            const greenRevenue = formJson.greenRevenue;
+            const redRevenue = formJson.redRevenue;
+            const yellowRevenue = formJson.yellowRevenue;
+            const bluePenalty = formJson.blueWIPPenalty;
+            const greenPenalty = formJson.greenWIPPenalty;
+            const redPenalty = formJson.redWIPPenalty;
+            const yellowPenalty = formJson.yellowWIPPenalty;
+            const blueCar = blueChecked ? 1 : 0;
+            const greenCar = greenChecked ? 1 : 0;
+            const redCar = redChecked ? 1 : 0;
+            const yellowCar = yellowChecked ? 1 : 0;
+
+            let code = Number("" + (Math.random() * 9 + 1) + Math.random * 10 + Math.random 
+            * 10 + Math.random * 10 + Math.random * 10 + Math.random * 10)
+
+            let rolls = '';
+
+            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty, 
+              redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
+              redRevenue, yellowRevenue);
+
             handleClose();
           },
         }}
       >
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Create Game</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
+            Adjust the Parameters to Begin
           </DialogContentText>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={blueChecked}
+                onChange={handleBlueCheckChange}
+                name="enableBlue"
+                color="primary"
+              />
+            }
+            label="Enable Blue Cars"
+          />
           <TextField
             autoFocus
             required
             margin="dense"
             id="name"
-            name="email"
-            label="Email Address"
-            type="email"
-            fullWidth
+            name="blueRevenue"
+            label="Blue Revenue per Car"
+            type="number"
             variant="standard"
+            defaultValue={3.00}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!blueChecked}
           />
+
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="blueWIPPenalty"
+            label="Blue WIP Penalty"
+            type="number"
+            variant="standard"
+            defaultValue={1.50}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!blueChecked}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={greenChecked}
+                onChange={handleGreenCheckChange}
+                name="enableGreen"
+                color="primary"
+              />
+            }
+            label="Enable Green Cars"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="greenRevenue"
+            label="Green Revenue per Car"
+            type="number"
+            variant="standard"
+            defaultValue={2.00}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!greenChecked}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="greenWIPPenalty"
+            label="Green WIP Penalty"
+            type="number"
+            variant="standard"
+            defaultValue={1.00}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!greenChecked}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={redChecked}
+                onChange={handleRedCheckChange}
+                name="enableRed"
+                color="primary"
+              />
+            }
+            label="Enable Red Cars"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="redRevenue"
+            label="Red Revenue per Car"
+            type="number"
+            variant="standard"
+            defaultValue={2.50}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!redChecked}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="redWIPPenalty"
+            label="Red WIP Penalty"
+            type="number"
+            variant="standard"
+            defaultValue={1.25}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!redChecked}
+          />
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={yellowChecked}
+                onChange={handleYellowCheckChange}
+                name="enableYellow"
+                color="primary"
+              />
+            }
+            label="Enable Yellow Cars"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="yellowRevenue"
+            label="Yellow Revenue per Car"
+            type="number"
+            variant="standard"
+            defaultValue={2.50}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!yellowChecked}
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="yellowWIPPenalty"
+            label="Yellow WIP Penalty"
+            type="number"
+            variant="standard"
+            defaultValue={1.25}
+            inputProps={{
+              step: 0.01, // Allows input of decimals
+              min: "0",   // Minimum value (optional)
+            }}
+            disabled={!yellowChecked}
+          />
+
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
