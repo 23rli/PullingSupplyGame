@@ -6,13 +6,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { FormControlLabel } from '@mui/material';
+import { Checkbox } from '@mui/material';
+
+import axios from 'axios'
 
 export function CreateIndiGame({roundManager}) {
-  const [open, setOpen] = useState(false);
-  const [blueChecked, setBlueChecked] = useState(false);
-    const [greenChecked, setGreenChecked] = useState(false);
-    const [redChecked, setRedChecked] = useState(false);
-    const [yellowChecked, setYellowChecked] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [blueChecked, setBlueChecked] = React.useState(false);
+    const [greenChecked, setGreenChecked] = React.useState(false);
+    const [redChecked, setRedChecked] = React.useState(false);
+    const [yellowChecked, setYellowChecked] = React.useState(false);
 
     const handleBlueCheckChange = (event) => {
         setBlueChecked(event.target.checked);
@@ -46,48 +50,58 @@ export function CreateIndiGame({roundManager}) {
         setYellowChecked(false); // Reset the checkbox state when closing the dialog
     };
 
-    const handleCreateGame = async ( username, blueCar, bluePenalty, greenCar, greenPenalty, 
-      redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
+    const handleCreateGame = async (
+      username, 
+      blueCar, bluePenalty, 
+      greenCar, greenPenalty, 
+      redCar, redPenalty, 
+      yellowCar, yellowPenalty, 
+      rolls, code, 
+      blueRevenue, greenRevenue, 
       redRevenue, yellowRevenue
     ) => {
       try {
-          const response = await  axios.post('http://localhost:8080/registergame', 
-            {blueCar: blueCar, 
-            bluePenalty: bluePenalty,
-            greenCar: greenCar,
-            greenPenalty: greenPenalty,
-            redCar: redCar,
-            redPenalty: redPenalty,
-            yellowCar: yellowCar,
-            yellowPenalty: yellowPenalty,
-            rolls: rolls,
-            mode: 0,
-            code: code,
-            blueRevenue: blueRevenue,
-            greenRevenue: greenRevenue,
-            redRevenue: redRevenue,
-            yellowRevenue: yellowRevenue
-            }).then((data) => {
-          console.log(data)
+        const response = await axios.post('http://localhost:8080/registergame', {
+          blueCar: blueCar, 
+          bluePenalty: bluePenalty,
+          greenCar: greenCar,
+          greenPenalty: greenPenalty,
+          redCar: redCar,
+          redPenalty: redPenalty,
+          yellowCar: yellowCar,
+          yellowPenalty: yellowPenalty,
+          rolls: rolls,
+          mode: 0,
+          code: code,
+          blueRevenue: blueRevenue,
+          greenRevenue: greenRevenue,
+          redRevenue: redRevenue,
+          yellowRevenue: yellowRevenue
         });
-          roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
-          handleCreateUser(username)
+        
+        console.log(response.data); // Log the response data
+    
+        roundManager.gameId = response.data.gameId; // Accessing 'gameId'
+        console.log(roundManager);
+        handleCreateUser(username);
+        
       } catch (error) {
-          console.error('Error registering:', error);
+        console.error('Error registering:', error);
       }
-    }
+    };
+    
 
       const handleCreateUser = async (username) => {
+        console.log("reached create user")
         try {
             const response = await  axios.post('http://localhost:8080/registeruser', 
               {
                 username: username,
                 privledge: "player",
-                gameId = roundManager.gameId
-              }).then((data) => {
-            console.log(data)
-          });
+                gameId: roundManager.gameId
+              })
             roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+            console.log(roundManager);
         } catch (error) {
             console.error('Error registering:', error);
         }
@@ -104,8 +118,23 @@ export function CreateIndiGame({roundManager}) {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
+      <Button 
+        variant="outlined" 
+        onClick={handleClickOpen}
+        sx={{
+          fontSize: '1.5rem', // Adjust font size to make it larger
+          color: '#2c387e', // Text color
+          backgroundColor: 'white', // Background color
+          borderColor: 'white', // Border color
+          padding: '10px 20px', // Padding to make it larger
+          margin: '20px', // Margin
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.8)', // Background color on hover
+            borderColor: 'white', // Border color on hover
+          }
+        }}
+      >
+        Individual Game
       </Button>
       <Dialog
         open={open}
@@ -135,6 +164,15 @@ export function CreateIndiGame({roundManager}) {
 
             let rolls = '';
 
+            for(let i = 0; i < 100; i++){
+              const red = parseInt(Math.random() * 10 + 1)
+              const yellow = parseInt(Math.random() * 8 + 1)
+              const blue = parseInt(Math.random() * 4 + 1)
+              rolls += red + ",";
+              rolls += yellow + ",";
+              rolls += blue + ",";
+            }
+
             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty, 
               redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
               redRevenue, yellowRevenue);
@@ -148,6 +186,17 @@ export function CreateIndiGame({roundManager}) {
           <DialogContentText>
             Adjust the Parameters to Begin
           </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="username"
+            label="Username"
+            type="text"
+            variant="standard"
+            defaultValue={"Guest"}
+          />
           <FormControlLabel
             control={
               <Checkbox
@@ -329,7 +378,7 @@ export function CreateIndiGame({roundManager}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit">Submit</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

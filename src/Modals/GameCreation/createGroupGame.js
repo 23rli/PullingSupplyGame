@@ -102,9 +102,24 @@ export function CreateGroupGame() {
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleOpenIntro}>
+            <Button 
+                variant="outlined" 
+                onClick={handleOpenIntro}
+                sx={{
+                    fontSize: '1.5rem', // Adjust font size to make it larger
+                    color: '#2c387e', // Text color
+                    backgroundColor: 'white', // Background color
+                    borderColor: 'white', // Border color
+                    padding: '10px 20px', // Padding to make it larger
+                    margin: '20px', // Margin
+                    '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Background color on hover
+                    borderColor: 'white', // Border color on hover
+                    }
+                }}
+                >
                 Team Game
-            </Button>
+                </Button>
             <Dialog
                 open={openIntro}
                 onClose={handleCloseIntro}

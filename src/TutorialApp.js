@@ -33,12 +33,12 @@ const buttonStyle = {
   margin: '10px 0' // Adds margin between buttons
 };
 
-const StartScreen = ({ onStart, roundManager }) => (
+const StartScreen = ({ onStart, openAdmin, roundManager }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
-    <h1>Welcome to the Game!</h1>
+    <h1>Welcome to Motor City!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <CreateGroupGame roundManager = {roundManager}/>
-      <CreateIndiGame roundManager = {roundManager}/>
+      <CreateGroupGame roundManager = {roundManager} onStart = {onStart} openAdmin = {openAdmin}/>
+      <CreateIndiGame roundManager = {roundManager} onStart = {onStart}/>
       <button onClick={onStart} style={buttonStyle}>Individual Game</button>
     </div>
   </div>
@@ -62,12 +62,13 @@ export const TutorialApp = () => {
   const homepage = () => setGameState('start');
   const startGame = () => setGameState('playing');
   const endGame = () => setGameState('end');
+  const admin = () => setGameState('admin')
 
   return (
     <>
       {gameState === 'start' && (
         <div style={screenStyle}>
-          <StartScreen onStart={startGame} roundManager={roundManager} />
+          <StartScreen onStart={startGame} openAdmin = {admin} roundManager={roundManager} />
         </div>
       )}
       {gameState === 'playing' && (
@@ -78,6 +79,11 @@ export const TutorialApp = () => {
       {gameState === 'end' && (
         <div style={screenStyle}>
           <EndScreen onRestart={startGame} backToHomePage={homepage} />
+        </div>
+      )}
+      {gameState === 'admin' && (
+        <div style={screenStyle}>
+          
         </div>
       )}
     </>

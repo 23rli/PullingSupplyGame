@@ -8,13 +8,7 @@ export class Round {
         //MACRO RESOURCES
         this.gameId = id;
         this.userId = 0;
-        this.gameResources = [];
-        for (let i = 0; i < 100; i++) {
-            const red = parseInt(Math.random() * 10 + 1)
-            const yellow = parseInt(Math.random() * 8 + 1)
-            const blue = parseInt(Math.random() * 4 + 1)
-            this.gameResources.push([red, yellow, blue]);
-        }
+        this.gameResources = [[0,0,0]];
 
         //Memory:
 
@@ -48,6 +42,39 @@ export class Round {
 
         this.endGame = false;
     }
+
+    setCars(blueCar, greenCar, redCar, yellowCar){
+        let count = 0;
+        if(blueCar === 1){
+            this.cars.push(new Car('b' + count, null));
+            count++;
+        }
+        if(greenCar === 1){
+            this.cars.push(new Car('g' + count, null));
+            count++;
+        }
+        if(redCar === 1){
+            this.cars.push(new Car('r' + count, null));
+            count++;
+        }
+        if(yellowCar === 1){
+            this.cars.push(new Car('y' + count, null));
+            count++;
+        }
+
+    }
+
+    setGameResources(rolls){
+        const rollArray = rolls.split(",")
+        console.log(rollArray)
+        for(let i = 0; i < rollArray.length/3; i++){
+            this.gameResources.push([rollArray[i * 3], rollArray[i * 3 + 1], rollArray[i * 3 + 2]])
+        }
+        this.roundResources = [...this.gameResources[0]]
+        this.convertedResources = [...this.gameResources[0]]
+    }
+
+
 
 
     resetRound() {
