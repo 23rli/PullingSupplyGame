@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControlLabel } from '@mui/material';
 import { Checkbox } from '@mui/material';
+import { Grid } from '@mui/material'
 
 import axios from 'axios'
 
@@ -82,6 +83,8 @@ export function CreateIndiGame({roundManager}) {
         console.log(response.data); // Log the response data
     
         roundManager.gameId = response.data.gameId; // Accessing 'gameId'
+        roundManager.setGameResources(rolls)
+        roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
         console.log(roundManager);
         handleCreateUser(username);
         
@@ -159,15 +162,15 @@ export function CreateIndiGame({roundManager}) {
             const redCar = redChecked ? 1 : 0;
             const yellowCar = yellowChecked ? 1 : 0;
 
-            let code = Number("" + (Math.random() * 9 + 1) + Math.random * 10 + Math.random 
-            * 10 + Math.random * 10 + Math.random * 10 + Math.random * 10)
+            let code = Number("" + (Math.random() * 9 + 1) + Math.random() * 10 + Math.random() 
+            * 10 + Math.random() * 10 + Math.random() * 10 + Math.random() * 10);
 
             let rolls = '';
 
             for(let i = 0; i < 100; i++){
-              const red = parseInt(Math.random() * 10 + 1)
-              const yellow = parseInt(Math.random() * 8 + 1)
-              const blue = parseInt(Math.random() * 4 + 1)
+              const red = parseInt(Math.random() * 10 + 1);
+              const yellow = parseInt(Math.random() * 8 + 1);
+              const blue = parseInt(Math.random() * 4 + 1);
               rolls += red + ",";
               rolls += yellow + ",";
               rolls += blue + ",";
@@ -196,185 +199,202 @@ export function CreateIndiGame({roundManager}) {
             type="text"
             variant="standard"
             defaultValue={"Guest"}
+            fullWidth
+            sx={{ marginBottom: '20px' }}
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={blueChecked}
-                onChange={handleBlueCheckChange}
-                name="enableBlue"
-                color="primary"
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={blueChecked}
+                    onChange={handleBlueCheckChange}
+                    name="enableBlue"
+                    color="primary"
+                  />
+                }
+                label="Enable Blue Cars"
               />
-            }
-            label="Enable Blue Cars"
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="blueRevenue"
-            label="Blue Revenue per Car"
-            type="number"
-            variant="standard"
-            defaultValue={3.00}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!blueChecked}
-          />
-
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="blueWIPPenalty"
-            label="Blue WIP Penalty"
-            type="number"
-            variant="standard"
-            defaultValue={1.50}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!blueChecked}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={greenChecked}
-                onChange={handleGreenCheckChange}
-                name="enableGreen"
-                color="primary"
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="blueRevenue"
+                label="Blue Revenue per Car"
+                type="number"
+                variant="standard"
+                defaultValue={3.00}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!blueChecked}
               />
-            }
-            label="Enable Green Cars"
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="greenRevenue"
-            label="Green Revenue per Car"
-            type="number"
-            variant="standard"
-            defaultValue={2.00}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!greenChecked}
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="greenWIPPenalty"
-            label="Green WIP Penalty"
-            type="number"
-            variant="standard"
-            defaultValue={1.00}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!greenChecked}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={redChecked}
-                onChange={handleRedCheckChange}
-                name="enableRed"
-                color="primary"
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="blueWIPPenalty"
+                label="Blue WIP Penalty"
+                type="number"
+                variant="standard"
+                defaultValue={1.50}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!blueChecked}
               />
-            }
-            label="Enable Red Cars"
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="redRevenue"
-            label="Red Revenue per Car"
-            type="number"
-            variant="standard"
-            defaultValue={2.50}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!redChecked}
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="redWIPPenalty"
-            label="Red WIP Penalty"
-            type="number"
-            variant="standard"
-            defaultValue={1.25}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!redChecked}
-          />
+            </Grid>
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={yellowChecked}
-                onChange={handleYellowCheckChange}
-                name="enableYellow"
-                color="primary"
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={greenChecked}
+                    onChange={handleGreenCheckChange}
+                    name="enableGreen"
+                    color="primary"
+                  />
+                }
+                label="Enable Green Cars"
               />
-            }
-            label="Enable Yellow Cars"
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="yellowRevenue"
-            label="Yellow Revenue per Car"
-            type="number"
-            variant="standard"
-            defaultValue={2.50}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!yellowChecked}
-          />
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="yellowWIPPenalty"
-            label="Yellow WIP Penalty"
-            type="number"
-            variant="standard"
-            defaultValue={1.25}
-            inputProps={{
-              step: 0.01, // Allows input of decimals
-              min: "0",   // Minimum value (optional)
-            }}
-            disabled={!yellowChecked}
-          />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="greenRevenue"
+                label="Green Revenue per Car"
+                type="number"
+                variant="standard"
+                defaultValue={2.00}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!greenChecked}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="greenWIPPenalty"
+                label="Green WIP Penalty"
+                type="number"
+                variant="standard"
+                defaultValue={1.00}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!greenChecked}
+              />
+            </Grid>
 
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={redChecked}
+                    onChange={handleRedCheckChange}
+                    name="enableRed"
+                    color="primary"
+                  />
+                }
+                label="Enable Red Cars"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="redRevenue"
+                label="Red Revenue per Car"
+                type="number"
+                variant="standard"
+                defaultValue={2.50}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!redChecked}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="redWIPPenalty"
+                label="Red WIP Penalty"
+                type="number"
+                variant="standard"
+                defaultValue={1.25}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!redChecked}
+              />
+            </Grid>
 
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={yellowChecked}
+                    onChange={handleYellowCheckChange}
+                    name="enableYellow"
+                    color="primary"
+                  />
+                }
+                label="Enable Yellow Cars"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="yellowRevenue"
+                label="Yellow Revenue per Car"
+                type="number"
+                variant="standard"
+                defaultValue={2.50}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!yellowChecked}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                required
+                margin="dense"
+                name="yellowWIPPenalty"
+                label="Yellow WIP Penalty"
+                type="number"
+                variant="standard"
+                defaultValue={1.25}
+                inputProps={{
+                  step: 0.01,
+                  min: "0",
+                }}
+                fullWidth
+                disabled={!yellowChecked}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

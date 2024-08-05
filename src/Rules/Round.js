@@ -21,9 +21,6 @@ export class Round {
         this.produced = 0;
         this.observers = [];
 
-        this.cars.push(new Car('b0', null));
-        this.cars.push(new Car('g1', null));
-
         //MICRO RESOURCES
         this.roundResources = [...this.gameResources[0]]
         this.convertedResources = [...this.gameResources[0]]

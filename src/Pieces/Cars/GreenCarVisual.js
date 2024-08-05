@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDrag, useDragLayer } from 'react-dnd';
 import { ItemTypes } from '../ItemTypes.js';
 
-export const GreenCarVisual = ({ id, roundManager, imageURL = './greenCar.png' }) => {
+export const GreenCarVisual = ({ id, roundManager, imageURL}) => {
   const [currentImageURL, setCurrentImageURL] = useState(imageURL);
 
   useEffect(() => {

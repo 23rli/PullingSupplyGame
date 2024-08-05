@@ -5,9 +5,10 @@ import { ItemTypes } from '../ItemTypes.js'
 
 export class Car{
 
-  constructor(id, rRes, yRes, bRes, waited, complete, x, y){
+  constructor(id, startY, rRes, yRes, bRes, waited, complete, x, y){
 
     this.id = id;
+    this.startingCoords = [0,startY]
 
     if(rRes != null){
       this.rRes = rRes
@@ -28,6 +29,18 @@ export class Car{
           this.yResLimit = 3;
           this.bResLimit = 2;
       }
+      if(id.charAt(0) === 'r'){
+        this.type = ItemTypes.BCAR;
+        this.rResLimit = 3;
+        this.yResLimit = 2;
+        this.bResLimit = 2;
+      }
+      if(id.charAt(0) === 'y'){
+        this.type = ItemTypes.BCAR;
+        this.rResLimit = 2;
+        this.yResLimit = 3;
+        this.bResLimit = 2;
+      }
     }else{
       this.id = id;
       this.rRes = 0
@@ -36,7 +49,7 @@ export class Car{
       this.waited = true;
       this.complete = false;
   
-      this.coords = [0,1];
+      this.coords = this.startingCoords;
       this.rResLimit = 2;
       this.yResLimit = 2;
       this.bResLimit = 2;
@@ -48,6 +61,20 @@ export class Car{
           this.rResLimit = 3;
           this.yResLimit = 3;
           this.bResLimit = 3;
+      }
+      if(id.charAt(0) === 'r'){
+        this.type = ItemTypes.BCAR;
+        this.coords = [0,0];
+        this.rResLimit = 3;
+        this.yResLimit = 2;
+        this.bResLimit = 2;
+      }
+      if(id.charAt(0) === 'y'){
+        this.type = ItemTypes.BCAR;
+        this.coords = [0,0];
+        this.rResLimit = 2;
+        this.yResLimit = 3;
+        this.bResLimit = 2;
       }
     }
   }

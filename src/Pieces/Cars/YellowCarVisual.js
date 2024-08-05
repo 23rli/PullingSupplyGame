@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDrag, useDragLayer } from 'react-dnd';
 import { ItemTypes } from '../ItemTypes.js';
 
-export const BlueCarVisual = ({ id, roundManager, imageURL}) => {
+export const YellowCarVisual = ({ id, roundManager, imageURL}) => {
   const [currentImageURL, setCurrentImageURL] = useState(imageURL);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export const BlueCarVisual = ({ id, roundManager, imageURL}) => {
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: ItemTypes.BCAR,
+      type: ItemTypes.YCAR,
       item: { id },
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
@@ -24,7 +24,7 @@ export const BlueCarVisual = ({ id, roundManager, imageURL}) => {
     <img
       ref={drag}
       src={currentImageURL}
-      alt="Blue Car"
+      alt="Yellow Car"
       width="150px"
       style={{
         display: isDragging ? 'none' : 'block', // Hide image when dragging
