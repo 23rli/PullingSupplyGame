@@ -26,7 +26,7 @@ export class ShortMemory{
         this.cars = [];
 
         for(let i = 0; i < cars.length; i++){
-            this.cars.push(new Car(cars[i].id, cars[i].rRes, cars[i].yRes, cars[i].bRes, cars[i].waited, cars[i].complete, cars[i].coords[0], cars[i].coords[1]))
+            this.cars.push(new Car(cars[i].id, null, cars[i].rRes, cars[i].yRes, cars[i].bRes, cars[i].waited, cars[i].complete, cars[i].coords[0], cars[i].coords[1]))
         }
         
         this.count = count;

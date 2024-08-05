@@ -201,6 +201,10 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
         type = ItemTypes.BCAR;
       } else if (id.charAt(0) === 'g') {
         type = ItemTypes.GCAR;
+      } else if (id.charAt(0) === 'r') {
+        type = ItemTypes.RCAR;
+      } else if (id.charAt(0) === 'y') {
+        type = ItemTypes.YCAR;
       }
     }
 

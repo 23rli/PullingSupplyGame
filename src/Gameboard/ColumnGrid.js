@@ -31,7 +31,7 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
   
 
   // Setting up the drop target for the knight using the useDrop hook
-  const products = [ItemTypes.GCAR, ItemTypes.BCAR];
+  const products = [ItemTypes.GCAR, ItemTypes.BCAR, ItemTypes.RCAR, ItemTypes.YCAR];
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -53,11 +53,7 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
         }
       },
       drop: (item) => {
-        if (item.id.type === ItemTypes.BCAR) {
-          roundManager.moveCar(x, y, item.id.id, true);
-        } else if (item.id.type === ItemTypes.GCAR) {
-          roundManager.moveCar(x, y, item.id.id, false);
-        }
+        roundManager.moveCar(x, y, item.id.id, true);
       },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),  // Whether an item is currently being hovered over this square

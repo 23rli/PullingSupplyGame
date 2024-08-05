@@ -12,7 +12,7 @@ import { Grid } from '@mui/material'
 
 import axios from 'axios'
 
-export function CreateIndiGame({roundManager}) {
+export function CreateIndiGame({roundManager, onStart}) {
   const [open, setOpen] = React.useState(false);
   const [blueChecked, setBlueChecked] = React.useState(false);
     const [greenChecked, setGreenChecked] = React.useState(false);
@@ -87,6 +87,7 @@ export function CreateIndiGame({roundManager}) {
         roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
         console.log(roundManager);
         handleCreateUser(username);
+        onStart();
         
       } catch (error) {
         console.error('Error registering:', error);

@@ -20,6 +20,11 @@ export class Round {
         this.count = 0;
         this.produced = 0;
         this.observers = [];
+        
+        this.startB = 0;
+        this.startG = 0;
+        this.startR = 0;
+        this.startY = 0;
 
         //MICRO RESOURCES
         this.roundResources = [...this.gameResources[0]]
@@ -43,29 +48,35 @@ export class Round {
     setCars(blueCar, greenCar, redCar, yellowCar){
         let count = 0;
         if(blueCar === 1){
-            this.cars.push(new Car('b' + count, null));
+            this.cars.push(new Car('b' + count, count, null));
+            this.startB = count;
             count++;
         }
         if(greenCar === 1){
-            this.cars.push(new Car('g' + count, null));
+            this.cars.push(new Car('g' + count, count, null));
+            this.startG = count;
             count++;
         }
         if(redCar === 1){
-            this.cars.push(new Car('r' + count, null));
+            this.cars.push(new Car('r' + count, count, null));
+            this.startR = count;
             count++;
+            console.log(this.cars)
         }
         if(yellowCar === 1){
-            this.cars.push(new Car('y' + count, null));
+            this.cars.push(new Car('y' + count, count, null));
+            this.startY = count;
             count++;
+            console.log(this.cars)
         }
 
     }
 
     setGameResources(rolls){
         const rollArray = rolls.split(",")
-        console.log(rollArray)
-        for(let i = 0; i < rollArray.length/3; i++){
-            this.gameResources.push([rollArray[i * 3], rollArray[i * 3 + 1], rollArray[i * 3 + 2]])
+        this.gameResources.pop();
+        for(let i = 0; i < rollArray.length/3 - 2; i++){
+            this.gameResources.push([Number([rollArray[i * 3]]), Number(rollArray[i * 3 + 1]), Number(rollArray[i * 3 + 2])])
         }
         this.roundResources = [...this.gameResources[0]]
         this.convertedResources = [...this.gameResources[0]]
@@ -80,7 +91,7 @@ export class Round {
 
         for (let i = 0; i < this.shortMemory.cars.length; i++) {
             const temp = this.shortMemory.cars[i]
-            this.cars.push(new Car(temp.id, temp.rRes, temp.yRes, temp.bRes, temp.waited, temp.complete, temp.coords[0], temp.coords[1]))
+            this.cars.push(new Car(temp.id, null, temp.rRes, temp.yRes, temp.bRes, temp.waited, temp.complete, temp.coords[0], temp.coords[1]))
         }
 
         this.count = this.shortMemory.count;
@@ -269,12 +280,18 @@ export class Round {
         if (toX == 5) {
             this.deleteCar(id)
             this.cars[index].coords = [6, 0];
-        } else if (id.charAt(0) === 'b' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == 0) {
+        } else if (id.charAt(0) === 'b' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == this.startB) {
             this.cars[index].coords = [toX, toY];
-            this.cars.push(new Car("b" + this.cars.length))
-        } else if (id.charAt(0) === 'g' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == 1) {
+            this.cars.push(new Car("b" + this.cars.length, this.startB, null))
+        } else if (id.charAt(0) === 'g' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == this.startG) {
             this.cars[index].coords = [toX, toY];
-            this.cars.push(new Car("g" + this.cars.length))
+            this.cars.push(new Car("g" + this.cars.length, this.startG, null))
+        }else if (id.charAt(0) === 'r' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == this.startR) {
+            this.cars[index].coords = [toX, toY];
+            this.cars.push(new Car("r" + this.cars.length, this.startR, null))
+        }else if (id.charAt(0) === 'y' && this.cars[index].coords[0] == 0 && this.cars[index].coords[1] == this.startY) {
+            this.cars[index].coords = [toX, toY];
+            this.cars.push(new Car("y" + this.cars.length, this.startY, null))
         } else {
             this.cars[index].coords = [toX, toY];
         }
@@ -319,8 +336,6 @@ export class Round {
 
         const [x, y] = cars[index].coords;
         let moveReqs = this.checkMoveReqs(toX, toY, cars[index])
-        console.log(toX + " " + toY + " " + x + " " + y)
-
         const dx = toX - x;
         const dy = toY - y;
         if(dx !== 0){
@@ -331,7 +346,6 @@ export class Round {
                 }
             }
         }
-        console.log(this.errorStatement)
         return false;
     }
 
