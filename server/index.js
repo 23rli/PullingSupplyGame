@@ -179,6 +179,39 @@ app.post('/registerround', (req, res) =>{
     })
 })
 
+app.post('/checkcode', (req, res) => {
+    const code = req.body.code;
+
+    // Use db.query directly instead of axios for a local database query
+    db.query("SELECT * FROM gameData WHERE code = ?", [code], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length > 0) {
+            res.send({ valid: true, gameId: result.gameId });
+        } else {
+            res.send({ valid: false, message: 'Invalid Code' });
+        }
+    });
+});
+
+app.post('/gameComponents', (req, res) => {
+    const code = req.body.code;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue mode FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length > 0) {
+            // Send the selected data if the code is found
+            res.send({ valid: true, data: result[0] });
+        } else {
+            res.send({ valid: false, message: 'Invalid Code' });
+        }
+    });
+});
+
 app.listen(8080, () => {
     console.log("port listening on 8080")
 })

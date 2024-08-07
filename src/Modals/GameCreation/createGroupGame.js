@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -9,10 +9,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControlLabel } from '@mui/material';
 import { Checkbox } from '@mui/material';
+import { Grid } from '@mui/material'
 
 import axios from 'axios';
 
-export function CreateGroupGame() {
+export function CreateGroupGame({roundManager}) {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -23,6 +24,20 @@ export function CreateGroupGame() {
     const [greenChecked, setGreenChecked] = useState(false);
     const [redChecked, setRedChecked] = useState(false);
     const [yellowChecked, setYellowChecked] = useState(false);
+
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const [timePerUpdate, setTimePerUpdate] = useState(5);
+    const [code, setCode] = useState(0);
+    const [error, setError] = useState("");
+    const [username, setUsername] = userState("")
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+          setElapsedTime((prevTime) => prevTime + 1);
+        }, 1000);
+    
+        return () => clearInterval(timer);
+      }, []);
 
     const handleBlueCheckChange = (event) => {
         setBlueChecked(event.target.checked);
@@ -80,7 +95,7 @@ export function CreateGroupGame() {
     const handleCloseCreate = () => {
         setOpenCreate(false);
     };
-    const handleOpenWaiJoin = () => {
+    const handleOpenWaitJoin = () => {
         setOpenJoin(false);
         setOpenWaitJoin(true);
     };
@@ -97,6 +112,122 @@ export function CreateGroupGame() {
     const handleCloseWaitCreate = () => {
         setOpenWaitCreate(false);
     };
+
+    const handleCreateGame = async (
+        username, 
+        blueCar, bluePenalty, 
+        greenCar, greenPenalty, 
+        redCar, redPenalty, 
+        yellowCar, yellowPenalty, 
+        rolls, code, 
+        blueRevenue, greenRevenue, 
+        redRevenue, yellowRevenue
+      ) => {
+        try {
+          const response = await axios.post('http://localhost:8080/registergame', {
+            blueCar: blueCar, 
+            bluePenalty: bluePenalty,
+            greenCar: greenCar,
+            greenPenalty: greenPenalty,
+            redCar: redCar,
+            redPenalty: redPenalty,
+            yellowCar: yellowCar,
+            yellowPenalty: yellowPenalty,
+            rolls: rolls,
+            mode: 1,
+            code: code,
+            blueRevenue: blueRevenue,
+            greenRevenue: greenRevenue,
+            redRevenue: redRevenue,
+            yellowRevenue: yellowRevenue
+          });
+          
+          console.log(response.data); // Log the response data
+          console.log(code)
+      
+          roundManager.gameId = response.data.gameId; // Accessing 'gameId'
+          roundManager.setGameResources(rolls)
+          roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
+          roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
+          console.log(roundManager);
+          handleCreateModerator(username);
+          
+        } catch (error) {
+          console.error('Error registering:', error);
+        }
+      };
+      
+  
+        const handleCreateModerator = async (username) => {
+          console.log("reached create user")
+          try {
+              const response = await  axios.post('http://localhost:8080/registeruser', 
+                {
+                  username: username,
+                  privledge: "moderator",
+                  gameId: roundManager.gameId
+                })
+              roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+              console.log(roundManager);
+          } catch (error) {
+              console.error('Error registering:', error);
+          }
+        };
+
+        const handleCreatePlayer = async (username) => {
+            console.log("reached create user")
+            try {
+                const response = await  axios.post('http://localhost:8080/registeruser', 
+                  {
+                    username: username,
+                    privledge: "moderator",
+                    gameId: roundManager.gameId
+                  })
+                roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+                console.log(roundManager);
+            } catch (error) {
+                console.error('Error registering:', error);
+            }
+          };
+
+        const checkValidity = async () => {
+            console.log("reached create user")
+            try {
+                const response = await axios.post('http://localhost:8080/checkcode', 
+                  {
+                    code: code
+                  })
+                roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
+                return response.data.valid;
+                console.log(roundManager);
+            } catch (error) {
+                console.error('Error registering:', error);
+            }
+
+            return false;
+          };
+
+          const joinGame = async ({roundManager}) => {
+            try {
+                const response = await axios.post('http://localhost:8080/gameComponents', 
+                  {
+                    gameId: roundManager.gameId
+                  })
+
+                  const data = response.data.data;
+
+                  roundManager.setGameResources(data.rolls)
+                  roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
+                  roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
+                  console.log(roundManager);
+                  handleCreatePlayer(username);
+
+            } catch (error) {
+                console.error('Error registering:', error);
+            }
+          }
+
+
 
 
 
@@ -134,6 +265,60 @@ export function CreateGroupGame() {
                 </DialogActions>
             </Dialog>
 
+            <Dialog
+                open={openJoin}
+                onClose={handleCloseJoin}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: (event) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries(formData.entries());
+                        setCode(formJson.code);
+                        setUsername(formJson.username)
+                        if(checkValidity()){
+                            joinGame({roundManager});
+                        }else{
+                            setError("Invalid Code")
+                        }
+                        //axios.post
+                    },
+                }}
+            >
+                <DialogTitle>Join Game</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To join a game, input the 6 digit code provided by your game creator
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="username"
+                        label="Username"
+                        type="text"
+                        defaultValue={"Guest"}
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="code"
+                        label="6 Digit Game Code"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseJoin}>Cancel</Button>
+                    <Button type="submit">Join</Button>
+                </DialogActions>
+            </Dialog>
 
             <Dialog
                 open={openCreate}
@@ -145,7 +330,6 @@ export function CreateGroupGame() {
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
                         const username = formJson.username;
-                        console.log(formJson.blueRevenue)
                         const blueRevenue = formJson.blueRevenue;
                         const greenRevenue = formJson.greenRevenue;
                         const redRevenue = formJson.redRevenue;
@@ -159,9 +343,10 @@ export function CreateGroupGame() {
                         const redCar = redChecked ? 1 : 0;
                         const yellowCar = yellowChecked ? 1 : 0;
 
-                        let code = Number("" + (Math.random() * 9 + 1) + Math.random() * 10 + Math.random()
-                            * 10 + Math.random() * 10 + Math.random() * 10 + Math.random() * 10);
+                        const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
+                            * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
 
+                        setCode(createCode);
                         let rolls = '';
 
                         for (let i = 0; i < 100; i++) {
@@ -394,6 +579,9 @@ export function CreateGroupGame() {
                         </Grid>
                     </Grid>
                 </DialogContent>
+                <DialogActions>
+                    <Button type="submit">Create</Button>
+                </DialogActions>
             </Dialog>
 
                 <Dialog
@@ -401,23 +589,14 @@ export function CreateGroupGame() {
                     onClose={handleCloseWaitCreate}
 
                 >
-                    <DialogTitle>Subscribe</DialogTitle>
+                    <DialogTitle>Waiting on Players</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            To subscribe to this website, please enter your email address here. We
-                            will send updates occasionally.
+                    <DialogContentText>
+                            Code: {code}
                         </DialogContentText>
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="name"
-                            name="email"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                            variant="standard"
-                        />
+                        <DialogContentText>
+                            To start the game, press start. Players will be displayed here:
+                        </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button type="submit">Subscribe</Button>
