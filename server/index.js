@@ -115,7 +115,7 @@ app.post('/registerround', (req, res) =>{
     const doneGreen = req.body.doneGreen;
     const doneRed = req.body.doneRed;
     const doneYellow = req.body.doneYellow;
-    const revenue = req.body.revenue;;
+    const rev = req.body.revenue;
 
     const rRes = req.body.rRes;
     const yRes = req.body.yRes;
@@ -130,7 +130,7 @@ app.post('/registerround', (req, res) =>{
         + "(game_id, user_id, round_number, manu_b, manu_g, manu_r, manu_y, assem_b, assem_g, assem_r, assem_y,"
         + "qual_b, qual_g, qual_r, qual_y, paint_b, paint_g, paint_r, paint_y, dry_b, dry_g, dry_r, dry_y, wip,"
         + "done_b, done_g, done_r, done_y, revenue, red_res, yel_res, blue_res, rcon_res, ycon_res, bcon_res,"
-        + "unusedr, unusedy, unusedb)"
+        + "unused_r, unused_y, unused_b)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [gameId,
              userId,
@@ -160,7 +160,7 @@ app.post('/registerround', (req, res) =>{
              doneGreen,
              doneRed,
              doneYellow,
-             revenue,
+             rev,
              rRes,
              yRes,
              bRes,

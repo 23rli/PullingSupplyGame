@@ -85,6 +85,7 @@ export function CreateIndiGame({roundManager, onStart}) {
         roundManager.gameId = response.data.gameId; // Accessing 'gameId'
         roundManager.setGameResources(rolls)
         roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
+        roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
         console.log(roundManager);
         handleCreateUser(username);
         onStart();
@@ -150,6 +151,7 @@ export function CreateIndiGame({roundManager, onStart}) {
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries(formData.entries());
             const username = formJson.username;
+            console.log(formJson.blueRevenue)
             const blueRevenue = formJson.blueRevenue;
             const greenRevenue = formJson.greenRevenue;
             const redRevenue = formJson.redRevenue;
@@ -177,6 +179,7 @@ export function CreateIndiGame({roundManager, onStart}) {
               rolls += blue + ",";
             }
 
+            console.log(blueRevenue)
             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty, 
               redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
               redRevenue, yellowRevenue);

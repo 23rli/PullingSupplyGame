@@ -1,6 +1,5 @@
 import { ShortMemory } from "./ShortMemory";
 
-
 export class LongMemory {
     constructor() {
         this.storage = [];

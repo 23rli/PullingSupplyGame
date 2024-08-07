@@ -21,10 +21,15 @@ export class Round {
         this.produced = 0;
         this.observers = [];
         
-        this.startB = 0;
-        this.startG = 0;
-        this.startR = 0;
-        this.startY = 0;
+        this.startB = -1;
+        this.startG = -1;
+        this.startR = -1;
+        this.startY = -1;
+
+        this.revenueB = 0;
+        this.revenueG = 0;
+        this.revenueR = 0;
+        this.revenueY = 0;
 
         //MICRO RESOURCES
         this.roundResources = [...this.gameResources[0]]
@@ -43,6 +48,13 @@ export class Round {
         this.errorDisplayed = false;
 
         this.endGame = false;
+    }
+
+    setRevenue(blueRev, greenRev, redRev, yellowRev){
+        if(blueRev != null) this.revenueB = blueRev;
+        if(greenRev != null) this.revenueG = greenRev;
+        if(redRev != null) this.revenueR = redRev;
+        if(yellowRev != null) this.revenueY = yellowRev;
     }
 
     setCars(blueCar, greenCar, redCar, yellowCar){

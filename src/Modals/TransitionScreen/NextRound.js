@@ -9,6 +9,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 
+import axios from 'axios';
+
 import { LongMemory } from '../../Rules/LongMemory';
 import { ShortMemory } from '../../Rules/ShortMemory';
 
@@ -27,6 +29,61 @@ function commitLongMem({roundManager, longMemory}){
   longMemory.commitPosition({roundManager})
   longMemory.commitResources({roundManager})
 }
+
+const commitToDB = async ({roundManager, longMemory}) => {
+  console.log(longMemory)
+  const data = longMemory.storage[roundManager.roundNum].locationData();
+  const rev = data[20] * roundManager.revenueB + data[21] * roundManager.revenueG
+  + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
+  console.log(data)
+  try {
+    const response = await axios.post('http://localhost:8080/registerround', 
+      {
+        gameId: roundManager.gameId,
+        userId: roundManager.userId,
+        roundNum: roundManager.roundNum,
+        mBlue: data[0],
+        mGreen: data[1],
+        mRed: data[2],
+        mYellow: data[3],
+        aBlue: data[4],
+        aGreen: data[5],
+        aRed: data[6],
+        aYellow: data[7],
+        qBlue: data[8],
+        qGreen: data[9],
+        qRed: data[10],
+        qYellow: data[11],
+        pBlue: data[12],
+        pGreen: data[13],
+        pRed: data[14],
+        pYellow: data[15],
+        dBlue: data[16],
+        dGreen: data[17],
+        dRed: data[18],
+        dYellow: data[19],
+        WIP: data.slice(0, 19).reduce((a, b) => a + b, 0),
+        doneBlue: data[20],
+        doneGreen: data[21],
+        doneRed: data[22],
+        doneYellow: data[23],
+        revenue: rev,
+        rRes: longMemory.storage[roundManager.roundNum].roundResources[0],
+        yRes: longMemory.storage[roundManager.roundNum].roundResources[1],
+        bRes: longMemory.storage[roundManager.roundNum].roundResources[2],
+        rConRes: longMemory.storage[roundManager.roundNum].conResources[0],
+        yConRes: longMemory.storage[roundManager.roundNum].conResources[1],
+        bConRes: longMemory.storage[roundManager.roundNum].conResources[2],
+        unusedR: longMemory.storage[roundManager.roundNum].endResources[0],
+        unusedY: longMemory.storage[roundManager.roundNum].endResources[1],
+        unusedB: longMemory.storage[roundManager.roundNum].endResources[2],
+      })
+    roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+    console.log(roundManager);
+  } catch (error) {
+      console.error('Error registering:', error);
+  }
+};
 
 export default function AlertDialogSlide({ roundManager, longMemory, endGame, autoAdvance, resetTimer }) {
   const [openNRPrompt, setOpenNRPrompt] = React.useState(false);
@@ -70,6 +127,7 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
     setOpenNRPrompt(false);
     console.log("button next round pressed")
     commitLongMem({roundManager, longMemory})
+    commitToDB({roundManager, longMemory})
     roundManager.advanceRound();
     resetTimer();
     setOpenResReport(true);

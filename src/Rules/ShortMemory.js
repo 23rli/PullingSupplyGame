@@ -49,52 +49,96 @@ export class ShortMemory{
         /*
             0 = # of Manufacturing Blue
             1 = # of Manufacturing Green
-            2 = # of Assembly Blue
-            3 = # of Assembly Green
-            4 = # of Quality Blue
-            5 = # of Quality Green
-            6 = # of Paint Blue
-            7 = # of Paint Green
-            8 = # of Dry Blue
-            9 = # of Dry Green
-            10 = # of Done Blue
-            11 = # of Done Green
+            2 = # of Manufacturing red
+            3 = # of Manufacturing yellow
+            4 = # of Assembly Blue
+            5 = # of Assembly Green
+            6 = # of Assembly red
+            7 = # of Assembly yellow
+            8 = # of Quality Blue
+            9 = # of Quality Green
+            10 = # of Quality red
+            11 = # of Quality yellow
+            12 = # of Paint Blue
+            13 = # of Paint Green
+            14 = # of Paint red
+            15 = # of Paint yellow
+            16 = # of Dry Blue
+            17 = # of Dry Green
+            18 = # of Dry red
+            19 = # of Dry yellow
+            20 = # of Done Blue
+            21 = # of Done Green
+            22 = # of Done red
+            23 = # of Done yellow
 
         */
-        let data = [0,0,0,0,0,0,0,0,0,0,0,0]
+        let data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
         for(let i = 0; i < this.cars.length; i++){
             if(this.cars[i].id.charAt(0) === 'b'){
                 if(this.cars[i].coords[0] == 1){
                     data[0] += 1;
                 }else if(this.cars[i].coords[0] == 2){
-                    data[2] += 1;
-                }else if(this.cars[i].coords[0] == 3){
                     data[4] += 1;
+                }else if(this.cars[i].coords[0] == 3){
+                    data[8] += 1;
                 }else if(this.cars[i].coords[0] == 4){
                     if(this.roundNum - 1 == this.paintRoundBegan){
-                        data[8] += 1;
+                        data[16] += 1;
                     }else{
-                        data[6] += 1;
+                        data[12] += 1;
                     }
                 }else if(this.cars[i].coords[0] == 6){
-                    data[10] += 1;
+                    data[20] += 1;
                 }
             }else if(this.cars[i].id.charAt(0) === 'g'){
                 if(this.cars[i].coords[0] == 1){
                     data[1] += 1;
                 }else if(this.cars[i].coords[0] == 2){
-                    data[3] += 1;
-                }else if(this.cars[i].coords[0] == 3){
                     data[5] += 1;
+                }else if(this.cars[i].coords[0] == 3){
+                    data[9] += 1;
                 }else if(this.cars[i].coords[0] == 4){
                     if(this.roundNum - 1 == this.paintRoundBegan){
-                        data[9] += 1;
+                        data[17] += 1;
                     }else{
-                        data[7] += 1;
+                        data[13] += 1;
                     }
                 }else if(this.cars[i].coords[0] == 6){
+                    data[21] += 1;
+                }
+            }else if(this.cars[i].id.charAt(0) === 'r'){
+                if(this.cars[i].coords[0] == 1){
+                    data[2] += 1;
+                }else if(this.cars[i].coords[0] == 2){
+                    data[6] += 1;
+                }else if(this.cars[i].coords[0] == 3){
+                    data[10] += 1;
+                }else if(this.cars[i].coords[0] == 4){
+                    if(this.roundNum - 1 == this.paintRoundBegan){
+                        data[18] += 1;
+                    }else{
+                        data[14] += 1;
+                    }
+                }else if(this.cars[i].coords[0] == 6){
+                    data[22] += 1;
+                }
+            }else if(this.cars[i].id.charAt(0) === 'y'){
+                if(this.cars[i].coords[0] == 1){
+                    data[3] += 1;
+                }else if(this.cars[i].coords[0] == 2){
+                    data[7] += 1;
+                }else if(this.cars[i].coords[0] == 3){
                     data[11] += 1;
+                }else if(this.cars[i].coords[0] == 4){
+                    if(this.roundNum - 1 == this.paintRoundBegan){
+                        data[19] += 1;
+                    }else{
+                        data[15] += 1;
+                    }
+                }else if(this.cars[i].coords[0] == 6){
+                    data[23] += 1;
                 }
             }
         }

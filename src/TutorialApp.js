@@ -48,7 +48,6 @@ const EndScreen = ({ onRestart, backToHomePage }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Game Over!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <button onClick={onRestart} style={buttonStyle}>Play Again</button>
       <button onClick={backToHomePage} style={buttonStyle}>Back to Homepage</button>
     </div>
   </div>
