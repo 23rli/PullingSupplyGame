@@ -77,7 +77,8 @@ export function CreateIndiGame({roundManager, onStart}) {
           blueRevenue: blueRevenue,
           greenRevenue: greenRevenue,
           redRevenue: redRevenue,
-          yellowRevenue: yellowRevenue
+          yellowRevenue: yellowRevenue,
+          gameState: "IN PROGRESS"
         });
         
         console.log(response.data); // Log the response data

@@ -16,18 +16,6 @@ var db  = mysql.createPool({
   database        : 'MotorCity'
 });
 
-app.post('/register', (req, res) =>{
-    const test = req.body.test;
-    const comment = req.body.comment;
-    db.query("INSERT into test (name, comment) VALUES (?, ?)", [test, comment], (err, result) => {
-        if (err){
-            console.log(err)
-        }else{
-            res.send({test: test})
-        }
-    })
-})
-
 app.post('/registergame', (req, res) =>{
     const blueCar = req.body.blueCar;
     const bluePenalty = req.body.bluePenalty;
@@ -44,10 +32,11 @@ app.post('/registergame', (req, res) =>{
     const greenRevenue = req.body.greenRevenue;
     const redRevenue = req.body.redRevenue;
     const yellowRevenue = req.body.yellowRevenue;
+    const gameState = req.body.gameState;
     db.query("INSERT into gameData (blue_car, blue_penalty, green_car, green_penalty,"
         + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode, code, blue_revenue," 
-        + " green_revenue, red_revenue, yellow_revenue) VALUES  "
-        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        + " green_revenue, red_revenue, yellow_revenue, game_state) VALUES  "
+        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
             blueCar,
             bluePenalty,
             greenCar, 
@@ -62,7 +51,8 @@ app.post('/registergame', (req, res) =>{
             blueRevenue,
             greenRevenue,
             redRevenue,
-            yellowRevenue
+            yellowRevenue,
+            gameState
         ], (err, result) => {
         if (err){
             console.log(err)
@@ -182,24 +172,25 @@ app.post('/registerround', (req, res) =>{
 app.post('/checkcode', (req, res) => {
     const code = req.body.code;
 
-    // Use db.query directly instead of axios for a local database query
-    db.query("SELECT * FROM gameData WHERE code = ?", [code], (err, result) => {
+    // Query the database, filter by code and game_state, and order by game_created descending
+    db.query("SELECT * FROM gameData WHERE code = ? AND game_state = 'IN PREP' ORDER BY game_created DESC", [code], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
         } else if (result.length > 0) {
-            res.send({ valid: true, gameId: result.gameId });
+            res.send({ valid: true, gameId: result[0].gameId }); // Use result[0] to get the most recent game
         } else {
-            res.send({ valid: false, message: 'Invalid Code' });
+            res.send({ valid: false, message: 'Invalid Code or Game not in preparation state' });
         }
     });
 });
 
+
 app.post('/gameComponents', (req, res) => {
-    const code = req.body.code;
+    const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue mode FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
+    db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -208,6 +199,55 @@ app.post('/gameComponents', (req, res) => {
             res.send({ valid: true, data: result[0] });
         } else {
             res.send({ valid: false, message: 'Invalid Code' });
+        }
+    });
+});
+
+app.post('/retrieveplayers', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT username FROM users WHERE gameId = ? ORDER BY user_id ASC", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
+app.post('/retrievegamestate', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT game_state FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result[0] });
+        }
+    });
+});
+
+app.post('/progressgamestate', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Update the game_state from IN PREP to IN PROGRESS based on the game_id
+    db.query("UPDATE gameData SET game_state = 'IN PROGRESS' WHERE game_id = ?", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database update error' });
+        } else {
+            // Check if any row was actually updated
+            if (result.affectedRows > 0) {
+                res.send({ success: true, message: 'Game state updated to IN PROGRESS' });
+            } else {
+                res.send({ success: false, message: 'No game found with the given gameId in IN PREP state' });
+            }
         }
     });
 });

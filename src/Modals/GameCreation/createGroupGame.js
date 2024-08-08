@@ -13,7 +13,7 @@ import { Grid } from '@mui/material'
 
 import axios from 'axios';
 
-export function CreateGroupGame({roundManager}) {
+export function CreateGroupGame({roundManager, onStart, openAdmin}) {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -26,10 +26,13 @@ export function CreateGroupGame({roundManager}) {
     const [yellowChecked, setYellowChecked] = useState(false);
 
     const [elapsedTime, setElapsedTime] = useState(0);
-    const [timePerUpdate, setTimePerUpdate] = useState(5);
+    const [timePerUpdate, setTimePerUpdate] = useState(2);
+    const [checkUsers, setCheckUsers] = useState(false);
+
     const [code, setCode] = useState(0);
     const [error, setError] = useState("");
-    const [username, setUsername] = userState("")
+    const [username, setUsername] = useState("");
+    const [gamePlayers, setGamePlayers] = useState([]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -38,6 +41,33 @@ export function CreateGroupGame({roundManager}) {
     
         return () => clearInterval(timer);
       }, []);
+
+      
+useEffect(() => {
+    const getPlayers = async () => {
+        if (checkUsers) {
+            if (elapsedTime >= timePerUpdate) {
+                try {
+                    const response = await axios.post('http://localhost:8080/retrieveplayers', {
+                        gameId: roundManager.gameId
+                    });
+                    setGamePlayers(response.data);
+                } catch (error) {
+                    console.error('Error registering:', error);
+                }
+            }
+        }
+    };
+
+    getPlayers(); // Call the async function
+
+}, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
+
+
+    const handleGameStart = () => {
+        
+        openAdmin();
+    } 
 
     const handleBlueCheckChange = (event) => {
         setBlueChecked(event.target.checked);
@@ -104,7 +134,7 @@ export function CreateGroupGame({roundManager}) {
         setOpenWaitJoin(false);
     };
 
-    const handleOpenWaiCreate = () => {
+    const handleOpenWaitCreate = () => {
         setOpenCreate(false);
         setOpenWaitCreate(true);
     };
@@ -119,10 +149,11 @@ export function CreateGroupGame({roundManager}) {
         greenCar, greenPenalty, 
         redCar, redPenalty, 
         yellowCar, yellowPenalty, 
-        rolls, code, 
+        rolls, 
         blueRevenue, greenRevenue, 
         redRevenue, yellowRevenue
       ) => {
+        console.log(code)
         try {
           const response = await axios.post('http://localhost:8080/registergame', {
             blueCar: blueCar, 
@@ -139,7 +170,8 @@ export function CreateGroupGame({roundManager}) {
             blueRevenue: blueRevenue,
             greenRevenue: greenRevenue,
             redRevenue: redRevenue,
-            yellowRevenue: yellowRevenue
+            yellowRevenue: yellowRevenue,
+            gameState: "IN PREP"
           });
           
           console.log(response.data); // Log the response data
@@ -198,8 +230,8 @@ export function CreateGroupGame({roundManager}) {
                     code: code
                   })
                 roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
-                return response.data.valid;
                 console.log(roundManager);
+                return response.data.valid;
             } catch (error) {
                 console.error('Error registering:', error);
             }
@@ -278,6 +310,7 @@ export function CreateGroupGame({roundManager}) {
                         setUsername(formJson.username)
                         if(checkValidity()){
                             joinGame({roundManager});
+                            handleOpenWaitJoin();
                         }else{
                             setError("Invalid Code")
                         }
@@ -347,6 +380,7 @@ export function CreateGroupGame({roundManager}) {
                             * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
 
                         setCode(createCode);
+                        console.log(code)
                         let rolls = '';
 
                         for (let i = 0; i < 100; i++) {
@@ -360,10 +394,10 @@ export function CreateGroupGame({roundManager}) {
 
                         console.log(blueRevenue)
                         handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
-                            redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
+                            redCar, redPenalty, yellowCar, yellowPenalty, rolls, blueRevenue, greenRevenue,
                             redRevenue, yellowRevenue);
 
-                        handleCloseCreate();
+                        handleOpenWaitCreate();
                     },
                 }}
             >
@@ -410,7 +444,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={3.00}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!blueChecked}
@@ -427,7 +461,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={1.50}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!blueChecked}
@@ -458,7 +492,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={2.00}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!greenChecked}
@@ -475,7 +509,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={1.00}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!greenChecked}
@@ -506,7 +540,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={2.50}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!redChecked}
@@ -523,7 +557,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={1.25}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!redChecked}
@@ -554,7 +588,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={2.50}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!yellowChecked}
@@ -571,7 +605,7 @@ export function CreateGroupGame({roundManager}) {
                                 defaultValue={1.25}
                                 inputProps={{
                                     step: 0.01,
-                                    min: "0",
+                                    min: 0,
                                 }}
                                 fullWidth
                                 disabled={!yellowChecked}
@@ -596,28 +630,29 @@ export function CreateGroupGame({roundManager}) {
                         </DialogContentText>
                         <DialogContentText>
                             To start the game, press start. Players will be displayed here:
+                            {gamePlayers}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button type="submit">Subscribe</Button>
+                        <Button onClick = {handleGameStart}>Start Game</Button>
                     </DialogActions>
                 </Dialog>
 
                 <Dialog
                     open={openWaitJoin}
-                    onClose={handleCloseWaitJoin}
+                    onClose={(event, reason) => {
+                        if (reason !== 'backdropClick') {
+                            handleCloseWaitJoin();
+                        }
+                    }}
                 >
-                    <DialogTitle>Subscribe</DialogTitle>
+                    <DialogTitle>Waiting to Join</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            To subscribe to this website, please enter your email address here. We
-                            will send updates occasionally.
+                            Please wait for the game to begin
                         </DialogContentText>
 
                     </DialogContent>
-                    <DialogActions>
-                        <Button type="submit">Subscribe</Button>
-                    </DialogActions>
                 </Dialog>
         </React.Fragment>
     );
