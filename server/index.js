@@ -190,7 +190,7 @@ app.post('/gameComponents', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
+    db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue FROM gameData WHERE game_id = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -207,7 +207,7 @@ app.post('/retrieveplayers', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT username FROM users WHERE gameId = ? ORDER BY user_id ASC", [gameId], (err, result) => {
+    db.query("SELECT username FROM users WHERE game_id = ? ORDER BY user_id ASC", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -222,7 +222,7 @@ app.post('/retrievegamestate', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT game_state FROM gameData WHERE gameId = ?", [gameId], (err, result) => {
+    db.query("SELECT game_state FROM gameData WHERE game_id = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });

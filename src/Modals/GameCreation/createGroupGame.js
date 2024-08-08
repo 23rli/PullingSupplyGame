@@ -13,7 +13,7 @@ import { Grid } from '@mui/material'
 
 import axios from 'axios';
 
-export function CreateGroupGame({roundManager, onStart, openAdmin}) {
+export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
@@ -28,6 +28,7 @@ export function CreateGroupGame({roundManager, onStart, openAdmin}) {
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timePerUpdate, setTimePerUpdate] = useState(2);
     const [checkUsers, setCheckUsers] = useState(false);
+    const [checkGameStatus, setCheckGameStatus] = useState(false);
 
     const [code, setCode] = useState(0);
     const [error, setError] = useState("");
@@ -36,38 +37,73 @@ export function CreateGroupGame({roundManager, onStart, openAdmin}) {
 
     useEffect(() => {
         const timer = setInterval(() => {
-          setElapsedTime((prevTime) => prevTime + 1);
+            setElapsedTime((prevTime) => prevTime + 1);
         }, 1000);
-    
-        return () => clearInterval(timer);
-      }, []);
 
-      
-useEffect(() => {
-    const getPlayers = async () => {
-        if (checkUsers) {
-            if (elapsedTime >= timePerUpdate) {
-                try {
-                    const response = await axios.post('http://localhost:8080/retrieveplayers', {
-                        gameId: roundManager.gameId
-                    });
-                    setGamePlayers(response.data);
-                } catch (error) {
-                    console.error('Error registering:', error);
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            if (checkGameStatus) {
+                if (elapsedTime >= timePerUpdate) {
+                    try {
+                        const response = await axios.post('http://localhost:8080/retrievegamestate', {
+                            gameId: roundManager.gameId
+                        });
+                        if (response.data === 'IN PROGRESS') {
+                            setCheckGameStatus(false);
+                            onStart();
+                        }
+                    } catch (error) {
+                        console.error('Error registering:', error);
+                    }
                 }
             }
-        }
-    };
+        };
 
-    getPlayers(); // Call the async function
+        checkStatus(); // Call the async function
 
-}, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
+    }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
+
+
+    useEffect(() => {
+        const getPlayers = async () => {
+            if (checkUsers) {
+                if (elapsedTime >= timePerUpdate) {
+                    try {
+                        const response = await axios.post('http://localhost:8080/retrieveplayers', {
+                            gameId: roundManager.gameId
+                        });
+                        setGamePlayers(response.data);
+                    } catch (error) {
+                        console.error('Error registering:', error);
+                    }
+                }
+            }
+        };
+
+        getPlayers(); // Call the async function
+
+    }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
 
 
     const handleGameStart = () => {
-        
-        openAdmin();
-    } 
+        const updateGameState = async () => {
+
+            try {
+                const response = await axios.post('http://localhost:8080/progressgamestate', {
+                    gameId: roundManager.gameId
+                });
+            } catch (error) {
+                console.error('Error registering:', error);
+            }
+
+
+            updateGameState()
+            openAdmin();
+        }
+    }
 
     const handleBlueCheckChange = (event) => {
         setBlueChecked(event.target.checked);
@@ -144,120 +180,120 @@ useEffect(() => {
     };
 
     const handleCreateGame = async (
-        username, 
-        blueCar, bluePenalty, 
-        greenCar, greenPenalty, 
-        redCar, redPenalty, 
-        yellowCar, yellowPenalty, 
-        rolls, 
-        blueRevenue, greenRevenue, 
+        username,
+        blueCar, bluePenalty,
+        greenCar, greenPenalty,
+        redCar, redPenalty,
+        yellowCar, yellowPenalty,
+        rolls,
+        blueRevenue, greenRevenue,
         redRevenue, yellowRevenue
-      ) => {
+    ) => {
         console.log(code)
         try {
-          const response = await axios.post('http://localhost:8080/registergame', {
-            blueCar: blueCar, 
-            bluePenalty: bluePenalty,
-            greenCar: greenCar,
-            greenPenalty: greenPenalty,
-            redCar: redCar,
-            redPenalty: redPenalty,
-            yellowCar: yellowCar,
-            yellowPenalty: yellowPenalty,
-            rolls: rolls,
-            mode: 1,
-            code: code,
-            blueRevenue: blueRevenue,
-            greenRevenue: greenRevenue,
-            redRevenue: redRevenue,
-            yellowRevenue: yellowRevenue,
-            gameState: "IN PREP"
-          });
-          
-          console.log(response.data); // Log the response data
-          console.log(code)
-      
-          roundManager.gameId = response.data.gameId; // Accessing 'gameId'
-          roundManager.setGameResources(rolls)
-          roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
-          roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
-          console.log(roundManager);
-          handleCreateModerator(username);
-          
-        } catch (error) {
-          console.error('Error registering:', error);
-        }
-      };
-      
-  
-        const handleCreateModerator = async (username) => {
-          console.log("reached create user")
-          try {
-              const response = await  axios.post('http://localhost:8080/registeruser', 
-                {
-                  username: username,
-                  privledge: "moderator",
-                  gameId: roundManager.gameId
-                })
-              roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-              console.log(roundManager);
-          } catch (error) {
-              console.error('Error registering:', error);
-          }
-        };
+            const response = await axios.post('http://localhost:8080/registergame', {
+                blueCar: blueCar,
+                bluePenalty: bluePenalty,
+                greenCar: greenCar,
+                greenPenalty: greenPenalty,
+                redCar: redCar,
+                redPenalty: redPenalty,
+                yellowCar: yellowCar,
+                yellowPenalty: yellowPenalty,
+                rolls: rolls,
+                mode: 1,
+                code: code,
+                blueRevenue: blueRevenue,
+                greenRevenue: greenRevenue,
+                redRevenue: redRevenue,
+                yellowRevenue: yellowRevenue,
+                gameState: "IN PREP"
+            });
 
-        const handleCreatePlayer = async (username) => {
-            console.log("reached create user")
-            try {
-                const response = await  axios.post('http://localhost:8080/registeruser', 
-                  {
+            console.log(response.data); // Log the response data
+            console.log(code)
+
+            roundManager.gameId = response.data.gameId; // Accessing 'gameId'
+            roundManager.setGameResources(rolls)
+            roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
+            roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
+            console.log(roundManager);
+            handleCreateModerator(username);
+
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    };
+
+
+    const handleCreateModerator = async (username) => {
+        console.log("reached create user")
+        try {
+            const response = await axios.post('http://localhost:8080/registeruser',
+                {
                     username: username,
                     privledge: "moderator",
                     gameId: roundManager.gameId
-                  })
-                roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-                console.log(roundManager);
-            } catch (error) {
-                console.error('Error registering:', error);
-            }
-          };
+                })
+            roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+            console.log(roundManager);
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    };
 
-        const checkValidity = async () => {
-            console.log("reached create user")
-            try {
-                const response = await axios.post('http://localhost:8080/checkcode', 
-                  {
-                    code: code
-                  })
-                roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
-                console.log(roundManager);
-                return response.data.valid;
-            } catch (error) {
-                console.error('Error registering:', error);
-            }
-
-            return false;
-          };
-
-          const joinGame = async ({roundManager}) => {
-            try {
-                const response = await axios.post('http://localhost:8080/gameComponents', 
-                  {
+    const handleCreatePlayer = async (username) => {
+        console.log("reached create user")
+        try {
+            const response = await axios.post('http://localhost:8080/registeruser',
+                {
+                    username: username,
+                    privledge: "moderator",
                     gameId: roundManager.gameId
-                  })
+                })
+            roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+            console.log(roundManager);
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    };
 
-                  const data = response.data.data;
+    const checkValidity = async () => {
+        console.log("reached create user")
+        try {
+            const response = await axios.post('http://localhost:8080/checkcode',
+                {
+                    code: code
+                })
+            roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
+            console.log(roundManager);
+            return response.data.valid;
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
 
-                  roundManager.setGameResources(data.rolls)
-                  roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
-                  roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
-                  console.log(roundManager);
-                  handleCreatePlayer(username);
+        return false;
+    };
 
-            } catch (error) {
-                console.error('Error registering:', error);
-            }
-          }
+    const joinGame = async ({ roundManager }) => {
+        try {
+            const response = await axios.post('http://localhost:8080/gameComponents',
+                {
+                    gameId: roundManager.gameId
+                })
+
+            const data = response.data.data;
+
+            roundManager.setGameResources(data.rolls)
+            roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
+            roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
+            console.log(roundManager);
+            handleCreatePlayer(username);
+
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    }
 
 
 
@@ -308,10 +344,10 @@ useEffect(() => {
                         const formJson = Object.fromEntries(formData.entries());
                         setCode(formJson.code);
                         setUsername(formJson.username)
-                        if(checkValidity()){
-                            joinGame({roundManager});
+                        if (checkValidity()) {
+                            joinGame({ roundManager });
                             handleOpenWaitJoin();
-                        }else{
+                        } else {
                             setError("Invalid Code")
                         }
                         //axios.post
@@ -618,42 +654,42 @@ useEffect(() => {
                 </DialogActions>
             </Dialog>
 
-                <Dialog
-                    open={openWaitCreate}
-                    onClose={handleCloseWaitCreate}
+            <Dialog
+                open={openWaitCreate}
+                onClose={handleCloseWaitCreate}
 
-                >
-                    <DialogTitle>Waiting on Players</DialogTitle>
-                    <DialogContent>
+            >
+                <DialogTitle>Waiting on Players</DialogTitle>
+                <DialogContent>
                     <DialogContentText>
-                            Code: {code}
-                        </DialogContentText>
-                        <DialogContentText>
-                            To start the game, press start. Players will be displayed here:
-                            {gamePlayers}
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick = {handleGameStart}>Start Game</Button>
-                    </DialogActions>
-                </Dialog>
+                        Code: {code}
+                    </DialogContentText>
+                    <DialogContentText>
+                        To start the game, press start. Players will be displayed here:
+                        {gamePlayers}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleGameStart}>Start Game</Button>
+                </DialogActions>
+            </Dialog>
 
-                <Dialog
-                    open={openWaitJoin}
-                    onClose={(event, reason) => {
-                        if (reason !== 'backdropClick') {
-                            handleCloseWaitJoin();
-                        }
-                    }}
-                >
-                    <DialogTitle>Waiting to Join</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Please wait for the game to begin
-                        </DialogContentText>
+            <Dialog
+                open={openWaitJoin}
+                onClose={(event, reason) => {
+                    if (reason !== 'backdropClick') {
+                        handleCloseWaitJoin();
+                    }
+                }}
+            >
+                <DialogTitle>Waiting to Join</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please wait for the game to begin
+                    </DialogContentText>
 
-                    </DialogContent>
-                </Dialog>
+                </DialogContent>
+            </Dialog>
         </React.Fragment>
     );
 }
