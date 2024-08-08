@@ -178,7 +178,8 @@ app.post('/checkcode', (req, res) => {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
         } else if (result.length > 0) {
-            res.send({ valid: true, gameId: result[0].gameId }); // Use result[0] to get the most recent game
+            console.log(result)
+            res.send({ valid: true, gameId: result[0].game_id}); // Use result[0] to get the most recent game
         } else {
             res.send({ valid: false, message: 'Invalid Code or Game not in preparation state' });
         }
@@ -207,7 +208,7 @@ app.post('/retrieveplayers', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT username FROM users WHERE game_id = ? ORDER BY user_id ASC", [gameId], (err, result) => {
+    db.query("SELECT username FROM users WHERE game = ? ORDER BY user_id ASC", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -242,7 +243,7 @@ app.post('/progressgamestate', (req, res) => {
             console.log(err);
             res.status(500).send({ error: 'Database update error' });
         } else {
-            // Check if any row was actually updated
+            //  if any row was actually updated
             if (result.affectedRows > 0) {
                 res.send({ success: true, message: 'Game state updated to IN PROGRESS' });
             } else {

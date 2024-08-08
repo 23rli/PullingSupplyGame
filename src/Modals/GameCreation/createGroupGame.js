@@ -11,6 +11,7 @@ import { FormControlLabel } from '@mui/material';
 import { Checkbox } from '@mui/material';
 import { Grid } from '@mui/material'
 
+
 import axios from 'axios';
 
 export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
@@ -30,10 +31,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [checkUsers, setCheckUsers] = useState(false);
     const [checkGameStatus, setCheckGameStatus] = useState(false);
 
+    const [gamePlayers, setGamePlayers] = useState([])
     const [code, setCode] = useState(0);
-    const [error, setError] = useState("");
-    const [username, setUsername] = useState("");
-    const [gamePlayers, setGamePlayers] = useState([]);
+
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -58,13 +58,14 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
+                    setElapsedTime(0)
                 }
             }
         };
 
         checkStatus(); // Call the async function
 
-    }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
+    }, [elapsedTime, checkUsers, timePerUpdate, roundManager, checkGameStatus, onStart]);
 
 
     useEffect(() => {
@@ -79,6 +80,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
+                    setElapsedTime(0)
                 }
             }
         };
@@ -89,6 +91,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
 
     const handleGameStart = () => {
+        console.log(roundManager)
         const updateGameState = async () => {
 
             try {
@@ -99,10 +102,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 console.error('Error registering:', error);
             }
 
-
-            updateGameState()
-            openAdmin();
         }
+
+        updateGameState()
     }
 
     const handleBlueCheckChange = (event) => {
@@ -172,6 +174,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
     const handleOpenWaitCreate = () => {
         setOpenCreate(false);
+        setCheckUsers(true);
         setOpenWaitCreate(true);
     };
 
@@ -185,7 +188,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         greenCar, greenPenalty,
         redCar, redPenalty,
         yellowCar, yellowPenalty,
-        rolls,
+        rolls, code,
         blueRevenue, greenRevenue,
         redRevenue, yellowRevenue
     ) => {
@@ -213,6 +216,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             console.log(response.data); // Log the response data
             console.log(code)
 
+            setCode(code)
             roundManager.gameId = response.data.gameId; // Accessing 'gameId'
             roundManager.setGameResources(rolls)
             roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
@@ -248,7 +252,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             const response = await axios.post('http://localhost:8080/registeruser',
                 {
                     username: username,
-                    privledge: "moderator",
+                    privledge: "player",
                     gameId: roundManager.gameId
                 })
             roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
@@ -258,14 +262,15 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         }
     };
 
-    const checkValidity = async () => {
-        console.log("reached create user")
+    const checkValidity = async (code) => {
+        console.log("reached check validity")
         try {
             const response = await axios.post('http://localhost:8080/checkcode',
                 {
                     code: code
                 })
-            roundManager.gameId = response.data.gameId; // Accessing 'newId' instead of 'id'
+            console.log(response.data.gameId)
+            roundManager.gameId = response.data.gameId;
             console.log(roundManager);
             return response.data.valid;
         } catch (error) {
@@ -275,7 +280,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         return false;
     };
 
-    const joinGame = async ({ roundManager }) => {
+    const joinGame = async ({ roundManager, username }) => {
+        console.log("From Join Game")
+        console.log(roundManager)
         try {
             const response = await axios.post('http://localhost:8080/gameComponents',
                 {
@@ -283,6 +290,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 })
 
             const data = response.data.data;
+            console.log(data)
 
             roundManager.setGameResources(data.rolls)
             roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
@@ -338,19 +346,28 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 onClose={handleCloseJoin}
                 PaperProps={{
                     component: 'form',
-                    onSubmit: (event) => {
+                    onSubmit: async (event) => { // Make the function async
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
-                        setCode(formJson.code);
-                        setUsername(formJson.username)
-                        if (checkValidity()) {
-                            joinGame({ roundManager });
-                            handleOpenWaitJoin();
-                        } else {
-                            setError("Invalid Code")
+
+                        const username = formJson.username;
+                        const code = formJson.code;
+
+                        try {
+                            // Await the result of checkValidity
+                            const valid = await checkValidity(code);
+
+                            if (valid) {
+                                console.log(roundManager);
+                                joinGame({ roundManager, username });
+                                handleOpenWaitJoin();
+                            } else {
+                                console.log("INVALID CODE");
+                            }
+                        } catch (error) {
+                            console.error('Error during form submission:', error);
                         }
-                        //axios.post
                     },
                 }}
             >
@@ -415,8 +432,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
                             * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
 
-                        setCode(createCode);
-                        console.log(code)
                         let rolls = '';
 
                         for (let i = 0; i < 100; i++) {
@@ -428,9 +443,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             rolls += blue + ",";
                         }
 
-                        console.log(blueRevenue)
                         handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
-                            redCar, redPenalty, yellowCar, yellowPenalty, rolls, blueRevenue, greenRevenue,
+                            redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
                             redRevenue, yellowRevenue);
 
                         handleOpenWaitCreate();
@@ -656,8 +670,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
             <Dialog
                 open={openWaitCreate}
-                onClose={handleCloseWaitCreate}
-
+                onClose={() => {
+                    handleCloseWaitCreate(); // Assuming you have a function to handle closing the dialog
+                    openAdmin();   // Open the admin panel when the dialog is closed
+                }}
             >
                 <DialogTitle>Waiting on Players</DialogTitle>
                 <DialogContent>
@@ -666,11 +682,13 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     </DialogContentText>
                     <DialogContentText>
                         To start the game, press start. Players will be displayed here:
-                        {gamePlayers}
+                        {gamePlayers.toString()}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleGameStart}>Start Game</Button>
+                    <Button onClick={() => handleGameStart()}>
+                        Start Game
+                    </Button>
                 </DialogActions>
             </Dialog>
 
