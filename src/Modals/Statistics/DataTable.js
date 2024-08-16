@@ -64,6 +64,7 @@ function cleanData(value){
 }
 
 function produceData({longMemory, roundManager, i}) {
+  console.log(longMemory)
   let data = longMemory.storage[i].locationData();
   let roundNum = i;
   let mBlue = cleanData(data[0]);
@@ -136,7 +137,7 @@ function produceData({longMemory, roundManager, i}) {
 function produceTableInfo({ longMemory, roundManager }) {
   let info = [];
   for (let i = 0; i < longMemory.storage.length; i++) {
-    info.push(produceData(longMemory, roundManager, i));
+    info.push(produceData({longMemory, roundManager, i}));
   }
   return info;
 }
@@ -153,8 +154,11 @@ export default function GameDataTable({ roundManager, longMemory }) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  console.log("data table")
+  console.log(longMemory)
+  console.log(roundManager)
   const columns = setColumns({roundManager})
-  const info = produceTableInfo({ longMemory, roundManager });
+  const info = produceTableInfo({longMemory, roundManager});
 
   const exportToExcel = () => {
     const wb = utils.book_new();

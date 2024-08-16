@@ -11,7 +11,6 @@ import { FormControlLabel } from '@mui/material';
 import { Checkbox } from '@mui/material';
 import { Grid } from '@mui/material'
 
-
 import axios from 'axios';
 
 export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
@@ -33,62 +32,72 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
     const [gamePlayers, setGamePlayers] = useState([])
     const [code, setCode] = useState(0);
-
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setElapsedTime((prevTime) => prevTime + 1);
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    useEffect(() => {
-        const checkStatus = async () => {
-            if (checkGameStatus) {
-                if (elapsedTime >= timePerUpdate) {
+        // Timer Effect
+        useEffect(() => {
+            const timer = setInterval(() => {
+                setElapsedTime((prevTime) => prevTime + 1);
+            }, 1000);
+    
+            return () => clearInterval(timer);
+        }, []);
+    
+        // Check Game Status Effect
+        useEffect(() => {
+            const checkStatus = async () => {
+                console.log("In CheckStatus");
+                console.log("checkGameStatus:", checkGameStatus);
+                console.log("elapsedTime:", elapsedTime);
+                console.log("timePerUpdate:", timePerUpdate);
+        
+                if (checkGameStatus && elapsedTime >= timePerUpdate) {
+                    console.log("Checking Status");
+        
                     try {
                         const response = await axios.post('http://localhost:8080/retrievegamestate', {
                             gameId: roundManager.gameId
                         });
-                        if (response.data === 'IN PROGRESS') {
+                        console.log("Response:", response);
+                        console.log(response.data.data)
+        
+                        if (response.data.data.game_state === 'IN PROGRESS') {
+                            console.log("reach transition")
                             setCheckGameStatus(false);
+                            handleCloseWaitJoin();
                             onStart();
                         }
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
-                    setElapsedTime(0)
+                    setElapsedTime(0); // Reset elapsedTime after a successful check
                 }
-            }
-        };
-
-        checkStatus(); // Call the async function
-
-    }, [elapsedTime, checkUsers, timePerUpdate, roundManager, checkGameStatus, onStart]);
-
-
-    useEffect(() => {
-        const getPlayers = async () => {
-            if (checkUsers) {
-                if (elapsedTime >= timePerUpdate) {
+            };
+        
+            checkStatus();
+        }, [elapsedTime, checkGameStatus, timePerUpdate, roundManager, onStart]);
+        
+    
+        // Retrieve Players Effect
+        useEffect(() => {
+            const getPlayers = async () => {
+                console.log("In Get Players")
+                if (checkUsers && elapsedTime >= timePerUpdate) {
+                    console.log("Checking players")
                     try {
                         const response = await axios.post('http://localhost:8080/retrieveplayers', {
                             gameId: roundManager.gameId
                         });
-                        setGamePlayers(response.data);
+                        console.log(response.data.data)
+                        setGamePlayers(response.data.data);
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
-                    setElapsedTime(0)
+                    setElapsedTime(0); // Reset elapsedTime after a successful fetch
                 }
-            }
-        };
-
-        getPlayers(); // Call the async function
-
-    }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
-
+            };
+    
+            getPlayers();
+        }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
+    
 
     const handleGameStart = () => {
         console.log(roundManager)
@@ -105,6 +114,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         }
 
         updateGameState()
+        handleCloseWaitCreate();
+        openAdmin();
     }
 
     const handleBlueCheckChange = (event) => {
@@ -362,6 +373,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 console.log(roundManager);
                                 joinGame({ roundManager, username });
                                 handleOpenWaitJoin();
+                                setCheckGameStatus(true);
                             } else {
                                 console.log("INVALID CODE");
                             }
@@ -670,10 +682,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
             <Dialog
                 open={openWaitCreate}
-                onClose={() => {
-                    handleCloseWaitCreate(); // Assuming you have a function to handle closing the dialog
-                    openAdmin();   // Open the admin panel when the dialog is closed
-                }}
+                onClose = {handleCloseWaitCreate}
             >
                 <DialogTitle>Waiting on Players</DialogTitle>
                 <DialogContent>
@@ -682,7 +691,11 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     </DialogContentText>
                     <DialogContentText>
                         To start the game, press start. Players will be displayed here:
-                        {gamePlayers.toString()}
+                        <div>
+                            {/* Render your component here */}
+                            <div>Elapsed Time: {elapsedTime}</div>
+                            <div>Players: {gamePlayers.join(', ')}</div>
+                        </div>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

@@ -208,7 +208,7 @@ app.post('/retrieveplayers', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT username FROM users WHERE game = ? ORDER BY user_id ASC", [gameId], (err, result) => {
+    db.query("SELECT username FROM users WHERE game = ? ORDER BY username ASC", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -249,6 +249,37 @@ app.post('/progressgamestate', (req, res) => {
             } else {
                 res.send({ success: false, message: 'No game found with the given gameId in IN PREP state' });
             }
+        }
+    });
+});
+
+app.post('/retrieveleaderboard', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT * FROM users WHERE game = ? ORDER BY username ASC", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
+app.post('/retrieveroundinfo', (req, res) => {
+    const gameId = req.body.gameId;
+    const userId = req.body.userId;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT * FROM round WHERE game_id = ? AND user_id ORDER BY username ASC", [gameId, userId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
         }
     });
 });
