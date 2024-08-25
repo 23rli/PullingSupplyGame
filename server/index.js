@@ -208,7 +208,7 @@ app.post('/retrieveplayers', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT username FROM users WHERE game = ? ORDER BY username ASC", [gameId], (err, result) => {
+    db.query("SELECT username FROM users WHERE game = ? AND privledge = 'player' ORDER BY username ASC", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -257,7 +257,7 @@ app.post('/retrieveleaderboard', (req, res) => {
     const gameId = req.body.gameId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT * FROM users WHERE game = ? ORDER BY username ASC", [gameId], (err, result) => {
+    db.query("SELECT * FROM users WHERE game = ? AND privledge = 'player' ORDER BY username ASC", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -273,7 +273,7 @@ app.post('/retrieveroundinfo', (req, res) => {
     const userId = req.body.userId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT * FROM round WHERE game_id = ? AND user_id ORDER BY username ASC", [gameId, userId], (err, result) => {
+    db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? ORDER BY revenue DESC", [gameId, userId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });

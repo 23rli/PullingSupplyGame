@@ -30,6 +30,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [checkUsers, setCheckUsers] = useState(false);
     const [checkGameStatus, setCheckGameStatus] = useState(false);
 
+    const [errorStatement, setErrorStatement] = useState("");
+
     const [gamePlayers, setGamePlayers] = useState([])
     const [code, setCode] = useState(0);
         // Timer Effect
@@ -47,6 +49,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 console.log("In CheckStatus");
                 console.log("checkGameStatus:", checkGameStatus);
                 console.log("elapsedTime:", elapsedTime);
+                console.log("checkUSers:", checkUsers);
                 console.log("timePerUpdate:", timePerUpdate);
         
                 if (checkGameStatus && elapsedTime >= timePerUpdate) {
@@ -79,7 +82,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         // Retrieve Players Effect
         useEffect(() => {
             const getPlayers = async () => {
-                console.log("In Get Players")
+                console.log("In Get Players" )
+                console.log(checkUsers)
+                console.log(elapsedTime >= timePerUpdate)
                 if (checkUsers && elapsedTime >= timePerUpdate) {
                     console.log("Checking players")
                     try {
@@ -87,7 +92,11 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             gameId: roundManager.gameId
                         });
                         console.log(response.data.data)
-                        setGamePlayers(response.data.data);
+                        let players = [];
+                        for(let i = 0; i <  response.data.data.length; i++){
+                            players.push(response.data.data[i].username)
+                        }
+                        setGamePlayers(players);
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
@@ -375,6 +384,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 handleOpenWaitJoin();
                                 setCheckGameStatus(true);
                             } else {
+                                setErrorStatement("Invalid Code. Please try again.");
                                 console.log("INVALID CODE");
                             }
                         } catch (error) {
@@ -411,6 +421,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         fullWidth
                         variant="standard"
                     />
+                    <DialogContentText style={{ color: 'red', margin: '16px 0' }}>
+                        {errorStatement !== '' && errorStatement}
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseJoin}>Cancel</Button>

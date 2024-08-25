@@ -78,7 +78,7 @@ const commitToDB = async ({roundManager, longMemory}) => {
         unusedY: longMemory.storage[roundManager.roundNum].endResources[1],
         unusedB: longMemory.storage[roundManager.roundNum].endResources[2],
       })
-    roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+    //roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
     console.log(roundManager);
   } catch (error) {
       console.error('Error registering:', error);

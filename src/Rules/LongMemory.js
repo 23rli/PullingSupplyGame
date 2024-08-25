@@ -9,10 +9,7 @@ export class LongMemory {
     
 
     commitPosition({ roundManager }) {
-        console.log("In Commit Position");
-        console.log("roundManager:", roundManager);
-        console.log("roundManager.shortMemory:", roundManager.shortMemory);
-        console.log("roundManager.roundNum:", roundManager.roundNum);
+        
 
         if(this.round < roundManager.roundNum){
             this.storage.push(new ShortMemory(roundManager.roundNum))
@@ -84,4 +81,17 @@ export class LongMemory {
         this.storage[roundNum].conResources = [...convertedResources];
         this.storage[roundNum].endResources = [...roundResources];
     }
+
+    /*
+    commitDB({package}){
+        if(package.round_number > this.roundNum){
+            this.storage.push(new ShortMemory(package.round_number))
+            this.round ++;
+        }
+
+        this.storage[roundNum].setMemory()
+
+    }
+
+    */
 }

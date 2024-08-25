@@ -4,6 +4,7 @@ import { Round } from './Rules/Round.js';
 import { LongMemory } from './Rules/LongMemory.js';
 import { CreateGroupGame } from './Modals/GameCreation/CreateGroupGame.js'
 import { CreateIndiGame } from './Modals/GameCreation/CreateIndiGame.js'
+import { AdminPanel } from './Admin/AdminPanel.js'
 
 const containerStyle = {
   display: 'flex',
@@ -81,7 +82,7 @@ export const TutorialApp = () => {
       )}
       {gameState === 'admin' && (
         <div style={screenStyle}>
-          
+          <AdminPanel roundManager = {roundManager}/>
         </div>
       )}
     </>
