@@ -8,12 +8,11 @@ import axios from 'axios';
 
 export function AdminPanel({ roundManager }) {
     const [selectedUser, setSelectedUser] = useState(null);
-    const [users, setUsers] = useState([]);
-    const [userRev, setUserRev] = useState([]);
+    const [userData, setUserData] = useState([]); // Combined state for users, userIds, and revenues
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timePerUpdate] = useState(2);
     const [sortConfig, setSortConfig] = useState({ key: 'userId', direction: 'asc' });
-    const [userData, setUserData] = useState([]);
+    const [detailedUserData, setDetailedUserData] = useState([]); // State for detailed user data
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -30,19 +29,24 @@ export function AdminPanel({ roundManager }) {
                 });
 
                 const playerData = response.data.data;
-                const usernames = playerData.map(player => player.username);
-                const revenues = await Promise.all(
+
+                const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
                         const revResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id
                         });
-                        return revResponse.data.data[0].revenue;
+                        const revenue = revResponse.data.data[0]?.revenue || 0;
+
+                        return {
+                            userId: player.user_id,
+                            username: player.username,
+                            revenue: revenue
+                        };
                     })
                 );
 
-                setUsers(usernames);
-                setUserRev(revenues);
+                setUserData(updatedUserData);
             } catch (error) {
                 console.error('Error fetching players or revenue:', error);
             }
@@ -53,17 +57,25 @@ export function AdminPanel({ roundManager }) {
         }
     }, [elapsedTime, timePerUpdate, roundManager]);
 
-    const handleRowClick = async (username) => {
-        setSelectedUser(username);
+    const handleRowClick = async (userId) => {
+        setSelectedUser(userId);
         try {
             const userResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
-                userId: username
+                userId: userId
             });
-            setUserData(userResponse.data); // Expecting an array of rows from the 'round' table
+            setDetailedUserData(userResponse.data.data); // Expecting an array of rows from the 'round' table
+            console.log(userResponse.data.data);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
+    };
+
+    const formatTime = () => {
+        const seconds = elapsedTime % 60;
+        const minutes = Math.floor((elapsedTime % 3600) / 60);
+        const hours = Math.floor(elapsedTime / 3600);
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     };
 
     const handleSort = (key) => {
@@ -75,14 +87,14 @@ export function AdminPanel({ roundManager }) {
     };
 
     const renderUserDataTable = () => {
-        if (!userData || userData.length === 0) return <Typography variant="body2">No data available.</Typography>;
+        if (!detailedUserData || detailedUserData.length === 0) return <Typography variant="body2">No data available.</Typography>;
 
         return (
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Round Number</TableCell>
+                        <TableCell>Round Number</TableCell>
                             <TableCell align="right">Manu B</TableCell>
                             <TableCell align="right">Manu G</TableCell>
                             <TableCell align="right">Manu R</TableCell>
@@ -121,7 +133,7 @@ export function AdminPanel({ roundManager }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {userData.map((row, index) => (
+                        {detailedUserData.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell>{row.round_number}</TableCell>
                                 <TableCell align="right">{row.manu_b}</TableCell>
@@ -174,7 +186,7 @@ export function AdminPanel({ roundManager }) {
                     <CardContent>
                         <Typography variant="h6">Game Settings</Typography>
                         <Typography variant="body2">Time Since Beginning: {formatTime()}</Typography>
-                        <Typography variant="body2">Current Number of Players: {users.length}</Typography>
+                        <Typography variant="body2">Current Number of Players: {userData.length}</Typography>
                     </CardContent>
                 </Card>
             </Grid>
@@ -187,9 +199,9 @@ export function AdminPanel({ roundManager }) {
                             End Game
                         </Button>
                         <Typography variant="h6" gutterBottom>Player Rounds</Typography>
-                        {playerRevenues().map((player, index) => (
+                        {userData.map((player) => (
                             <Typography variant="body2" key={player.userId}>
-                                {player.userId}: Round {userRev[index] || 0}
+                                {player.username}: Revenue {player.revenue}
                             </Typography>
                         ))}
                     </CardContent>
@@ -222,7 +234,7 @@ export function AdminPanel({ roundManager }) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {playerRevenues().map((row) => (
+                            {userData.map((row) => (
                                 <TableRow
                                     key={row.userId}
                                     hover
