@@ -169,12 +169,7 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
         keepMounted
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Would you like to Reset your progress to the beginning of this round?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            .....
-          </DialogContentText>
-        </DialogContent>
+        <DialogTitle>{"Your time has run out! Please proceed to the next round"}</DialogTitle>
         <DialogActions>
           <Button onClick={handleAgreeForce}>Agree</Button>
         </DialogActions>

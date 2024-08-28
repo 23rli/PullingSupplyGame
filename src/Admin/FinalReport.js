@@ -6,13 +6,15 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import NumberInputModal from "./WIPPenalty.js"
-export function AdminPanel({ roundManager }) {
+
+export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [userData, setUserData] = useState([]); // Combined state for users, userIds, and revenues
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timePerUpdate] = useState(2);
     const [sortConfig, setSortConfig] = useState({ key: 'userId', direction: 'asc' });
     const [detailedUserData, setDetailedUserData] = useState([]); // State for detailed user data
+    const [gameStats, setGameStates] = useState(null);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -29,7 +31,6 @@ export function AdminPanel({ roundManager }) {
                 });
 
                 const playerData = response.data.data;
-                console.log(playerData)
 
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
@@ -38,23 +39,25 @@ export function AdminPanel({ roundManager }) {
                             userId: player.user_id
                         });
                         const revenue = revResponse.data.data[0]?.revenue || 0;
-                        const roundNum = revResponse.data.data[0]?.round_number || 0;
-
-                        console.log(revenue)
-                        console.log(player.username)
-                        console.log(player.user_id)
+                        const finalRoundNum = revResponse.data.data[0]?.round_number || 0;
+                        let carNum = 0;
+                        for(let i = 0; i < revResponse.data.data.length; i++){
+                            if(revResponse.data.data[i].round_number == wipRound){
+                                carNum = revResponse.data.data[i].wip;
+                            }
+                        }
 
                         return {
                             userId: player.user_id,
                             username: player.username,
                             revenue: revenue,
-                            round: roundNum
+                            round: finalRoundNum,
+                            revenueAfterWIP: revenue - (wipPenalty * carNum)
                         };
                     })
                 );
 
                 setUserData(updatedUserData);
-                console.log(updatedUserData)
             } catch (error) {
                 console.error('Error fetching players or revenue:', error);
             }
@@ -65,8 +68,11 @@ export function AdminPanel({ roundManager }) {
         }
     }, [elapsedTime, timePerUpdate, roundManager]);
 
-    const endGame = () => {
-
+    const revenueMedian = () => {
+        let totalRev = 0
+        for(let i = 0; i < userData.length; i++){
+            userData[i].
+        }
     }
     
     const handleRowClick = async (userId) => {
@@ -193,27 +199,16 @@ export function AdminPanel({ roundManager }) {
 
     return (
         <Grid container spacing={2} padding={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 <Card>
                     <CardContent>
-                        <Typography variant="h6">Game Settings</Typography>
-                        <Typography variant="body2">Time Since Beginning: {formatTime()}</Typography>
-                        <Typography variant="body2">Current Number of Players: {userData.length}</Typography>
-                    </CardContent>
-                </Card>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Card>
-                    <CardContent>
-                        <Typography variant="h6">Game Control</Typography>
-                        <NumberInputModal endGame = {endGame} roundManager = {roundManager} userData = {userData}/>
-                        <Typography variant="h6" gutterBottom>Player Rounds</Typography>
-                        {userData.map((player) => (
-                            <Typography variant="body2" key={player.userId}>
-                                {player.username}: Round: {player.round}
-                            </Typography>
-                        ))}
+                    <Typography variant="h6">Game Overview</Typography>
+                        <Typography variant="body2">Time Since Beginning: {time}</Typography>
+                        <Typography variant="body2">Number of Players: {userData.length}</Typography>
+                        <Typography variant="body2">Median Revenue: {/* Calculate median revenue */}</Typography>
+                        <Typography variant="body2">Mean Revenue: {/* Calculate mean revenue */}</Typography>
+                        <Typography variant="body2">WIP Penalty: {roundManager.wipPenalty}</Typography>
+                        <Typography variant="body2">Penalty Enacted in Round: {roundManager.wipRound}</Typography>
                     </CardContent>
                 </Card>
             </Grid>

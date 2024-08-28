@@ -2,8 +2,10 @@ import { useMemo, useState } from 'react';
 import { Board } from './Gameboard/Board.js';
 import { Round } from './Rules/Round.js';
 import { LongMemory } from './Rules/LongMemory.js';
-import { CreateGroupGame } from './Modals/GameCreation/CreateGroupGame.js'
 import { CreateIndiGame } from './Modals/GameCreation/CreateIndiGame.js'
+import { CreateGroupGame } from './Modals/GameCreation/CreateGroupGame.js'
+import GameDataTable from './Modals/Statistics/DataTable.js'
+
 import { AdminPanel } from './Admin/AdminPanel.js'
 
 const containerStyle = {
@@ -44,11 +46,12 @@ const StartScreen = ({ onStart, openAdmin, roundManager }) => (
   </div>
 );
 
-const EndScreen = ({ onRestart, backToHomePage }) => (
+const EndScreen = ({ onRestart, backToHomePage, roundManager, longMemory }) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Game Over!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <button onClick={backToHomePage} style={buttonStyle}>Back to Homepage</button>
+      <GameDataTable roundManager = {roundManager} longMemory = {longMemory}/>
     </div>
   </div>
 );
@@ -77,7 +80,7 @@ export const TutorialApp = () => {
       )}
       {gameState === 'end' && (
         <div style={screenStyle}>
-          <EndScreen onRestart={startGame} backToHomePage={homepage} />
+          <EndScreen onRestart={startGame} backToHomePage={homepage} roundManager = {roundManager} longMemory = {longMemory} />
         </div>
       )}
       {gameState === 'admin' && (

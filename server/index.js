@@ -284,6 +284,23 @@ app.post('/retrieveroundinfo', (req, res) => {
     });
 });
 
+app.post('/retrieveWIP', (req, res) => {
+    const gameId = req.body.gameId;
+    const userId = req.body.userId;
+    const roundNum = req.body.roundNum
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT WIP FROM round WHERE game_id = ? AND user_id = ? AND round_number = ? ORDER BY revenue DESC", [gameId, userId, roundNum], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
 app.listen(8080, () => {
     console.log("port listening on 8080")
 })
