@@ -137,6 +137,9 @@ export class Round {
                 const limit = this.cars[index].bResLimit;
                 const res = this.cars[index].bRes;
                 const need = limit - res;
+                console.log(need)
+                console.log(limit)
+                console.log(res)
                 let availableRes = this.roundResources[2];
                 if (availableRes >= need) {
                     this.cars[index].bRes += need;

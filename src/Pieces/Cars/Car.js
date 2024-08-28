@@ -57,7 +57,7 @@ export class Car {
         this.coords = [0, startY];
         this.rResLimit = 3;
         this.yResLimit = 3;
-        this.bResLimit = 3;
+        this.bResLimit = 2;
       }else if (id.charAt(0) === 'r') {
         this.type = ItemTypes.RCAR;
         this.coords = [0, startY];
