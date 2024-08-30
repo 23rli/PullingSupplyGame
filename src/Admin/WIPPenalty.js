@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import axios from 'axios'
 
-export function NumberInputModal({endGame, roundManager, userData}) {
+export function NumberInputModal({endGame, roundManager, time}) {
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [errorStatement, setErrorStatement] = useState('');
@@ -46,23 +46,10 @@ export function NumberInputModal({endGame, roundManager, userData}) {
                         const penalty = formJson.WIPPen;
                         const roundNum = formJson.roundNum;
 
-                        try {
-                            // Await the result of checkValidity
-                            for(let i = 0; i < userData.length; i ++){
-                                const response = await axios.post('http://localhost:8080/retrieveWIP', {
-                                    gameId: roundManager.gameId,
-                                    userId: userData[i].user_id,
-                                    roundNum: roundNum
-    
-                                });
-                            }
-                            
-                            console.log('Form submitted:', { penalty, roundNum });
-
-                            endGame();
-                        } catch {
-                            console.error('Error submitting form');
-                        }
+                        roundManager.WIPPen = penalty;
+                        roundManager.WIPRound = roundNum;
+                        roundManager.time = time;
+                        endGame();
                     },
                 }}
             >

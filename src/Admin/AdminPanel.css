@@ -1,0 +1,6 @@
+.admin-panel-container {
+    max-height: 100vh; /* Limit to the viewport height */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    padding: 16px;     /* Add padding if needed */
+    box-sizing: border-box; /* Include padding in the total width and height */
+}

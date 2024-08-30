@@ -48,6 +48,12 @@ export class Round {
         this.errorDisplayed = false;
 
         this.endGame = false;
+
+        //Admin Resources:
+
+        this.WIPPen = 0;
+        this.WIPRound = 0;
+        this.time = "";
     }
 
     setRevenue(blueRev, greenRev, redRev, yellowRev){

@@ -161,12 +161,12 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
                 }}
               />
               <Typography variant="h6" component="div">
-                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 < 10 && (
+                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 < 10 && (timePerRound - elapsedTime)%60 > 0  && (
                   <>
                     Timer: {Math.floor((timePerRound - elapsedTime) / 60) + ":0" + ((timePerRound - elapsedTime) % 60)}
                   </>
                 )}
-                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 >= 10> 0 && (
+                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 >= 10 && (
                   <>
                     Timer: {Math.floor((timePerRound - elapsedTime) / 60) + ":" + ((timePerRound - elapsedTime) % 60)}
                   </>

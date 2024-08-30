@@ -210,7 +210,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         yellowCar, yellowPenalty,
         rolls, code,
         blueRevenue, greenRevenue,
-        redRevenue, yellowRevenue
+        redRevenue, yellowRevenue,
+        gameNotes
     ) => {
         console.log(code)
         try {
@@ -230,7 +231,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 greenRevenue: greenRevenue,
                 redRevenue: redRevenue,
                 yellowRevenue: yellowRevenue,
-                gameState: "IN PREP"
+                gameState: "IN PREP",
+                gameNotes: gameNotes
             });
 
             console.log(response.data); // Log the response data
@@ -453,6 +455,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         const greenCar = greenChecked ? 1 : 0;
                         const redCar = redChecked ? 1 : 0;
                         const yellowCar = yellowChecked ? 1 : 0;
+                        const gameNotes = formJson.gameNotes;
 
                         const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
                             * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
@@ -470,7 +473,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
                         handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
                             redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
-                            redRevenue, yellowRevenue);
+                            redRevenue, yellowRevenue, gameNotes);
 
                         handleOpenWaitCreate();
                     },
@@ -684,6 +687,18 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 }}
                                 fullWidth
                                 disabled={!yellowChecked}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                margin="dense"
+                                name="gameNotes"
+                                label="Game Notes"
+                                type="text"
+                                variant="standard"
+                                fullWidth
+                                multiline
+                                rows={4}
                             />
                         </Grid>
                     </Grid>

@@ -7,6 +7,7 @@ import { CreateGroupGame } from './Modals/GameCreation/CreateGroupGame.js'
 import GameDataTable from './Modals/Statistics/DataTable.js'
 
 import { AdminPanel } from './Admin/AdminPanel.js'
+import { FinalReport } from './Admin/FinalReport.js';
 
 const containerStyle = {
   display: 'flex',
@@ -65,6 +66,7 @@ export const TutorialApp = () => {
   const startGame = () => setGameState('playing');
   const endGame = () => setGameState('end');
   const admin = () => setGameState('admin')
+  const report = () => setGameState('finalReport')
 
   return (
     <>
@@ -85,9 +87,15 @@ export const TutorialApp = () => {
       )}
       {gameState === 'admin' && (
         <div style={screenStyle}>
-          <AdminPanel roundManager = {roundManager}/>
+          <AdminPanel roundManager = {roundManager} report = {report}/>
         </div>
       )}
+      {gameState === 'finalReport' && (
+        <div style={screenStyle}>
+          <FinalReport roundManager = {roundManager} wipPenalty = {roundManager.WIPPen} wipRound = {roundManager.WIPRound} time = {roundManager.time}/>
+        </div>
+      )}
+
     </>
   );
 };

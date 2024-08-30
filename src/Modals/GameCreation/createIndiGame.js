@@ -12,106 +12,108 @@ import { Grid } from '@mui/material'
 
 import axios from 'axios'
 
-export function CreateIndiGame({roundManager, onStart}) {
+export function CreateIndiGame({ roundManager, onStart }) {
   const [open, setOpen] = React.useState(false);
   const [blueChecked, setBlueChecked] = React.useState(false);
-    const [greenChecked, setGreenChecked] = React.useState(false);
-    const [redChecked, setRedChecked] = React.useState(false);
-    const [yellowChecked, setYellowChecked] = React.useState(false);
+  const [greenChecked, setGreenChecked] = React.useState(false);
+  const [redChecked, setRedChecked] = React.useState(false);
+  const [yellowChecked, setYellowChecked] = React.useState(false);
 
-    const handleBlueCheckChange = (event) => {
-        setBlueChecked(event.target.checked);
-    };
+  const handleBlueCheckChange = (event) => {
+    setBlueChecked(event.target.checked);
+  };
 
-    const handleCloseBlue = () => {
-        setBlueChecked(false); // Reset the checkbox state when closing the dialog
-    };
+  const handleCloseBlue = () => {
+    setBlueChecked(false); // Reset the checkbox state when closing the dialog
+  };
 
-    const handleGreenCheckChange = (event) => {
-        setGreenChecked(event.target.checked);
-    };
+  const handleGreenCheckChange = (event) => {
+    setGreenChecked(event.target.checked);
+  };
 
-    const handleCloseGreen = () => {
-        setGreenChecked(false); // Reset the checkbox state when closing the dialog
-    };
+  const handleCloseGreen = () => {
+    setGreenChecked(false); // Reset the checkbox state when closing the dialog
+  };
 
-    const handleRedCheckChange = (event) => {
-        setRedChecked(event.target.checked);
-    };
+  const handleRedCheckChange = (event) => {
+    setRedChecked(event.target.checked);
+  };
 
-    const handleCloseRed = () => {
-        setRedChecked(false); // Reset the checkbox state when closing the dialog
-    };
+  const handleCloseRed = () => {
+    setRedChecked(false); // Reset the checkbox state when closing the dialog
+  };
 
-    const handleYellowCheckChange = (event) => {
-        setYellowChecked(event.target.checked);
-    };
+  const handleYellowCheckChange = (event) => {
+    setYellowChecked(event.target.checked);
+  };
 
-    const handleCloseYellow = () => {
-        setYellowChecked(false); // Reset the checkbox state when closing the dialog
-    };
+  const handleCloseYellow = () => {
+    setYellowChecked(false); // Reset the checkbox state when closing the dialog
+  };
 
-    const handleCreateGame = async (
-      username, 
-      blueCar, bluePenalty, 
-      greenCar, greenPenalty, 
-      redCar, redPenalty, 
-      yellowCar, yellowPenalty, 
-      rolls, code, 
-      blueRevenue, greenRevenue, 
-      redRevenue, yellowRevenue
-    ) => {
-      try {
-        const response = await axios.post('http://localhost:8080/registergame', {
-          blueCar: blueCar, 
-          bluePenalty: bluePenalty,
-          greenCar: greenCar,
-          greenPenalty: greenPenalty,
-          redCar: redCar,
-          redPenalty: redPenalty,
-          yellowCar: yellowCar,
-          yellowPenalty: yellowPenalty,
-          rolls: rolls,
-          mode: 0,
-          code: code,
-          blueRevenue: blueRevenue,
-          greenRevenue: greenRevenue,
-          redRevenue: redRevenue,
-          yellowRevenue: yellowRevenue,
-          gameState: "IN PROGRESS"
-        });
-        
-        console.log(response.data); // Log the response data
-    
-        roundManager.gameId = response.data.gameId; // Accessing 'gameId'
-        roundManager.setGameResources(rolls)
-        roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
-        roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
-        console.log(roundManager);
-        handleCreateUser(username);
-        onStart();
-        
-      } catch (error) {
-        console.error('Error registering:', error);
-      }
-    };
-    
+  const handleCreateGame = async (
+    username,
+    blueCar, bluePenalty,
+    greenCar, greenPenalty,
+    redCar, redPenalty,
+    yellowCar, yellowPenalty,
+    rolls, code,
+    blueRevenue, greenRevenue,
+    redRevenue, yellowRevenue,
+    gameNotes
+  ) => {
+    try {
+      const response = await axios.post('http://localhost:8080/registergame', {
+        blueCar: blueCar,
+        bluePenalty: bluePenalty,
+        greenCar: greenCar,
+        greenPenalty: greenPenalty,
+        redCar: redCar,
+        redPenalty: redPenalty,
+        yellowCar: yellowCar,
+        yellowPenalty: yellowPenalty,
+        rolls: rolls,
+        mode: 0,
+        code: code,
+        blueRevenue: blueRevenue,
+        greenRevenue: greenRevenue,
+        redRevenue: redRevenue,
+        yellowRevenue: yellowRevenue,
+        gameState: "IN PROGRESS",
+        gameNotes: gameNotes
+      });
 
-      const handleCreateUser = async (username) => {
-        console.log("reached create user")
-        try {
-            const response = await  axios.post('http://localhost:8080/registeruser', 
-              {
-                username: username,
-                privledge: "player",
-                gameId: roundManager.gameId
-              })
-            roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-            console.log(roundManager);
-        } catch (error) {
-            console.error('Error registering:', error);
-        }
-      };
+      console.log(response.data); // Log the response data
+
+      roundManager.gameId = response.data.gameId; // Accessing 'gameId'
+      roundManager.setGameResources(rolls)
+      roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
+      roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
+      console.log(roundManager);
+      handleCreateUser(username);
+      onStart();
+
+    } catch (error) {
+      console.error('Error registering:', error);
+    }
+  };
+
+
+  const handleCreateUser = async (username) => {
+    console.log("reached create user")
+    try {
+      const response = await axios.post('http://localhost:8080/registeruser',
+        {
+          username: username,
+          privledge: "player",
+          gameId: roundManager.gameId
+        })
+      roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
+      console.log(roundManager);
+    } catch (error) {
+      console.error('Error registering:', error);
+    }
+  };
 
 
   const handleClickOpen = () => {
@@ -124,8 +126,8 @@ export function CreateIndiGame({roundManager, onStart}) {
 
   return (
     <React.Fragment>
-      <Button 
-        variant="outlined" 
+      <Button
+        variant="outlined"
         onClick={handleClickOpen}
         sx={{
           fontSize: '1.5rem', // Adjust font size to make it larger
@@ -164,13 +166,14 @@ export function CreateIndiGame({roundManager, onStart}) {
             const greenCar = greenChecked ? 1 : 0;
             const redCar = redChecked ? 1 : 0;
             const yellowCar = yellowChecked ? 1 : 0;
+            const gameNotes = formJson.gameNotes;
 
-            let code = Number("" + (Math.random() * 9 + 1) + Math.random() * 10 + Math.random() 
-            * 10 + Math.random() * 10 + Math.random() * 10 + Math.random() * 10);
+            let code = Number("" + (Math.random() * 9 + 1) + Math.random() * 10 + Math.random()
+              * 10 + Math.random() * 10 + Math.random() * 10 + Math.random() * 10);
 
             let rolls = '';
 
-            for(let i = 0; i < 100; i++){
+            for (let i = 0; i < 100; i++) {
               const red = parseInt(Math.random() * 10 + 1);
               const yellow = parseInt(Math.random() * 8 + 1);
               const blue = parseInt(Math.random() * 4 + 1);
@@ -180,9 +183,9 @@ export function CreateIndiGame({roundManager, onStart}) {
             }
 
             console.log(blueRevenue)
-            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty, 
+            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
               redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
-              redRevenue, yellowRevenue);
+              redRevenue, yellowRevenue, gameNotes);
 
             handleClose();
           },
@@ -396,6 +399,18 @@ export function CreateIndiGame({roundManager, onStart}) {
                 }}
                 fullWidth
                 disabled={!yellowChecked}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                margin="dense"
+                name="gameNotes"
+                label="Game Notes"
+                type="text"
+                variant="standard"
+                fullWidth
+                multiline
+                rows={4}
               />
             </Grid>
           </Grid>

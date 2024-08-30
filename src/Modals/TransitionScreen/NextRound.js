@@ -32,6 +32,7 @@ function commitLongMem({roundManager, longMemory}){
 
 const commitToDB = async ({roundManager, longMemory}) => {
   console.log(longMemory)
+  console.log(roundManager)
   const data = longMemory.storage[roundManager.roundNum].locationData();
   const rev = data[20] * roundManager.revenueB + data[21] * roundManager.revenueG
   + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
@@ -141,8 +142,19 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
   const handleAgreeEnd = () => {
     setOpenEnd(false);
     endGame();
+    notifyDB();
     roundManager.endGame = true;
   };
+
+  const notifyDB = async () => {
+    try {
+      const userResponse = await axios.post('http://localhost:8080/progressgamestatetwo', {
+          gameId: roundManager.gameId
+      });
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+  }
 
   const handleAgreeForce = () => {
     handleAgreeNR();

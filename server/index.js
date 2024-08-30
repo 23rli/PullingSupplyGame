@@ -33,10 +33,11 @@ app.post('/registergame', (req, res) =>{
     const redRevenue = req.body.redRevenue;
     const yellowRevenue = req.body.yellowRevenue;
     const gameState = req.body.gameState;
+    const gameNotes = req.body.gameNotes;
     db.query("INSERT into gameData (blue_car, blue_penalty, green_car, green_penalty,"
         + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode, code, blue_revenue," 
-        + " green_revenue, red_revenue, yellow_revenue, game_state) VALUES  "
-        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        + " green_revenue, red_revenue, yellow_revenue, game_state, game_notes) VALUES  "
+        + " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
             blueCar,
             bluePenalty,
             greenCar, 
@@ -52,7 +53,8 @@ app.post('/registergame', (req, res) =>{
             greenRevenue,
             redRevenue,
             yellowRevenue,
-            gameState
+            gameState,
+            gameNotes
         ], (err, result) => {
         if (err){
             console.log(err)
@@ -253,6 +255,25 @@ app.post('/progressgamestate', (req, res) => {
     });
 });
 
+app.post('/progressgamestatetwo', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Update the game_state from IN PREP to IN PROGRESS based on the game_id
+    db.query("UPDATE gameData SET game_state = 'FINISHED' WHERE game_id = ?", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database update error' });
+        } else {
+            //  if any row was actually updated
+            if (result.affectedRows > 0) {
+                res.send({ success: true, message: 'Game state updated to FINISHED' });
+            } else {
+                res.send({ success: false, message: 'No game found with the given gameId in IN PROGRESS state' });
+            }
+        }
+    });
+});
+
 app.post('/retrieveleaderboard', (req, res) => {
     const gameId = req.body.gameId;
 
@@ -291,6 +312,21 @@ app.post('/retrieveWIP', (req, res) => {
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT WIP FROM round WHERE game_id = ? AND user_id = ? AND round_number = ? ORDER BY revenue DESC", [gameId, userId, roundNum], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
+app.post('/retrievegamedetails', (req, res) => {
+    const gameId = req.body.gameId;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT * FROM gameData WHERE game_id = ?", [gameId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
