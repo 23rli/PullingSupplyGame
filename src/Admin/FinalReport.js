@@ -1,3 +1,18 @@
+//Use WIP penalty from beginning of game to calculate
+//add revenue in final report to after WIP
+//Add columns to Final Rev: Max WIP per team, total throughput (how many cars pushed through), total wip penalty per team
+//Reference Screenshot
+//Fix both final report and admin panel tables
+
+//fix round disply in deatiled user info
+
+// swtich user overview with game stats in excel file
+
+//look at screen 
+
+
+//Hide endgame button for team game players
+
 import React, { useState, useEffect } from 'react';
 import {
     Grid, Card, Box, CardContent, Typography, Button,
