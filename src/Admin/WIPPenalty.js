@@ -43,10 +43,8 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
 
-                        const penalty = formJson.WIPPen;
                         const roundNum = formJson.roundNum;
 
-                        roundManager.WIPPen = penalty;
                         roundManager.WIPRound = roundNum;
                         roundManager.time = time;
                         endGame();
@@ -67,21 +65,6 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         type="number"
                         fullWidth
                         variant="standard"
-                    />
-                    <TextField
-                        required
-                        margin="dense"
-                        id="WIPPen"
-                        name="WIPPen"
-                        label="WIP Penalty per Car"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                        defaultValue={1.50}
-                        inputProps={{
-                            step: 0.01,
-                            min: 0,
-                        }}
                     />
                     <DialogContentText style={{ color: 'red', margin: '16px 0' }}>
                         {errorStatement !== '' && errorStatement}

@@ -52,15 +52,19 @@ export class Round {
 
         //Admin Resources:
 
-        this.WIPPen = 0;
+        this.WIPPen = [];
         this.WIPRound = 0;
         this.time = "";
+    }
+
+    setWIPPen(bluePen, greenPen, redPen, yellowPen){
+        this.WIPPen = [bluePen, greenPen, redPen, yellowPen]
     }
 
     setMode(mode){
         this.mode = mode;
     }
-    
+
     setRevenue(blueRev, greenRev, redRev, yellowRev){
         if(blueRev != null) this.revenueB = blueRev;
         if(greenRev != null) this.revenueG = greenRev;

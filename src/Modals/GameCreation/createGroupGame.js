@@ -243,6 +243,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             roundManager.setGameResources(rolls)
             roundManager.setMode(2);
             roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
+            roundManager.setWIPPen(bluePenalty, greenPenalty, redPenalty, yellowPenalty)
             roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
             console.log(roundManager);
             handleCreateModerator(username);

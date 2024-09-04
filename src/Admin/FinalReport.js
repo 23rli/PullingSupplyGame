@@ -16,7 +16,7 @@ import * as XLSX from 'xlsx'; // Make sure to install xlsx library
 
 import './FinalReport.css'; // Import the CSS file for styles
 
-export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
+export function FinalReport({ roundManager, wipRound, time}) {
     const [selectedUser, setSelectedUser] = useState(null);
     const [userData, setUserData] = useState([]); // Combined state for users, userIds, and revenues
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -65,7 +65,7 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
 
                         unfinished = roundData[0].wip
     
-                        const penalty = wipPenalty * carNum;
+                        const penalty = calculateWIPPenalty(roundData);
                         const revenueAfterWIP = revenue - penalty;
                         const finalScore = revenueAfterWIP; // You may want to apply more calculations here
     
@@ -91,11 +91,33 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
             }
         };
     
-        if (elapsedTime % timePerUpdate === 0 && !updated) {
+        if (elapsedTime % timePerUpdate === 0 && elapsedTime < 100) {
             fetchPlayers();
             setUpdated(true);
         }
-    }, [elapsedTime, timePerUpdate, roundManager, wipPenalty, wipRound]);
+    }, [elapsedTime, timePerUpdate, roundManager, wipRound]);
+
+    const calculateWIPPenalty = (roundData) => {
+        let penalty = 0;
+
+        if(roundManager.startB == 1){
+            const blueCars = roundData[wipRound].manu_b + roundData[wipRound].assem_b + roundData[wipRound].qual_b + roundData[wipRound].paint_b + roundData[wipRound].dry_b
+            penalty += blueCars * roundManager.WIPPen[0]
+        }
+        if(roundManager.startG == 1){
+            const greenCars = roundData[wipRound].manu_g + roundData[wipRound].assem_g + roundData[wipRound].qual_g + roundData[wipRound].paint_g + roundData[wipRound].dry_g
+            penalty += greenCars * roundManager.WIPPen[1]
+        }
+        if(roundManager.startR == 1){
+            const redCars = roundData[wipRound].manu_b + roundData[wipRound].assem_r + roundData[wipRound].qual_r + roundData[wipRound].paint_r + roundData[wipRound].dry_r
+            penalty += redCars * roundManager.WIPPen[2]
+        }
+        if(roundManager.startY == 1){
+            const yellowCars = roundData[wipRound].manu_y + roundData[wipRound].assem_y + roundData[wipRound].qual_y + roundData[wipRound].paint_y + roundData[wipRound].dry_y
+            penalty += yellowCars * roundManager.WIPPen[3]
+        }
+        return penalty;
+    }
     
 
     const revenueData = () => {
@@ -444,9 +466,23 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
                                 Export to Excel
                             </Button>
                         </Box>
-                            <Typography variant="body2"> Game Time Elasped: {roundManager.time}</Typography>
                             <Typography variant="body2">Number of Players: {userData.length}</Typography>
-                            <Typography variant="body2">WIP Penalty: {wipPenalty}</Typography>
+                            {roundManager.startB == 1 && (
+                                <Typography variant="body2">Blue WIP Penalty: {roundManager.WIPPen[0]}</Typography>
+
+                            )}
+                            {roundManager.startG == 1 && (
+                                <Typography variant="body2">Green WIP Penalty: {roundManager.WIPPen[1]}</Typography>
+
+                            )}
+                            {roundManager.startR == 1 && (
+                                <Typography variant="body2">Red WIP Penalty: {roundManager.WIPPen[2]}</Typography>
+
+                            )}
+                            {roundManager.startY == 1 && (
+                                <Typography variant="body2">Yellow WIP Penalty: {roundManager.WIPPen[3]}</Typography>
+
+                            )}
                             <Typography variant="body2">Penalty Enacted in Round: {wipRound}</Typography>
                             {gameStats && ( 
                                 <TableContainer component={Paper}>
