@@ -4,3 +4,8 @@
     padding: 16px;     /* Add padding if needed */
     box-sizing: border-box; /* Include padding in the total width and height */
 }
+
+.user-details-card {
+    width: 100%; /* Set a fixed width */
+    overflow-x: auto; /* Enable horizontal scrolling */
+}

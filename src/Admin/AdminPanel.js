@@ -296,9 +296,9 @@ export function AdminPanel({ roundManager, report }) {
 
                     {selectedUser && (
                         <Grid item xs={12}>
-                            <Card>
+                            <Card className="user-details-card">
                                 <CardContent>
-                                    <Typography variant="h6">User Details: </Typography>
+                                    <Typography variant="h6">User Details:</Typography>
                                     {renderUserDataTable()}
                                 </CardContent>
                             </Card>

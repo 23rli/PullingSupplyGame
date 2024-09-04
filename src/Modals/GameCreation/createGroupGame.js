@@ -241,6 +241,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             setCode(code)
             roundManager.gameId = response.data.gameId; // Accessing 'gameId'
             roundManager.setGameResources(rolls)
+            roundManager.setMode(2);
             roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
             roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
             console.log(roundManager);
@@ -315,6 +316,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             console.log(data)
 
             roundManager.setGameResources(data.rolls)
+            roundManager.setMode(1)
             roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
             roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
             console.log(roundManager);

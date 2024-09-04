@@ -4,14 +4,6 @@
 //Reference Screenshot
 //Fix both final report and admin panel tables
 
-//fix round disply in deatiled user info
-
-// swtich user overview with game stats in excel file
-
-//look at screen 
-
-
-//Hide endgame button for team game players
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -22,7 +14,6 @@ import {
 import axios from 'axios';
 import * as XLSX from 'xlsx'; // Make sure to install xlsx library
 
-import NumberInputModal from "./WIPPenalty.js"
 import './FinalReport.css'; // Import the CSS file for styles
 
 export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
@@ -30,6 +21,7 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
     const [userData, setUserData] = useState([]); // Combined state for users, userIds, and revenues
     const [elapsedTime, setElapsedTime] = useState(0);
     const [timePerUpdate] = useState(2);
+    const [updated, setUpdated] = useState(false);
     const [sortConfig, setSortConfig] = useState({ key: 'userId', direction: 'asc' });
     const [detailedUserData, setDetailedUserData] = useState([]); // State for detailed user data
     const [gameStats, setGameStats] = useState(null);
@@ -47,46 +39,64 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
                 const response = await axios.post('http://localhost:8080/retrieveleaderboard', {
                     gameId: roundManager.gameId
                 });
-
+    
                 const playerData = response.data.data;
-
+    
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
                         const revResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id
                         });
-                        const revenue = revResponse.data.data[0]?.revenue || 0;
-                        const finalRoundNum = revResponse.data.data[0]?.round_number || 0;
+    
+                        const roundData = revResponse.data.data;
+                        const revenue = roundData[0]?.revenue || 0;
+                        const finalRoundNum = roundData[0]?.round_number || 0;
                         let carNum = 0;
-                        for(let i = 0; i < revResponse.data.data.length; i++){
-                            if(revResponse.data.data[i].round_number == wipRound){
-                                carNum = revResponse.data.data[i].wip;
-                            }
-                        }
+                        let maxWIP = 0;
+                        let throughput = 0;
+                        let unfinished = 0;
+    
+                        roundData.forEach((round) => {
+                            carNum = round.round_number == wipRound ? round.wip : carNum;
+                            maxWIP = Math.max(maxWIP, round.wip);
+                            throughput += round.done_b + round.done_g + round.done_r + round.done_y;
+                        });
 
+                        unfinished = roundData[0].wip
+    
+                        const penalty = wipPenalty * carNum;
+                        const revenueAfterWIP = revenue - penalty;
+                        const finalScore = revenueAfterWIP; // You may want to apply more calculations here
+    
                         return {
                             userId: player.user_id,
                             username: player.username,
                             revenue: revenue,
                             round: finalRoundNum,
-                            revenueAfterWIP: revenue - (wipPenalty * carNum),
-                            WIPPen: (wipPenalty * carNum)
+                            revenueAfterWIP: revenueAfterWIP,
+                            penalty: penalty,
+                            finalScore: finalScore,
+                            throughput: throughput,
+                            maxWIP: maxWIP,
+                            unfinished: unfinished,
                         };
                     })
                 );
-
+    
                 setUserData(updatedUserData);
-                setGameStats(revenueData)
+                setGameStats(revenueData);
             } catch (error) {
                 console.error('Error fetching players or revenue:', error);
             }
         };
-
-        if (elapsedTime % timePerUpdate === 0) {
+    
+        if (elapsedTime % timePerUpdate === 0 && !updated) {
             fetchPlayers();
+            setUpdated(true);
         }
-    }, [elapsedTime, timePerUpdate, roundManager]);
+    }, [elapsedTime, timePerUpdate, roundManager, wipPenalty, wipRound]);
+    
 
     const revenueData = () => {
         let totalRevNP = 0;
@@ -102,12 +112,12 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
         for (let i = 0; i < userData.length; i++) {
             totalRevNP += userData[i].revenue;
             totalRevYP += userData[i].revenueAfterWIP;
-            totalWIPPen += userData[i].WIPPen;
+            totalWIPPen += userData[i].penalty;
             totalRound += userData[i].round;
     
             revenueNPArray.push(userData[i].revenue);
             revenueYPArray.push(userData[i].revenueAfterWIP);
-            WIPPenArray.push(userData[i].WIPPen);
+            WIPPenArray.push(userData[i].penalty);
             roundArray.push(userData[i].round);
         }
     
@@ -175,6 +185,12 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
             direction = 'desc';
         }
         setSortConfig({ key, direction });
+        const sortedData = [...userData].sort((a, b) => {
+            if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+            if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+        setUserData(sortedData);
     };
 
     const exportToExcel = async () => {
@@ -247,18 +263,22 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
         ];
     
         const statsWorksheet = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(workbook, statsWorksheet, "Game Stats");
-    
+
+
         // Add User Revenue data to a new sheet
         const userRevenueData = userData.map(user => ({
             Username: user.username,
+            Final_Round: user.round,
             Revenue: user.revenue,
-            RevenueAfterWIP: user.revenueAfterWIP,
-            Round: user.round,
-            WIPPenalty: user.WIPPen
-        }));
+            Penalty: user.penalty,
+            Final_Score: user.finalScore,
+            Throughput: user.throughput,
+            Max_WIP: user.maxWIP,
+            Unfinished: user.unfinished
+        })).sort((a, b) => b.Revenue - a.Revenue); // Sort by Revenue in descending order
         const userRevenueWorksheet = XLSX.utils.json_to_sheet(userRevenueData);
         XLSX.utils.book_append_sheet(workbook, userRevenueWorksheet, "User Overview");
+        XLSX.utils.book_append_sheet(workbook, statsWorksheet, "Game Stats");
     
         // Add detailed user data sheets
         for (const user of userData) {
@@ -488,7 +508,7 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
                                             direction={sortConfig.direction}
                                             onClick={() => handleSort('Users')}
                                         >
-                                            Users
+                                            Teams
                                         </TableSortLabel>
                                     </TableCell>
                                     <TableCell align="right">
@@ -498,6 +518,51 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
                                             onClick={() => handleSort('revenue')}
                                         >
                                             Revenue
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <TableSortLabel
+                                            active={sortConfig.key === 'penalty'}
+                                            direction={sortConfig.direction}
+                                            onClick={() => handleSort('penalty')}
+                                        >
+                                            Penalty
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <TableSortLabel
+                                            active={sortConfig.key === 'finalScore'}
+                                            direction={sortConfig.direction}
+                                            onClick={() => handleSort('finalScore')}
+                                        >
+                                            Final Score
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <TableSortLabel
+                                            active={sortConfig.key === 'throughput'}
+                                            direction={sortConfig.direction}
+                                            onClick={() => handleSort('throughput')}
+                                        >
+                                            Throughput
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <TableSortLabel
+                                            active={sortConfig.key === 'maxWIP'}
+                                            direction={sortConfig.direction}
+                                            onClick={() => handleSort('maxWIP')}
+                                        >
+                                            Max WIP
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        <TableSortLabel
+                                            active={sortConfig.key === 'unfinished'}
+                                            direction={sortConfig.direction}
+                                            onClick={() => handleSort('unfinished')}
+                                        >
+                                            Unfinished
                                         </TableSortLabel>
                                     </TableCell>
                                 </TableRow>
@@ -514,6 +579,11 @@ export function FinalReport({ roundManager, wipPenalty, wipRound, time}) {
                                             {row.username}
                                         </TableCell>
                                         <TableCell align="right">{row.revenue}</TableCell>
+                                        <TableCell align="right">{row.penalty}</TableCell>
+                                        <TableCell align="right">{row.finalScore}</TableCell>
+                                        <TableCell align="right">{row.throughput}</TableCell>
+                                        <TableCell align="right">{row.maxWIP}</TableCell>
+                                        <TableCell align="right">{row.unfinished}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

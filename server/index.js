@@ -294,7 +294,7 @@ app.post('/retrieveroundinfo', (req, res) => {
     const userId = req.body.userId;
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
-    db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? ORDER BY revenue DESC", [gameId, userId], (err, result) => {
+    db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? ORDER BY round_number DESC", [gameId, userId], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });

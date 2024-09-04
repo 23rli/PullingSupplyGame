@@ -123,16 +123,39 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
     setOpenEnd(false);
   };
 
-
-  const handleAgreeNR = () => {
+  const handleAgreeNR = async () => {
     setOpenNRPrompt(false);
-    console.log("button next round pressed")
-    commitLongMem({roundManager, longMemory})
-    commitToDB({roundManager, longMemory})
+    console.log("button next round pressed");
+
+    if (roundManager.mode == 1) {
+        const isGameEnd = await checkGameEnd(); // Wait for checkGameEnd to complete
+        if (isGameEnd) {
+            endGame();
+        }
+    }
+    
+    commitLongMem({ roundManager, longMemory });
+    commitToDB({ roundManager, longMemory });
     roundManager.advanceRound();
     resetTimer();
     setOpenResReport(true);
-  };
+};
+
+const checkGameEnd = async () => {
+    try {
+        const response = await axios.post('http://localhost:8080/retrievegamestate', {
+            gameId: roundManager.gameId
+        });
+        if (response.data.data.game_state === 'FINISHED') {
+            return true;
+        }
+    } catch (error) {
+        console.error('Error fetching game state:', error);
+    }
+
+    return false;
+};
+
 
   const handleAgreeReset = () => {
     setOpenReset(false);
@@ -171,9 +194,11 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
         Reset Round
       </Fab>
 
-      <Fab color="default" aria-label="add" variant='extended' size='large' style={fabStyleEnd} onClick={handleClickOpenEnd}>
-        End Game
-      </Fab>
+      {roundManager.mode !== 1 && (
+        <Fab color="default" aria-label="add" variant="extended" size="large" style={fabStyleEnd} onClick={handleClickOpenEnd}>
+            End Game
+        </Fab>
+      )}
 
       <Dialog
         open={autoAdvance}

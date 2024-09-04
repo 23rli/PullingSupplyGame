@@ -8,6 +8,7 @@ export class Round {
         //MACRO RESOURCES
         this.gameId = id;
         this.userId = 0;
+        this.mode = 0;
         this.gameResources = [[0,0,0]];
 
         //Memory:
@@ -56,6 +57,10 @@ export class Round {
         this.time = "";
     }
 
+    setMode(mode){
+        this.mode = mode;
+    }
+    
     setRevenue(blueRev, greenRev, redRev, yellowRev){
         if(blueRev != null) this.revenueB = blueRev;
         if(greenRev != null) this.revenueG = greenRev;
