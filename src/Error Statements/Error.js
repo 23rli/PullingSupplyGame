@@ -18,23 +18,17 @@ const StyledSnackbarContent = styled('div')(({ theme }) => ({
   maxWidth: '400px'
 }));
 
-export default function TransitionsSnackbar({ errorStatement, open, onClose, timeOpen }) {
-  useEffect(() => {
-    if (open) {
-      const timer = setTimeout(() => {
-        onClose();
-      }, timeOpen);
-      return () => clearTimeout(timer);
-    }
-  }, [open, onClose]);
+export default function TransitionsSnackbar({ errorStatement, open, onClose }) {
+  // We rely on the parent to manage `open`, so we don't manage state here
 
   return (
     <Snackbar
       open={open}
       TransitionComponent={SlideTransition}
-      autoHideDuration={6000}
+      autoHideDuration={2000} // 2 seconds
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      style={errorStyle} // Apply errorStyle here
+      style={errorStyle}
+      onClose={onClose} // Trigger onClose when the Snackbar closes
     >
       <StyledSnackbarContent>
         {errorStatement}

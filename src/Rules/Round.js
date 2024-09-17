@@ -341,14 +341,14 @@ export class Round {
             if(car.rRes < car.rResLimit && x == 1){
                 this.errorStatement = "This Car doesn't have enough red resources";
                 return false;
-            }else if(car.yRes < car.yResLimit && x == 2 ){
+            }else if(car.yRes < car.yResLimit && x == 2){
                 this.errorStatement = "This Car doesn't have enough yellow resources";
                 return false;
             }else if(car.bRes < car.bResLimit && x == 3){
                 this.errorStatement = "This Car doesn't have enough blue resources";
                 return false;
             }else if(!car.waited){
-                 this.errorStatement = "This Car hasn't waited the proper amount of turns!"
+                this.errorStatement = "This Car hasn't waited the proper amount of turns!"
                 return false;
             }
 

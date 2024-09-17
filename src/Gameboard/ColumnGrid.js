@@ -1,81 +1,81 @@
-// Importing useDrop hook from react-dnd library
-import { useDrop } from 'react-dnd'
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { useDrop } from 'react-dnd';
+import { ItemTypes } from '../Pieces/ItemTypes.js';
+import { Overlay, OverlayType } from './Overlay.js';
+import { ColumnContainer } from './ColumnContainer.js';
+import TransitionsSnackbar from '../Error Statements/Error.js';
 
-// Importing ItemTypes constant from the same directory
-import { ItemTypes } from '../Pieces/ItemTypes.js'
-
-// Importing Overlay component and OverlayType constant from the same directory
-import { Overlay, OverlayType } from './Overlay.js'
-
-// Importing Square component from the same directory
-import { ColumnContainer } from './ColumnContainer.js'
-
-import TransitionsSnackbar from '../Error Statements/Error.js'
-
-// BoardSquare component that represents each square on the chessboard
 export const ColumnGrid = ({ x, y, children, roundManager }) => {
+  const [message, setMessage] = useState(''); // Manage the error message
+  const [error, setError] = useState(false);  // Manage whether the error is open
 
-  const [message, setMessage] = React.useState('');
-  const [error, setError] = React.useState(false);
+  // Automatically close the Snackbar after the timeout or when message is cleared
+  useEffect(() => {
+    if (error && message) {
+      const timer = setTimeout(() => {
+        setError(false);
+        setMessage('');  // Clear the message after error closes
+        roundManager.errorDisplay = false;
+      }, 2000);  // Keep it in sync with the Snackbar duration
 
-  React.useEffect(() => {
-    if (message.length > 0 && error == false && roundManager.errorDisplay == false) {
-      roundManager.errorDisplay = true;
-      setError(true);
-    } else {
-      roundManager.errorDisplay = false;
-      setError(false);
+      return () => clearTimeout(timer); // Cleanup the timeout
     }
-  }, [message]); // Watch for changes to the message
-  
+  }, [error, message]);
 
-  // Setting up the drop target for the knight using the useDrop hook
+  // Drop target setup
   const products = [ItemTypes.GCAR, ItemTypes.BCAR, ItemTypes.RCAR, ItemTypes.YCAR];
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
-      accept: products,  // Accepts items of type KNIGHT, GCAR, and BCAR
+      accept: products,
       canDrop: (item) => {
-        if (!roundManager.canMoveCar(x, y, item.id.id, roundManager.cars)) {
-            if(roundManager.movementError() != message){
-              setMessage(roundManager.movementError());
-            }
-          return false;
-        } else {
-          if (roundManager.checkPaintStatus(x, y)) {
-            return true;
-          } else {
-            setMessage("A painting process is already in progress. Please wait for its conclusion to add another vehicle")
-            setError(true); // Set the error to true
-            return false;
+        const car = item.id; // Assuming item.id contains car's data including current x, y coordinates
+
+        // Condition to skip error if the car is already at this grid position
+        if (car.x === x && car.y === y) {
+          return false; // Skip any error handling if car is at the same position
+        }
+
+        // Proceed with usual checks for valid movement
+        if (!roundManager.canMoveCar(x, y, car.id, roundManager.cars)) {
+          const newMessage = roundManager.movementError();
+          if (newMessage !== message) {
+            setMessage(newMessage);  // Set new error message
+            setError(true);          // Trigger the Snackbar to open
+            roundManager.errorDisplay = true;
           }
+          return false;
+        } else if (roundManager.checkPaintStatus(x, y)) {
+          return true;
+        } else {
+          setMessage("A painting process is already in progress. Please wait.");
+          setError(true);
+          roundManager.errorDisplay = true;
+          return false;
         }
       },
       drop: (item) => {
         roundManager.moveCar(x, y, item.id.id, true);
       },
       collect: (monitor) => ({
-        isOver: !!monitor.isOver(),  // Whether an item is currently being hovered over this square
-        canDrop: !!monitor.canDrop(),  // Whether the item can be dropped on this square
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
       }),
     }),
-    [roundManager],  // Dependency array containing game object
-  )
+    [roundManager, message, error, x, y]  // Add dependencies to include relevant state
+  );
 
   return (
     <>
-      <TransitionsSnackbar
+      {/* Snackbar for displaying error messages */}
+      <TransitionsSnackbar 
         errorStatement={message}
         open={error}
         onClose={() => {
-          setError(false);
+          setError(false);           // Manually close Snackbar
+          setMessage('');            // Clear the error message
           roundManager.errorDisplay = false;
-          setTimeout(() => {
-            setMessage('');
-          }, 3000);  // 3000 milliseconds = 3 seconds
         }}
-        timeOpen={1000}
       />
       
       <div
@@ -84,21 +84,20 @@ export const ColumnGrid = ({ x, y, children, roundManager }) => {
         data-testid={`(${x},${y})`}
         style={{
           position: 'relative',
-          width: '100%',  // Full width of the parent container
-          height: '100%',  // Full height of the parent container
+          width: '100%',
+          height: '100%',
         }}
       >
-        {/* Render the Square component, passing whether the square is black */}
+        {/* ColumnContainer component for the grid */}
         <ColumnContainer x={x} y={y} roundManager={roundManager}>
           {children}
         </ColumnContainer>
 
-        {/* Conditionally render different overlays based on drag and drop state */}
+        {/* Conditionally render overlays based on drag and drop state */}
         {isOver && !canDrop && <Overlay type={OverlayType.IllegalMoveHover} />}
         {!isOver && canDrop && <Overlay type={OverlayType.PossibleMove} />}
         {isOver && canDrop && <Overlay type={OverlayType.LegalMoveHover} />}
       </div>
     </>
-  )
-}
-
+  );
+};

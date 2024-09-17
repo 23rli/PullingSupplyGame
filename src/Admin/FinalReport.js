@@ -91,7 +91,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
             }
         };
     
-        if (elapsedTime % timePerUpdate === 0 && elapsedTime < 1000) {
+        if (elapsedTime % timePerUpdate === 0 && elapsedTime < 5) {
             fetchPlayers();
             setUpdated(true);
         }
@@ -193,12 +193,21 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 gameId: roundManager.gameId,
                 userId: userId
             });
-            setDetailedUserData(userResponse.data.data); // Expecting an array of rows from the 'round' table
-            console.log(userResponse.data.data);
+    
+            // Transform the data: if any value is 0, replace it with null
+            const transformedData = userResponse.data.data.map(row => 
+                Object.fromEntries(
+                    Object.entries(row).map(([key, value]) => [key, value === 0 ? null : value])
+                )
+            );
+    
+            setDetailedUserData(transformedData); // Set the transformed data
+            console.log(transformedData);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
+    
 
     const formatTime = () => {
         const seconds = elapsedTime % 60;

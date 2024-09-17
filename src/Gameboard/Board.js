@@ -37,7 +37,7 @@ const fabStyle = { position: 'fixed', bottom: 16, right: 16 };
 export const Board = ({ roundManager, longMemory, endGame }) => {
   const [cars, setCars] = useState(roundManager.cars);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [timePerRound, setTimePerRound] = useState(180);
+  const [timePerRound, setTimePerRound] = useState(600);
   const [activeConverter, setActiveConverter] = useState(true);
   const [autoAdvance, setAutoAdvance] = useState(false);
 
@@ -57,8 +57,10 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   }, []);
 
   useEffect(() => {
-    if (roundManager.roundNum >= 10) {
-      setTimePerRound(90);
+    if (roundManager.roundNum >= 6 && roundManager.roundNum <= 10) {
+      setTimePerRound(180);
+    } else if (roundManager.roundNum >= 11) {
+      setTimePerRound(120);
     }
 
     if (elapsedTime === (timePerRound / 3) * 2) {
