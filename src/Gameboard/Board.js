@@ -20,6 +20,7 @@ import { ColumnHeader } from './ColumnHeader.js';
 import { Piece } from '../Pieces/Piece.js';
 import { ItemTypes } from '../Pieces/ItemTypes.js';
 import StatisticsModal from '../Modals/Statistics/StatusModal.js';
+import { RecipeScreen } from '../Modals/Recipes/RecipeScreen.js';
 
 // Styles
 const boardStyle = {
@@ -106,6 +107,7 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Round: {roundManager.roundNum}
               </Typography>
+              <RecipeScreen/>
               <MenuItem sx={{ bgcolor: red[400], display: 'flex', alignItems: 'left', justifyContent: 'center' }}>
                 <IconButton size="large" aria-label="show 17 new notifications">
                   <Badge color="">
