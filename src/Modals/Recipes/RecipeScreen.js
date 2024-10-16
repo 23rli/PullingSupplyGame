@@ -1,3 +1,9 @@
+import blueCarEmpty from '../../Pieces/Cars/Motor City Graphics/Model B - empty.png';
+import redCarEmpty from '../../Pieces/Cars/Motor City Graphics/Model R - empty.png';
+import yellowCarEmpty from '../../Pieces/Cars/Motor City Graphics/Model Y - empty.png';
+import greenCarEmpty from '../../Pieces/Cars/Motor City Graphics/Model G - empty.png';
+
+
 // Import necessary hooks from React and Material UI components
 import * as React from 'react';
 import Button from '@mui/material/Button';
@@ -9,6 +15,7 @@ import Paper from '@mui/material/Paper';
 import Draggable from 'react-draggable';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { Box } from '@mui/material';
 
 function PaperComponent(props) {
   return (
@@ -31,10 +38,10 @@ export const RecipeScreen = ({ roundManager }) => {
 
   // Car data for display
   const carData = [
-    { name: "Blue Car", recipe: { red: 3, yellow: 3, blue: 2 } },
-    { name: "Green Car", recipe: { red: 2, yellow: 2, blue: 2 } },
-    { name: "Red Car", recipe: { red: 3, yellow: 2, blue: 2 } },
-    { name: "Yellow Car", recipe: { red: 2, yellow: 3, blue: 2 } },
+    { name: "Blue Car", recipe: { red: 3, yellow: 3, blue: 2 }, image: blueCarEmpty },
+    { name: "Green Car", recipe: { red: 2, yellow: 2, blue: 2 }, image: greenCarEmpty },
+    { name: "Red Car", recipe: { red: 3, yellow: 2, blue: 2 }, image: redCarEmpty },
+    { name: "Yellow Car", recipe: { red: 2, yellow: 3, blue: 2 }, image: yellowCarEmpty },
   ];
 
   return (
@@ -55,23 +62,26 @@ export const RecipeScreen = ({ roundManager }) => {
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2}>
-            {/* Left Side: Car Names */}
-            <Grid item xs={6}>
-              {carData.map((car, index) => (
-                <Typography key={index} variant="h6" gutterBottom>
-                  {car.name}
-                </Typography>
-              ))}
-            </Grid>
+            {carData.map((car, index) => (
+              <Grid container item xs={12} key={index} alignItems="center" spacing={2}>
+                {/* Left Side: Car Names and Images */}
+                <Grid item xs={6}>
+                  <Box textAlign="center">
+                    <Typography variant="h6" gutterBottom>
+                      {car.name}
+                    </Typography>
+                    <img src={car.image} alt={`${car.name}`} width="100" />
+                  </Box>
+                </Grid>
 
-            {/* Right Side: Car Recipes */}
-            <Grid item xs={6}>
-              {carData.map((car, index) => (
-                <Typography key={index} variant="body1" gutterBottom>
-                  Red: {car.recipe.red}, Yellow: {car.recipe.yellow}, Blue: {car.recipe.blue}
-                </Typography>
-              ))}
-            </Grid>
+                {/* Right Side: Car Recipes */}
+                <Grid item xs={6}>
+                  <Typography variant="body1">
+                    Red: {car.recipe.red}, Yellow: {car.recipe.yellow}, Blue: {car.recipe.blue}
+                  </Typography>
+                </Grid>
+              </Grid>
+            ))}
           </Grid>
         </DialogContent>
         <DialogActions>
