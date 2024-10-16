@@ -102,13 +102,10 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
           <AppBar position="static" sx={{ bgcolor: grey[800] }}>
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Motor City
-              </Typography>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Round: {roundManager.roundNum}
               </Typography>
-              <RecipeScreen/>
-              <MenuItem sx={{ bgcolor: red[400], display: 'flex', alignItems: 'left', justifyContent: 'center' }}>
+              <RecipeScreen sx={{ ml: 1, display: 'flex'}}/>
+              <MenuItem sx={{ bgcolor: red[400], display: 'flex', alignItems: 'left', justifyContent: 'center',  ml: 1 }}>
                 <IconButton size="large" aria-label="show 17 new notifications">
                   <Badge color="">
                     <Build sx={{ color: red[100] }} />

@@ -54,7 +54,7 @@ export function NumberInputModal({endGame, roundManager, time}) {
                 <DialogTitle>End Game</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Please select the round and Work in Progress Penalty for this game!
+                        Please select the Round to calculate Work In Progress for this game!
                     </DialogContentText>
                     <TextField
                         required
@@ -62,6 +62,22 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         id="roundNum"
                         name="roundNum"
                         label="Round Number to Calculate WIP Penalty"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <DialogContentText style={{ color: 'red', margin: '16px 0' }}>
+                        {errorStatement !== '' && errorStatement}
+                    </DialogContentText>
+                    <DialogContentText>
+                        Please select the Round you would like to end this game at!
+                    </DialogContentText>
+                    <TextField
+                        required
+                        margin="dense"
+                        id="roundNum"
+                        name="roundNum"
+                        label="Round Number to End Game"
                         type="number"
                         fullWidth
                         variant="standard"
