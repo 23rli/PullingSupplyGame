@@ -20,6 +20,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [openWaitJoin, setOpenWaitJoin] = useState(false);
     const [openWaitCreate, setOpenWaitCreate] = useState(false);
 
+    const [reUseGame, setReUseGame] = useState(false);
+
     const [blueChecked, setBlueChecked] = useState(false);
     const [greenChecked, setGreenChecked] = useState(false);
     const [redChecked, setRedChecked] = useState(false);
@@ -127,6 +129,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         openAdmin();
     }
 
+    const handleReUseChange = (event) => {
+        setReUseGame(event.target.checked);
+    };
+
     const handleBlueCheckChange = (event) => {
         setBlueChecked(event.target.checked);
     };
@@ -202,6 +208,44 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         setOpenWaitCreate(false);
     };
 
+    const handleRecycleGame = async (oldId, username, gameNotes) => {
+        try {
+            const response = await axios.post('http://localhost:8080/retrievegamedetails', {
+                gameId: oldId
+            });
+
+            const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
+                                * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
+
+
+            const gameTable = gameData.data.data.map(row => ({
+                'Rolls': row.rolls,
+                'Blue Car': row.blue_car,
+                'Green Car': row.green_car,
+                'Red Car': row.red_car,
+                'Yellow Car': row.yellow_car,
+                'Blue Penalty': row.blue_penalty,
+                'Green Penalty': row.green_penalty,
+                'Red Penalty': row.red_penalty,
+                'Yellow Penalty': row.yellow_penalty,
+                'Blue Revenue': row.blue_revenue,
+                'Green Revenue': row.green_revenue,
+                'Red Revenue': row.red_revenue,
+                'Yellow Revenue': row.yellow_revenue
+            }));
+
+
+            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
+                redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
+                redRevenue, yellowRevenue, gameNotes);
+
+            handleOpenWaitCreate();
+
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+    }
+
     const handleCreateGame = async (
         username,
         blueCar, bluePenalty,
@@ -240,11 +284,12 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
             setCode(code)
             roundManager.gameId = response.data.gameId; // Accessing 'gameId'
-            roundManager.setGameResources(rolls)
+            roundManager.setGameResources(rolls);
             roundManager.setMode(2);
-            roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
-            roundManager.setWIPPen(bluePenalty, greenPenalty, redPenalty, yellowPenalty)
-            roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
+            roundManager.setCars(blueCar, greenCar, redCar, yellowCar);
+            roundManager.setWIPPen(bluePenalty, greenPenalty, redPenalty, yellowPenalty);
+            roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue);
+            roundManager.setShortTermMem();
             console.log(roundManager);
             handleCreateModerator(username);
 
@@ -446,39 +491,45 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
                         const username = formJson.username;
-                        const blueRevenue = formJson.blueRevenue;
-                        const greenRevenue = formJson.greenRevenue;
-                        const redRevenue = formJson.redRevenue;
-                        const yellowRevenue = formJson.yellowRevenue;
-                        const bluePenalty = formJson.blueWIPPenalty;
-                        const greenPenalty = formJson.greenWIPPenalty;
-                        const redPenalty = formJson.redWIPPenalty;
-                        const yellowPenalty = formJson.yellowWIPPenalty;
-                        const blueCar = blueChecked ? 1 : 0;
-                        const greenCar = greenChecked ? 1 : 0;
-                        const redCar = redChecked ? 1 : 0;
-                        const yellowCar = yellowChecked ? 1 : 0;
                         const gameNotes = formJson.gameNotes;
+                        if(!reUseGame){
+                            const blueRevenue = formJson.blueRevenue;
+                            const greenRevenue = formJson.greenRevenue;
+                            const redRevenue = formJson.redRevenue;
+                            const yellowRevenue = formJson.yellowRevenue;
+                            const bluePenalty = formJson.blueWIPPenalty;
+                            const greenPenalty = formJson.greenWIPPenalty;
+                            const redPenalty = formJson.redWIPPenalty;
+                            const yellowPenalty = formJson.yellowWIPPenalty;
+                            const blueCar = blueChecked ? 1 : 0;
+                            const greenCar = greenChecked ? 1 : 0;
+                            const redCar = redChecked ? 1 : 0;
+                            const yellowCar = yellowChecked ? 1 : 0;
 
-                        const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
-                            * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
+                            const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
+                                * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
 
-                        let rolls = '';
+                            let rolls = '';
 
-                        for (let i = 0; i < 100; i++) {
-                            const red = parseInt(Math.random() * 10 + 1);
-                            const yellow = parseInt(Math.random() * 8 + 1);
-                            const blue = parseInt(Math.random() * 4 + 1);
-                            rolls += red + ",";
-                            rolls += yellow + ",";
-                            rolls += blue + ",";
+                            for (let i = 0; i < 100; i++) {
+                                const red = parseInt(Math.random() * 10 + 1);
+                                const yellow = parseInt(Math.random() * 8 + 1);
+                                const blue = parseInt(Math.random() * 4 + 1);
+                                rolls += red + ",";
+                                rolls += yellow + ",";
+                                rolls += blue + ",";
+                            }
+
+                            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
+                                redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
+                                redRevenue, yellowRevenue, gameNotes);
+
+                            handleOpenWaitCreate();
+                        }else{
+                            const oldId = formJson.oldGameId;
+                            
+                            recycleGame(oldId, username, gameNotes);
                         }
-
-                        handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
-                            redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
-                            redRevenue, yellowRevenue, gameNotes);
-
-                        handleOpenWaitCreate();
                     },
                 }}
             >
@@ -500,6 +551,34 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         fullWidth
                         sx={{ marginBottom: '20px' }}
                     />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={reUseGame}
+                                onChange={handleReUseChange}
+                                name="reUse"
+                                color="primary"
+                            />
+                        }
+                        label="Reuse old Game"
+                    />
+                    <Grid item xs={6}>
+                            <TextField
+                                required
+                                margin="dense"
+                                name="oldGameID"
+                                label="Insert old Game Id (EX: 147)"
+                                type="number"
+                                variant="standard"
+                                defaultValue={0}
+                                inputProps={{
+                                    step: 1,
+                                    min: 0,
+                                }}
+                                fullWidth
+                                disabled={!reUseGame}
+                            />
+                        </Grid>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControlLabel
@@ -512,6 +591,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     />
                                 }
                                 label="Enable Blue Cars"
+                                disabled={reUseGame}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -528,7 +608,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!blueChecked}
+                                disabled={reUseGame || !blueChecked}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -545,7 +625,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!blueChecked}
+                                disabled={reUseGame || !blueChecked}
                             />
                         </Grid>
 
@@ -560,6 +640,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     />
                                 }
                                 label="Enable Green Cars"
+                                disabled={reUseGame}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -576,7 +657,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!greenChecked}
+                                disabled={reUseGame || !greenChecked}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -593,7 +674,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!greenChecked}
+                                disabled={reUseGame || !greenChecked}
                             />
                         </Grid>
 
@@ -608,6 +689,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     />
                                 }
                                 label="Enable Red Cars"
+                                disabled={reUseGame}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -624,7 +706,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!redChecked}
+                                disabled={reUseGame || !redChecked}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -641,7 +723,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!redChecked}
+                                disabled={reUseGame || !redChecked}
+                                
                             />
                         </Grid>
 
@@ -656,6 +739,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     />
                                 }
                                 label="Enable Yellow Cars"
+                                disabled={reUseGame}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -672,7 +756,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!yellowChecked}
+                                disabled={reUseGame || !yellowChecked}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -689,7 +773,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={!yellowChecked}
+                                disabled={reUseGame || !yellowChecked}
                             />
                         </Grid>
                         <Grid item xs={12}>

@@ -104,8 +104,8 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Round: {roundManager.roundNum}
               </Typography>
-              <RecipeScreen sx={{ ml: 1, display: 'flex'}}/>
-              <MenuItem sx={{ bgcolor: red[400], display: 'flex', alignItems: 'left', justifyContent: 'center',  ml: 1 }}>
+              <RecipeScreen sx={{ ml: 1, display: 'flex'}} />
+              <MenuItem sx={{ bgcolor: red[400], display: 'flex', alignItems: 'left', justifyContent: 'center', ml: 1 }}>
                 <IconButton size="large" aria-label="show 17 new notifications">
                   <Badge color="">
                     <Build sx={{ color: red[100] }} />
@@ -137,8 +137,8 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
                 sx={{
                   ml: 5,
                   backgroundColor: 'transparent',
-                  borderColor: 'transparent', // Make border transparent if there is any
-                  boxShadow: 'none' // Remove any box shadow
+                  borderColor: 'transparent',
+                  boxShadow: 'none'
                 }}
               />
               {activeConverter && (
@@ -147,7 +147,7 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
               {!activeConverter && (
                 <Button disabled>Converter</Button>
               )}
-              <Button color="inherit" variant='outlined' onClick={handleAllocate} sx={{ ml: 1 }}>Allocate</Button>
+              <Button color="inherit" variant="outlined" onClick={handleAllocate} sx={{ ml: 1 }}>Allocate</Button>
               <StatisticsModal roundManager={roundManager} longMemory={longMemory} sx={{ ml: 2 }} />
               <Divider
                 orientation="vertical"
@@ -157,17 +157,17 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
                 sx={{
                   ml: 5,
                   backgroundColor: 'transparent',
-                  borderColor: 'transparent', // Make border transparent if there is any
-                  boxShadow: 'none' // Remove any box shadow
+                  borderColor: 'transparent',
+                  boxShadow: 'none'
                 }}
               />
               <Typography variant="h6" component="div">
-                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 < 10 && (timePerRound - elapsedTime)%60 > 0  && (
+                {elapsedTime <= timePerRound && (timePerRound - elapsedTime) % 60 < 10 && (timePerRound - elapsedTime) % 60 > 0 && (
                   <>
                     Timer: {Math.floor((timePerRound - elapsedTime) / 60) + ":0" + ((timePerRound - elapsedTime) % 60)}
                   </>
                 )}
-                {elapsedTime <= timePerRound && (timePerRound - elapsedTime)%60 >= 10 && (
+                {elapsedTime <= timePerRound && (timePerRound - elapsedTime) % 60 >= 10 && (
                   <>
                     Timer: {Math.floor((timePerRound - elapsedTime) / 60) + ":" + ((timePerRound - elapsedTime) % 60)}
                   </>
@@ -185,10 +185,38 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
               </Typography>
             </Toolbar>
           </AppBar>
-        </Box>
+        </Box>      
       </div>
     );
   }
+
+  function renderRefreshMessage() {
+    return (
+      <Box
+        sx={{
+          width: '100%', // Take full width of the container
+          display: 'flex', // Use flexbox to center the content
+          justifyContent: 'center', // Center horizontally
+          alignItems: 'center', // Center vertically
+          bgcolor: 'transparent', // Background color
+          mt: 0, // No margin at the top
+          mb: 0, // No margin at the bottom
+          py: 0.5, // Small vertical padding
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          component="div"
+          sx={{ color: 'white', textAlign: 'center', fontSize: '0.8rem' }} // Smaller font size
+        >
+          DO NOT REFRESH THE PAGE
+        </Typography>
+      </Box>
+    );
+  }
+  
+  
+  
 
   function renderColumnSpace(i) {
     const x = i % 6;
@@ -227,6 +255,7 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   const squares = [];
 
   squares.push(renderAppBar(-8));
+  squares.push(renderRefreshMessage())
   for (let i = -6; i < 0; i += 1) {
     squares.push(renderColumnHeader(i));
   }
@@ -235,7 +264,7 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   }
 
   return (
-    <div style={boardStyle}>
+    <div style={{ ...boardStyle}}>
       {squares}
       <AlertDialogSlide roundManager={roundManager} longMemory={longMemory} endGame={endGame} autoAdvance={autoAdvance} resetTimer={resetTimer} />
     </div>

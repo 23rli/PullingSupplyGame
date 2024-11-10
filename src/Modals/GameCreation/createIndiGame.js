@@ -86,9 +86,10 @@ export function CreateIndiGame({ roundManager, onStart }) {
       console.log(response.data); // Log the response data
 
       roundManager.gameId = response.data.gameId; // Accessing 'gameId'
-      roundManager.setGameResources(rolls)
-      roundManager.setCars(blueCar, greenCar, redCar, yellowCar)
-      roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue)
+      roundManager.setGameResources(rolls);
+      roundManager.setCars(blueCar, greenCar, redCar, yellowCar);
+      roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue);
+      roundManager.setShortTermMem();
       console.log(roundManager);
       handleCreateUser(username);
       onStart();

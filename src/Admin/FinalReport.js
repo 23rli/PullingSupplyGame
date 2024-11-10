@@ -373,7 +373,13 @@ export function FinalReport({ roundManager, wipRound, time}) {
         // Finalize and save the Excel file
         XLSX.writeFile(workbook, "Game_Stats.xlsx");
     };
-    
+
+
+    const [isGameStateVisible, setIsGameStateVisible] = useState(true); // State for table visibility
+
+    const toggleGameStateVisibility = () => {
+        setIsGameStateVisible(prev => !prev);
+    };
 
 
     const renderUserDataTable = () => {
@@ -384,7 +390,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Round Number</TableCell>
+                            <TableCell style={{ position: 'sticky', left: 0, backgroundColor: 'white', zIndex: 1 }}>Round Number</TableCell>
                             <TableCell align="right">Manu B</TableCell>
                             <TableCell align="right">Manu G</TableCell>
                             <TableCell align="right">Manu R</TableCell>
@@ -425,7 +431,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                     <TableBody>
                         {detailedUserData.map((row, index) => (
                             <TableRow key={index}>
-                                <TableCell>{row.round_number}</TableCell>
+                                <TableCell style={{ position: 'sticky', left: 0, backgroundColor: 'white', zIndex: 1 }}>{row.round_number}</TableCell>
                                 <TableCell align="right">{row.manu_b}</TableCell>
                                 <TableCell align="right">{row.manu_g}</TableCell>
                                 <TableCell align="right">{row.manu_r}</TableCell>
@@ -475,12 +481,19 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 <Grid item xs={12}>
                     <Card>
                         <CardContent>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                            <Typography variant="h6">Game Overview</Typography>
-                            <Button variant="contained" color="primary" onClick={exportToExcel}>
-                                Export to Excel
-                            </Button>
-                        </Box>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                <Typography variant="h6">Game Overview</Typography>
+                                <Button variant="contained" color="primary" onClick={exportToExcel}>
+                                    Export to Excel
+                                </Button>
+                                {/* Toggle Button */}
+                                <Button 
+                                    variant="outlined" 
+                                    onClick={toggleGameStateVisibility}
+                                >
+                                    {isGameStateVisible ? 'Hide Game State' : 'Show Game State'}
+                                </Button>
+                            </Box>
                             <Typography variant="body2">Number of Players: {userData.length}</Typography>
                             {roundManager.startB == 1 && (
                                 <Typography variant="body2">Blue WIP Penalty: {roundManager.WIPPen[0]}</Typography>
@@ -499,7 +512,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
 
                             )}
                             <Typography variant="body2">Penalty Enacted in Round: {wipRound}</Typography>
-                            {gameStats && ( 
+                            {gameStats && isGameStateVisible && ( // Conditional rendering
                                 <TableContainer component={Paper}>
                                     <Table>
                                         <TableHead>
@@ -547,7 +560,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                         </CardContent>
                     </Card>
                 </Grid>
-
+        
                 <Grid item xs={12}>
                     <TableContainer component={Paper}>
                         <Table>
