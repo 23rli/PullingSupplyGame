@@ -43,10 +43,14 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries(formData.entries());
 
-                        const roundNum = formJson.roundNum;
+                        const roundNumWIP = formJson.roundNumWIP;
+                        const roundNumGame = formJson.roundNumGame;
 
-                        roundManager.WIPRound = roundNum;
+                        roundManager.WIPRound = roundNumWIP;
+                        roundManager.EndRound = roundNumGame;
                         roundManager.time = time;
+                        console.log("wippenalty")
+                        console.log(roundManager)
                         endGame();
                     },
                 }}
@@ -60,7 +64,7 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         required
                         margin="dense"
                         id="roundNum"
-                        name="roundNum"
+                        name="roundNumWIP"
                         label="Round Number to Calculate WIP Penalty"
                         type="number"
                         fullWidth
@@ -76,7 +80,7 @@ export function NumberInputModal({endGame, roundManager, time}) {
                         required
                         margin="dense"
                         id="roundNum"
-                        name="roundNum"
+                        name="roundNumGame"
                         label="Round Number to End Game"
                         type="number"
                         fullWidth

@@ -175,7 +175,7 @@ app.post('/checkcode', (req, res) => {
     const code = req.body.code;
 
     // Query the database, filter by code and game_state, and order by game_created descending
-    db.query("SELECT * FROM gameData WHERE code = ? AND game_state = 'IN PREP' ORDER BY game_created DESC", [code], (err, result) => {
+    db.query("SELECT * FROM gameData WHERE code = ? AND (game_state = 'IN PREP' OR game_state = 'IN PROGRESS') ORDER BY game_created DESC", [code], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
@@ -295,6 +295,23 @@ app.post('/retrieveroundinfo', (req, res) => {
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? ORDER BY round_number DESC", [gameId, userId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
+app.post('/retrievelimitedroundinfo', (req, res) => {
+    const gameId = req.body.gameId;
+    const userId = req.body.userId;
+    const roundLimit = req.body.roundLimit;
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? AND round_number <= ? ORDER BY round_number DESC", [gameId, userId, roundLimit], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });

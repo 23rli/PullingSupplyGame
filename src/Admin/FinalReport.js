@@ -41,12 +41,14 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 });
     
                 const playerData = response.data.data;
+                console.log(roundManager.EndRound)
     
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
-                        const revResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
+                        const revResponse = await axios.post('http://localhost:8080/retrievelimitedroundinfo', {
                             gameId: roundManager.gameId,
-                            userId: player.user_id
+                            userId: player.user_id,
+                            roundLimit: roundManager.EndRound
                         });
     
                         const roundData = revResponse.data.data;

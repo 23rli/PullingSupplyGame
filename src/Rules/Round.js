@@ -54,6 +54,7 @@ export class Round {
 
         this.WIPPen = [];
         this.WIPRound = 0;
+        this.EndRound = 0;
         this.time = "";
     }
 

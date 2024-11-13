@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Grid, TextField, Button } from '@mui/material';
 
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { FormControlLabel } from '@mui/material';
-import { Checkbox } from '@mui/material';
-import { Grid } from '@mui/material'
 
 import axios from 'axios';
 
@@ -213,31 +204,58 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             const response = await axios.post('http://localhost:8080/retrievegamedetails', {
                 gameId: oldId
             });
-
-            const createCode = parseInt(Math.random() * 9 + 1) * 100000 + parseInt(Math.random() * 10) * 10000 + parseInt(Math.random()
-                                * 10) * 1000 + parseInt(Math.random() * 10) * 100 + parseInt(Math.random() * 10) * 10 + parseInt(Math.random() * 10);
-
-
-            const gameTable = gameData.data.data.map(row => ({
-                'Rolls': row.rolls,
-                'Blue Car': row.blue_car,
-                'Green Car': row.green_car,
-                'Red Car': row.red_car,
-                'Yellow Car': row.yellow_car,
-                'Blue Penalty': row.blue_penalty,
-                'Green Penalty': row.green_penalty,
-                'Red Penalty': row.red_penalty,
-                'Yellow Penalty': row.yellow_penalty,
-                'Blue Revenue': row.blue_revenue,
-                'Green Revenue': row.green_revenue,
-                'Red Revenue': row.red_revenue,
-                'Yellow Revenue': row.yellow_revenue
+            console.log("called retrieve game")
+            // Generate the unique game code
+            const createCode = parseInt(Math.random() * 9 + 1) * 100000 +
+                               parseInt(Math.random() * 10) * 10000 +
+                               parseInt(Math.random() * 10) * 1000 +
+                               parseInt(Math.random() * 10) * 100 +
+                               parseInt(Math.random() * 10) * 10 +
+                               parseInt(Math.random() * 10);
+            
+            // Map response data to extract individual values for each required input
+            const gameData = response.data.data;
+            console.log(gameData)
+            console.log(oldId)
+            const gameTable = gameData.map(row => ({
+                rolls: row.rolls,
+                blueCar: row.blue_car,
+                greenCar: row.green_car,
+                redCar: row.red_car,
+                yellowCar: row.yellow_car,
+                bluePenalty: row.blue_penalty,
+                greenPenalty: row.green_penalty,
+                redPenalty: row.red_penalty,
+                yellowPenalty: row.yellow_penalty,
+                blueRevenue: row.blue_revenue,
+                greenRevenue: row.green_revenue,
+                redRevenue: row.red_revenue,
+                yellowRevenue: row.yellow_revenue
             }));
+            
+            // Assuming gameTable has a single entry; adjust if handling multiple rows differently
+            const {
+                rolls,
+                blueCar, bluePenalty, blueRevenue,
+                greenCar, greenPenalty, greenRevenue,
+                redCar, redPenalty, redRevenue,
+                yellowCar, yellowPenalty, yellowRevenue
+            } = gameTable[0]; // Access the first game if multiple rows
 
 
-            handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
-                redCar, redPenalty, yellowCar, yellowPenalty, rolls, createCode, blueRevenue, greenRevenue,
-                redRevenue, yellowRevenue, gameNotes);
+            
+            console.log("calling create game")
+            
+            // Call handleCreateGame with the mapped data
+            handleCreateGame(
+                username, 
+                blueCar, bluePenalty, greenCar, greenPenalty,
+                redCar, redPenalty, yellowCar, yellowPenalty,
+                rolls, createCode, 
+                blueRevenue, greenRevenue, redRevenue, yellowRevenue,
+                gameNotes
+            );
+            
 
             handleOpenWaitCreate();
 
@@ -338,6 +356,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 {
                     code: code
                 })
+            console.log(response)
             console.log(response.data.gameId)
             roundManager.gameId = response.data.gameId;
             console.log(roundManager);
@@ -526,9 +545,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
                             handleOpenWaitCreate();
                         }else{
-                            const oldId = formJson.oldGameId;
+                            const oldId = formJson.oldGameID;
+                            console.log("reached here")
                             
-                            recycleGame(oldId, username, gameNotes);
+                            handleRecycleGame(oldId, username, gameNotes);
                         }
                     },
                 }}
@@ -579,6 +599,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 disabled={!reUseGame}
                             />
                         </Grid>
+
+                    <Collapse in={!reUseGame}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControlLabel
@@ -776,7 +798,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 disabled={reUseGame || !yellowChecked}
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        
+                    </Grid>
+                    </Collapse>
+                    <Grid item xs={12}>
                             <TextField
                                 margin="dense"
                                 name="gameNotes"
@@ -788,8 +813,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                 rows={4}
                             />
                         </Grid>
-                    </Grid>
                 </DialogContent>
+
                 <DialogActions>
                     <Button type="submit">Create</Button>
                 </DialogActions>
