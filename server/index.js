@@ -14,7 +14,7 @@ var db = mysql.createPool({
   connectionLimit: 10,            // Maximum concurrent connections
   host: 'localhost',               // Database host
   user: 'root',                    // Database user
-  password: 'CC001856',            // Database password
+  password: 'CarsPullSupplies!',            // Database password
   database: 'motorcitydata'            // Target database
 });
 
