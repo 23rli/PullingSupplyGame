@@ -356,8 +356,9 @@ app.post('/retrievegamedetails', (req, res) => {
     });
 });
 
-app.listen(8080, () => {
-    console.log("port listening on 8080")
-})
+const port = 8080;
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
+});
 
 
