@@ -13,9 +13,9 @@ app.use(cors());                                      // Enable CORS for all rou
 var db = mysql.createPool({
   connectionLimit: 10,            // Maximum concurrent connections
   host: '3.129.12.15',               // Database host
-  user: 'root',                    // Database user
+  user: 'Admin',                    // Database user
   password: 'CarsPullSupplies!',            // Database password
-  database: 'motorcitydata'            // Target database
+  database: 'MotorCity'            // Target database
 });
 
 app.post('/registergame', (req, res) =>{
