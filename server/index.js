@@ -12,7 +12,7 @@ app.use(cors());                                      // Enable CORS for all rou
 // Database connection pool setup
 var db = mysql.createPool({
   connectionLimit: 10,            // Maximum concurrent connections
-  host: 'localhost',               // Database host
+  host: '3.129.12.15',               // Database host
   user: 'root',                    // Database user
   password: 'CarsPullSupplies!',            // Database password
   database: 'motorcitydata'            // Target database
