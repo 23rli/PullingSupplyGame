@@ -38,7 +38,7 @@ const commitToDB = async ({roundManager, longMemory}) => {
   + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
   console.log(data)
   try {
-    const response = await axios.post('http://localhost:8080/registerround', 
+    const response = await axios.post('http://3.129.12.15:8080/registerround', 
       {
         gameId: roundManager.gameId,
         userId: roundManager.userId,
@@ -143,7 +143,7 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
 
 const checkGameEnd = async () => {
     try {
-        const response = await axios.post('http://localhost:8080/retrievegamestate', {
+        const response = await axios.post('http://3.129.12.15:8080/retrievegamestate', {
             gameId: roundManager.gameId
         });
         if (response.data.data.game_state === 'FINISHED') {
@@ -171,7 +171,7 @@ const checkGameEnd = async () => {
 
   const notifyDB = async () => {
     try {
-      const userResponse = await axios.post('http://localhost:8080/progressgamestatetwo', {
+      const userResponse = await axios.post('http://3.129.12.15:8080/progressgamestatetwo', {
           gameId: roundManager.gameId
       });
     } catch (error) {

@@ -27,7 +27,7 @@ export function AdminPanel({ roundManager, report }) {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const response = await axios.post('http://localhost:8080/retrieveleaderboard', {
+                const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
                     gameId: roundManager.gameId
                 });
 
@@ -36,7 +36,7 @@ export function AdminPanel({ roundManager, report }) {
 
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
-                        const revResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
+                        const revResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id
                         });
@@ -70,7 +70,7 @@ export function AdminPanel({ roundManager, report }) {
 
     const endGame = async () => {
         try {
-            const userResponse = await axios.post('http://localhost:8080/progressgamestatetwo', {
+            const userResponse = await axios.post('http://3.129.12.15:8080/progressgamestatetwo', {
                 gameId: roundManager.gameId
             });
             
@@ -84,7 +84,7 @@ export function AdminPanel({ roundManager, report }) {
         setSelectedUser(userId);
         console.log(userId)
         try {
-            const userResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
+            const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
                 userId: userId
             });

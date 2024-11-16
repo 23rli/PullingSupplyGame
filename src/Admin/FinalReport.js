@@ -36,7 +36,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const response = await axios.post('http://localhost:8080/retrieveleaderboard', {
+                const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
                     gameId: roundManager.gameId
                 });
     
@@ -45,7 +45,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
     
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
-                        const revResponse = await axios.post('http://localhost:8080/retrievelimitedroundinfo', {
+                        const revResponse = await axios.post('http://3.129.12.15:8080/retrievelimitedroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id,
                             roundLimit: roundManager.EndRound
@@ -191,7 +191,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
     const handleRowClick = async (userId) => {
         setSelectedUser(userId);
         try {
-            const userResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
+            const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
                 userId: userId
             });
@@ -236,7 +236,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
         const workbook = XLSX.utils.book_new();
 
         try{
-            const gameData = await axios.post('http://localhost:8080/retrievegamedetails', {
+            const gameData = await axios.post('http://3.129.12.15:8080/retrievegamedetails', {
                 gameId: roundManager.gameId,
             });
             
@@ -322,7 +322,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
         // Add detailed user data sheets
         for (const user of userData) {
             try {
-                const detailedUserResponse = await axios.post('http://localhost:8080/retrieveroundinfo', {
+                const detailedUserResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                     gameId: roundManager.gameId,
                     userId: user.userId
                 });

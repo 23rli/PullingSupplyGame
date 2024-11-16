@@ -109,6 +109,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 const response = await axios.post('http://3.129.12.15:8080/progressgamestate', {
                     gameId: roundManager.gameId
                 });
+                
             } catch (error) {
                 console.error('Error registering:', error);
             }
