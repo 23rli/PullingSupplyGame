@@ -44,8 +44,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 console.log("elapsedTime:", elapsedTime);
                 console.log("checkUSers:", checkUsers);
                 console.log("timePerUpdate:", timePerUpdate);
-                const response = await axios.post('http://3.129.12.15:8080/test', {
-                });
+                console.log('Sending POST request to backend...');
+                const response = await axios.post('http://3.129.12.15:8080/test', {});
+                console.log('Response received:', response);
         
                 if (checkGameStatus && elapsedTime >= timePerUpdate) {
                     console.log("Checking Status");
