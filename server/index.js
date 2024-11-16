@@ -19,10 +19,9 @@ var db = mysql.createPool({
 });
 
 app.post('/test', (req, res) => {
-    console.log("TEST HAS ARRIVED")
-    res.send('test success!');
+    console.log("Received request at /test");
+    res.status(200).send("Test successful");
 });
-
 
 app.post('/registergame', (req, res) =>{
     const blueCar = req.body.blueCar;
