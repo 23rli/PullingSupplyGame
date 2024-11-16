@@ -15,7 +15,7 @@ var db = mysql.createPool({
   host: 'localhost',               // Database host
   user: 'root',                    // Database user
   password: 'CC001856',            // Database password
-  database: 'MotorCity'            // Target database
+  database: 'motorcitydata'            // Target database
 });
 
 app.post('/registergame', (req, res) =>{
