@@ -42,6 +42,7 @@ app.post('/registergame', (req, res) =>{
     const yellowRevenue = req.body.yellowRevenue;
     const gameState = req.body.gameState;
     const gameNotes = req.body.gameNotes;
+    console.log("ARRIVE IN REGISTER GAME> ABOUT to do DB QUERY")
     db.query("INSERT into gamedata (blue_car, blue_penalty, green_car, green_penalty,"
         + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode, code, blue_revenue," 
         + " green_revenue, red_revenue, yellow_revenue, game_state, game_notes) VALUES  "
@@ -126,6 +127,8 @@ app.post('/registerround', (req, res) =>{
     const unusedR = req.body.unusedR;
     const unusedY = req.body.unusedY;
     const unusedB = req.body.unusedB;
+
+    
     db.query("INSERT into round "
         + "(game_id, user_id, round_number, manu_b, manu_g, manu_r, manu_y, assem_b, assem_g, assem_r, assem_y,"
         + "qual_b, qual_g, qual_r, qual_y, paint_b, paint_g, paint_r, paint_y, dry_b, dry_g, dry_r, dry_y, wip,"
