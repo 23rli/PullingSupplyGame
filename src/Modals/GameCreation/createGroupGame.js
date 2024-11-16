@@ -49,7 +49,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     console.log("Checking Status");
         
                     try {
-                        const response = await axios.post('http://localhost:8080/retrievegamestate', {
+                        const response = await axios.post('http://3.129.12.15:8080/retrievegamestate', {
                             gameId: roundManager.gameId
                         });
                         console.log("Response:", response);
@@ -81,7 +81,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 if (checkUsers && elapsedTime >= timePerUpdate) {
                     console.log("Checking players")
                     try {
-                        const response = await axios.post('http://localhost:8080/retrieveplayers', {
+                        const response = await axios.post('http://3.129.12.15:8080/retrieveplayers', {
                             gameId: roundManager.gameId
                         });
                         console.log(response.data.data)
@@ -106,7 +106,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         const updateGameState = async () => {
 
             try {
-                const response = await axios.post('http://localhost:8080/progressgamestate', {
+                const response = await axios.post('http://3.129.12.15:8080/progressgamestate', {
                     gameId: roundManager.gameId
                 });
             } catch (error) {
@@ -201,7 +201,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
     const handleRecycleGame = async (oldId, username, gameNotes) => {
         try {
-            const response = await axios.post('http://localhost:8080/retrievegamedetails', {
+            const response = await axios.post('http://3.129.12.15:8080/retrievegamedetails', {
                 gameId: oldId
             });
             console.log("called retrieve game")
@@ -277,7 +277,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     ) => {
         console.log(code)
         try {
-            const response = await axios.post('http://localhost:8080/registergame', {
+            const response = await axios.post('http://3.129.12.15:8080/registergame', {
                 blueCar: blueCar,
                 bluePenalty: bluePenalty,
                 greenCar: greenCar,
@@ -320,7 +320,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const handleCreateModerator = async (username) => {
         console.log("reached create user")
         try {
-            const response = await axios.post('http://localhost:8080/registeruser',
+            const response = await axios.post('http://3.129.12.15:8080/registeruser',
                 {
                     username: username,
                     privledge: "moderator",
@@ -336,7 +336,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const handleCreatePlayer = async (username) => {
         console.log("reached create user")
         try {
-            const response = await axios.post('http://localhost:8080/registeruser',
+            const response = await axios.post('http://3.129.12.15:8080/registeruser',
                 {
                     username: username,
                     privledge: "player",
@@ -352,7 +352,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const checkValidity = async (code) => {
         console.log("reached check validity")
         try {
-            const response = await axios.post('http://localhost:8080/checkcode',
+            const response = await axios.post('http://3.129.12.15:8080/checkcode',
                 {
                     code: code
                 })
@@ -372,7 +372,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         console.log("From Join Game")
         console.log(roundManager)
         try {
-            const response = await axios.post('http://localhost:8080/gameComponents',
+            const response = await axios.post('http://3.129.12.15:8080/gameComponents',
                 {
                     gameId: roundManager.gameId
                 })
