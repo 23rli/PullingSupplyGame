@@ -19,6 +19,7 @@ var db = mysql.createPool({
 });
 
 app.post('/test', (req, res) => {
+    console.log("TEST HAS ARRIVED")
     res.send('test success!');
 });
 
