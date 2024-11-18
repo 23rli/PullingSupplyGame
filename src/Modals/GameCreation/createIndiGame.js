@@ -83,14 +83,13 @@ export function CreateIndiGame({ roundManager, onStart }) {
         gameNotes: gameNotes
       });
 
-      console.log(response.data); // Log the response data
+
 
       roundManager.gameId = response.data.gameId; // Accessing 'gameId'
       roundManager.setGameResources(rolls);
       roundManager.setCars(blueCar, greenCar, redCar, yellowCar);
       roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue);
       roundManager.setShortTermMem();
-      console.log(roundManager);
       handleCreateUser(username);
       onStart();
 
@@ -101,7 +100,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
 
 
   const handleCreateUser = async (username) => {
-    console.log("reached create user")
+
     try {
       const response = await axios.post('http://3.129.12.15:8080/registeruser',
         {
@@ -110,7 +109,6 @@ export function CreateIndiGame({ roundManager, onStart }) {
           gameId: roundManager.gameId
         })
       roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-      console.log(roundManager);
     } catch (error) {
       console.error('Error registering:', error);
     }
@@ -183,7 +181,6 @@ export function CreateIndiGame({ roundManager, onStart }) {
               rolls += blue + ",";
             }
 
-            console.log(blueRevenue)
             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
               redCar, redPenalty, yellowCar, yellowPenalty, rolls, code, blueRevenue, greenRevenue,
               redRevenue, yellowRevenue, gameNotes);

@@ -32,7 +32,7 @@ export function AdminPanel({ roundManager, report }) {
                 });
 
                 const playerData = response.data.data;
-                console.log(playerData)
+
 
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
@@ -43,9 +43,6 @@ export function AdminPanel({ roundManager, report }) {
                         const revenue = revResponse.data.data[0]?.revenue || 0;
                         const roundNum = revResponse.data.data[0]?.round_number || 0;
 
-                        console.log(revenue)
-                        console.log(player.username)
-                        console.log(player.user_id)
 
                         return {
                             userId: player.user_id,
@@ -57,7 +54,6 @@ export function AdminPanel({ roundManager, report }) {
                 );
 
                 setUserData(updatedUserData);
-                console.log(updatedUserData)
             } catch (error) {
                 console.error('Error fetching players or revenue:', error);
             }
@@ -82,14 +78,14 @@ export function AdminPanel({ roundManager, report }) {
     
     const handleRowClick = async (userId) => {
         setSelectedUser(userId);
-        console.log(userId)
+
         try {
             const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
                 userId: userId
             });
             setDetailedUserData(userResponse.data.data); // Expecting an array of rows from the 'round' table
-            console.log(userResponse.data.data);
+
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -123,7 +119,6 @@ export function AdminPanel({ roundManager, report }) {
                 return 0;
             });
         }
-        console.log(sortableItems)
         return sortableItems;
 
     }, [userData, sortConfig]);

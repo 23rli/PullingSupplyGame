@@ -39,27 +39,16 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         // Check Game Status Effect
         useEffect(() => {
             const checkStatus = async () => {
-                console.log("In CheckStatus");
-                console.log("checkGameStatus:", checkGameStatus);
-                console.log("elapsedTime:", elapsedTime);
-                console.log("checkUSers:", checkUsers);
-                console.log("timePerUpdate:", timePerUpdate);
-                console.log('Sending POST request to backend...');
-                const response = await axios.post('http://3.129.12.15:8080/test', {});
-                console.log('Response received:', response);
-        
+
                 if (checkGameStatus && elapsedTime >= timePerUpdate) {
-                    console.log("Checking Status");
         
                     try {
                         const response = await axios.post('http://3.129.12.15:8080/retrievegamestate', {
                             gameId: roundManager.gameId
                         });
-                        console.log("Response:", response);
-                        console.log(response.data.data)
+
         
                         if (response.data.data.game_state === 'IN PROGRESS') {
-                            console.log("reach transition")
                             setCheckGameStatus(false);
                             handleCloseWaitJoin();
                             onStart();
@@ -78,16 +67,12 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         // Retrieve Players Effect
         useEffect(() => {
             const getPlayers = async () => {
-                console.log("In Get Players" )
-                console.log(checkUsers)
-                console.log(elapsedTime >= timePerUpdate)
+
                 if (checkUsers && elapsedTime >= timePerUpdate) {
-                    console.log("Checking players")
                     try {
                         const response = await axios.post('http://3.129.12.15:8080/retrieveplayers', {
                             gameId: roundManager.gameId
                         });
-                        console.log(response.data.data)
                         let players = [];
                         for(let i = 0; i <  response.data.data.length; i++){
                             players.push(response.data.data[i].username)
@@ -105,7 +90,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     
 
     const handleGameStart = () => {
-        console.log(roundManager)
+
         const updateGameState = async () => {
 
             try {
@@ -208,7 +193,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             const response = await axios.post('http://3.129.12.15:8080/retrievegamedetails', {
                 gameId: oldId
             });
-            console.log("called retrieve game")
             // Generate the unique game code
             const createCode = parseInt(Math.random() * 9 + 1) * 100000 +
                                parseInt(Math.random() * 10) * 10000 +
@@ -219,8 +203,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             
             // Map response data to extract individual values for each required input
             const gameData = response.data.data;
-            console.log(gameData)
-            console.log(oldId)
+
             const gameTable = gameData.map(row => ({
                 rolls: row.rolls,
                 blueCar: row.blue_car,
@@ -248,7 +231,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
 
             
-            console.log("calling create game")
             
             // Call handleCreateGame with the mapped data
             handleCreateGame(
@@ -279,7 +261,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         redRevenue, yellowRevenue,
         gameNotes
     ) => {
-        console.log(code)
+        
         try {
             const response = await axios.post('http://3.129.12.15:8080/registergame', {
                 blueCar: blueCar,
@@ -301,9 +283,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 gameNotes: gameNotes
             });
 
-            console.log(response.data); // Log the response data
-            console.log(code)
-
+ 
             setCode(code)
             roundManager.gameId = response.data.gameId; // Accessing 'gameId'
             roundManager.setGameResources(rolls);
@@ -312,7 +292,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             roundManager.setWIPPen(bluePenalty, greenPenalty, redPenalty, yellowPenalty);
             roundManager.setRevenue(blueRevenue, greenRevenue, redRevenue, yellowRevenue);
             roundManager.setShortTermMem();
-            console.log(roundManager);
             handleCreateModerator(username);
 
         } catch (error) {
@@ -322,7 +301,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
 
     const handleCreateModerator = async (username) => {
-        console.log("reached create user")
         try {
             const response = await axios.post('http://3.129.12.15:8080/registeruser',
                 {
@@ -331,14 +309,12 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     gameId: roundManager.gameId
                 })
             roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-            console.log(roundManager);
         } catch (error) {
             console.error('Error registering:', error);
         }
     };
 
     const handleCreatePlayer = async (username) => {
-        console.log("reached create user")
         try {
             const response = await axios.post('http://3.129.12.15:8080/registeruser',
                 {
@@ -347,23 +323,20 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                     gameId: roundManager.gameId
                 })
             roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-            console.log(roundManager);
         } catch (error) {
             console.error('Error registering:', error);
         }
     };
 
     const checkValidity = async (code) => {
-        console.log("reached check validity")
+
         try {
             const response = await axios.post('http://3.129.12.15:8080/checkcode',
                 {
                     code: code
                 })
-            console.log(response)
-            console.log(response.data.gameId)
+
             roundManager.gameId = response.data.gameId;
-            console.log(roundManager);
             return response.data.valid;
         } catch (error) {
             console.error('Error registering:', error);
@@ -373,8 +346,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     };
 
     const joinGame = async ({ roundManager, username }) => {
-        console.log("From Join Game")
-        console.log(roundManager)
+
         try {
             const response = await axios.post('http://3.129.12.15:8080/gameComponents',
                 {
@@ -382,13 +354,11 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 })
 
             const data = response.data.data;
-            console.log(data)
 
             roundManager.setGameResources(data.rolls)
             roundManager.setMode(1)
             roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
             roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
-            console.log(roundManager);
             handleCreatePlayer(username);
 
         } catch (error) {
@@ -452,13 +422,12 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             const valid = await checkValidity(code);
 
                             if (valid) {
-                                console.log(roundManager);
+
                                 joinGame({ roundManager, username });
                                 handleOpenWaitJoin();
                                 setCheckGameStatus(true);
                             } else {
                                 setErrorStatement("Invalid Code. Please try again.");
-                                console.log("INVALID CODE");
                             }
                         } catch (error) {
                             console.error('Error during form submission:', error);
@@ -550,7 +519,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             handleOpenWaitCreate();
                         }else{
                             const oldId = formJson.oldGameID;
-                            console.log("reached here")
                             
                             handleRecycleGame(oldId, username, gameNotes);
                         }

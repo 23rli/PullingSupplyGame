@@ -25,18 +25,17 @@ const fabStyleEnd = { position: 'fixed', bottom: 30, right: 400 }; // Positionin
 
 function commitLongMem({roundManager, longMemory}){
   roundManager.setShortTermMem();
-  console.log(roundManager)
+
   longMemory.commitPosition({roundManager})
   longMemory.commitResources({roundManager})
 }
 
 const commitToDB = async ({roundManager, longMemory}) => {
-  console.log(longMemory)
-  console.log(roundManager)
+
   const data = longMemory.storage[roundManager.roundNum].locationData();
   const rev = data[20] * roundManager.revenueB + data[21] * roundManager.revenueG
   + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
-  console.log(data)
+
   try {
     const response = await axios.post('http://3.129.12.15:8080/registerround', 
       {
@@ -80,7 +79,7 @@ const commitToDB = async ({roundManager, longMemory}) => {
         unusedB: longMemory.storage[roundManager.roundNum].endResources[2],
       })
     //roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
-    console.log(roundManager);
+
   } catch (error) {
       console.error('Error registering:', error);
   }
@@ -125,7 +124,6 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
 
   const handleAgreeNR = async () => {
     setOpenNRPrompt(false);
-    console.log("button next round pressed");
 
     if (roundManager.mode == 1) {
         const isGameEnd = await checkGameEnd(); // Wait for checkGameEnd to complete

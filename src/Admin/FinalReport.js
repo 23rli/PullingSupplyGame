@@ -41,7 +41,6 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 });
     
                 const playerData = response.data.data;
-                console.log(roundManager.EndRound)
     
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
@@ -101,27 +100,21 @@ export function FinalReport({ roundManager, wipRound, time}) {
 
     const calculateWIPPenalty = (roundData) => {
         let penalty = 0;
-        console.log(roundData)
-        console.log(roundManager.startG)
+
         if(roundManager.startB != -1){
             const blueCars = roundData[wipRound].manu_b + roundData[wipRound].assem_b + roundData[wipRound].qual_b + roundData[wipRound].paint_b + roundData[wipRound].dry_b
-            console.log(blueCars);
             penalty += blueCars * roundManager.WIPPen[0]
         }
         if(roundManager.startG != -1){
             const greenCars = roundData[wipRound].manu_g + roundData[wipRound].assem_g + roundData[wipRound].qual_g + roundData[wipRound].paint_g + roundData[wipRound].dry_g
-            console.log(greenCars)
-            console.log(roundData[wipRound].manu_g)
             penalty += greenCars * roundManager.WIPPen[1]
         }
         if(roundManager.startR != -1){
             const redCars = roundData[wipRound].manu_b + roundData[wipRound].assem_r + roundData[wipRound].qual_r + roundData[wipRound].paint_r + roundData[wipRound].dry_r
-            console.log(redCars)
             penalty += redCars * roundManager.WIPPen[2]
         }
         if(roundManager.startY != -1){
             const yellowCars = roundData[wipRound].manu_y + roundData[wipRound].assem_y + roundData[wipRound].qual_y + roundData[wipRound].paint_y + roundData[wipRound].dry_y
-           console.log(yellowCars)
             penalty += yellowCars * roundManager.WIPPen[3]
         }
         return penalty;
@@ -204,7 +197,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
             );
     
             setDetailedUserData(transformedData); // Set the transformed data
-            console.log(transformedData);
+
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
