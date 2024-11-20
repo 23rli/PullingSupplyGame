@@ -79,7 +79,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             players.push(response.data.data[i].username)
                         }
                         setGamePlayers(players);
-                        console.log(players);
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
@@ -789,50 +788,71 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                 disabled={reUseGame || !yellowChecked}
+                                disabled={reUseGame || !yellowChecked}
                             />
                         </Grid>
+                        
                     </Grid>
                     </Collapse>
+                    <Grid item xs={12}>
+                            <TextField
+                                margin="dense"
+                                name="gameNotes"
+                                label="Game Notes"
+                                type="text"
+                                variant="standard"
+                                fullWidth
+                                multiline
+                                rows={4}
+                            />
+                        </Grid>
                 </DialogContent>
+
                 <DialogActions>
-                    <Button onClick={handleCloseCreate}>Cancel</Button>
                     <Button type="submit">Create</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog
                 open={openWaitCreate}
-                onClose={handleCloseWaitCreate}
+                onClose = {handleCloseWaitCreate}
             >
-                <DialogTitle>Waiting for Players</DialogTitle>
+                <DialogTitle>Waiting on Players</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Share the game code with your teammates to join the game.
-                    </DialogContentText>
-                    <Typography variant="h6" sx={{ marginTop: '20px', fontWeight: 'bold' }}>
                         Game Code: {code}
-                    </Typography>
+                    </DialogContentText>
+                    <DialogContentText>
+                        To start the game, press start. Players will be displayed here:
+                        <div>
+                            {/* Render your component here */}
+                            <div>Players: {gamePlayers.join(', ')}</div>
+                        </div>
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseWaitCreate}>Close</Button>
+                    <Button onClick={() => handleGameStart()}>
+                        Start Game
+                    </Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog
                 open={openWaitJoin}
-                onClose={handleCloseWaitJoin}
+                onClose={(event, reason) => {
+                    if (reason !== 'backdropClick') {
+                        handleCloseWaitJoin();
+                    }
+                }}
             >
-                <DialogTitle>Waiting for Game to Start</DialogTitle>
+                <DialogTitle>Waiting to Join</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        The game creator will begin the session shortly. Please wait.
+                        Please wait for the game to begin
                     </DialogContentText>
+
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseWaitJoin}>Close</Button>
-                </DialogActions>
             </Dialog>
         </React.Fragment>
     );
-};
+}
