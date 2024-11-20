@@ -811,7 +811,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         Share the game code with your teammates to join the game.
                     </DialogContentText>
                     <Typography variant="h6" sx={{ marginTop: '20px', fontWeight: 'bold' }}>
-                        Game Code: {createCode}
+                        Game Code: {code}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
