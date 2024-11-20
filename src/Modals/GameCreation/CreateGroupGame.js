@@ -78,6 +78,8 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         for(let i = 0; i <  response.data.data.length; i++){
                             players.push(response.data.data[i].username)
                         }
+                        console.log(response);
+                        console.log(players);
                         setGamePlayers(players);
                     } catch (error) {
                         console.error('Error registering:', error);
