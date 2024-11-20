@@ -12,6 +12,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [openWaitCreate, setOpenWaitCreate] = useState(false);
 
     const [reUseGame, setReUseGame] = useState(false);
+    const [evanDalton, setEvanDalton] = useState(false);
 
     const [blueChecked, setBlueChecked] = useState(false);
     const [greenChecked, setGreenChecked] = useState(false);
@@ -111,6 +112,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
     const handleReUseChange = (event) => {
         setReUseGame(event.target.checked);
+    };
+
+    const handleEvanDalton = (event) => {
+        setEvanDalton(event.target.checked);
     };
 
     const handleBlueCheckChange = (event) => {
@@ -484,6 +489,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         const formJson = Object.fromEntries(formData.entries());
                         const username = formJson.username;
                         const gameNotes = formJson.gameNotes;
+                        const evanDalton = formJson.evanDalton;
                         if(!reUseGame){
                             const blueRevenue = formJson.blueRevenue;
                             const greenRevenue = formJson.greenRevenue;
@@ -503,13 +509,17 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
                             let rolls = '';
 
-                            for (let i = 0; i < 100; i++) {
-                                const red = parseInt(Math.random() * 10 + 1);
-                                const yellow = parseInt(Math.random() * 8 + 1);
-                                const blue = parseInt(Math.random() * 4 + 1);
-                                rolls += red + ",";
-                                rolls += yellow + ",";
-                                rolls += blue + ",";
+                            if(!evanDalton){
+                                for (let i = 0; i < 100; i++) {
+                                    const red = parseInt(Math.random() * 10 + 1);
+                                    const yellow = parseInt(Math.random() * 8 + 1);
+                                    const blue = parseInt(Math.random() * 4 + 1);
+                                    rolls += red + ",";
+                                    rolls += yellow + ",";
+                                    rolls += blue + ",";
+                                }
+                            }else{
+                                rolls = "8,6,2,7,4,3,10,6,1,6,2,2,6,2,1,9,2,3,7,7,2,5,4,4,5,6,3,3,3,4,4,2,1,5,5,3,3,6,2,6,1,3,1,3,2,2,2,2,7,5,2,4,3,4,5,6,3,4,8,3,8,7,2,7,6,3,6,3,2,5,6,4,5,8,2";
                             }
 
                             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
@@ -553,6 +563,17 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             />
                         }
                         label="Reuse old Game"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={evanDalton}
+                                onChange={handleEvanDalton}
+                                name="EvanDalton"
+                                color="primary"
+                            />
+                        }
+                        label="Evan Dalton Numbers"
                     />
                     <Grid item xs={6}>
                             <TextField
