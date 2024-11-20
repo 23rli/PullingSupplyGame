@@ -79,6 +79,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                             players.push(response.data.data[i].username)
                         }
                         setGamePlayers(players);
+                        console.log(players);
                     } catch (error) {
                         console.error('Error registering:', error);
                     }
@@ -788,72 +789,50 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                                     min: 0,
                                 }}
                                 fullWidth
-                                disabled={reUseGame || !yellowChecked}
+                                 disabled={reUseGame || !yellowChecked}
                             />
                         </Grid>
-                        
                     </Grid>
                     </Collapse>
-                    <Grid item xs={12}>
-                            <TextField
-                                margin="dense"
-                                name="gameNotes"
-                                label="Game Notes"
-                                type="text"
-                                variant="standard"
-                                fullWidth
-                                multiline
-                                rows={4}
-                            />
-                        </Grid>
                 </DialogContent>
-
                 <DialogActions>
+                    <Button onClick={handleCloseCreate}>Cancel</Button>
                     <Button type="submit">Create</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog
                 open={openWaitCreate}
-                onClose = {handleCloseWaitCreate}
+                onClose={handleCloseWaitCreate}
             >
-                <DialogTitle>Waiting on Players</DialogTitle>
+                <DialogTitle>Waiting for Players</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Code: {code}
+                        Share the game code with your teammates to join the game.
                     </DialogContentText>
-                    <DialogContentText>
-                        To start the game, press start. Players will be displayed here:
-                        <div>
-                            {/* Render your component here */}
-                            <div>Elapsed Time: {elapsedTime}</div>
-                            <div>Players: {gamePlayers.join(', ')}</div>
-                        </div>
-                    </DialogContentText>
+                    <Typography variant="h6" sx={{ marginTop: '20px', fontWeight: 'bold' }}>
+                        Game Code: {createCode}
+                    </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => handleGameStart()}>
-                        Start Game
-                    </Button>
+                    <Button onClick={handleCloseWaitCreate}>Close</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog
                 open={openWaitJoin}
-                onClose={(event, reason) => {
-                    if (reason !== 'backdropClick') {
-                        handleCloseWaitJoin();
-                    }
-                }}
+                onClose={handleCloseWaitJoin}
             >
-                <DialogTitle>Waiting to Join</DialogTitle>
+                <DialogTitle>Waiting for Game to Start</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Please wait for the game to begin
+                        The game creator will begin the session shortly. Please wait.
                     </DialogContentText>
-
                 </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseWaitJoin}>Close</Button>
+                </DialogActions>
             </Dialog>
         </React.Fragment>
     );
-}
+};
