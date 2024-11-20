@@ -8,6 +8,11 @@ const bodyParser = require('body-parser');    // Middleware for parsing request 
 app.use(bodyParser.urlencoded({ extended: false }));  // Parse URL-encoded data
 app.use(bodyParser.json());                           // Parse JSON data
 app.use(cors());                                      // Enable CORS for all routes
+app.use(cors({
+    origin: 'https://motorcity.boeingcenter.com',
+    methods: 'GET,POST',
+    credentials: true
+}));
 
 // Database connection pool setup
 var db = mysql.createPool({
