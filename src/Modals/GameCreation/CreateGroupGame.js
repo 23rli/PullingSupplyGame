@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
+    const [openReJoin, setOpenReJoin] = useState(false);
     const [openCreate, setOpenCreate] = useState(false);
     const [openWaitJoin, setOpenWaitJoin] = useState(false);
     const [openWaitCreate, setOpenWaitCreate] = useState(false);
@@ -176,6 +177,15 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
     const handleCloseJoin = () => {
         setOpenJoin(false);
+    };
+
+    const handleOpenReJoin = () => {
+        setOpenIntro(false);
+        setOpenReJoin(true);
+    };
+
+    const handleCloseReJoin = () => {
+        setOpenReJoin(false);
     };
     const handleOpenCreate = () => {
         setOpenIntro(false);
@@ -446,10 +456,83 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 <DialogTitle>Team Game</DialogTitle>
                 <DialogContent>
                     <Button onClick={handleOpenJoin}>Join Game</Button>
+                    <Button onClick={handleOpenRejoin}>Rejoin Game</Button>
                     <Button onClick={handleOpenCreate}>Create Game</Button>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseIntro}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={openReJoin}
+                onClose={handleCloseReJoin}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: async (event) => { // Make the function async
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries(formData.entries());
+
+                        const username = formJson.username;
+                        const code = formJson.code;
+
+                        try {
+                            // Await the result of checkValidity
+                            const valid = await checkValidity(code);
+                            const unique = await checkUniqueness(username);
+
+                            if (valid & !unique) {
+
+                                //joinGame({ roundManager, username });
+                                //handleOpenWaitJoin();
+                                //setCheckGameStatus(true);
+                            } else if (!valid){
+                                setErrorStatement("Invalid Code. Please try again.");
+                            }else{
+                                setErrorStatement("The username is not in play");
+                            }
+                        } catch (error) {
+                            console.error('Error during form submission:', error);
+                        }
+                    },
+                }}
+            >
+                <DialogTitle>Rejoin Game</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To Rejoin a game, input the 6 digit code and your previous username
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="username"
+                        label="Username"
+                        type="text"
+                        defaultValue={"Guest"}
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="code"
+                        label="6 Digit Game Code"
+                        type="number"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <DialogContentText style={{ color: 'red', margin: '16px 0' }}>
+                        {errorStatement !== '' && errorStatement}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseJoin}>Cancel</Button>
+                    <Button type="submit">Rejoin</Button>
                 </DialogActions>
             </Dialog>
 
