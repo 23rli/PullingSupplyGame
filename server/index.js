@@ -44,7 +44,7 @@ app.post('/test', (req, res) => {
     res.status(200).send("Test successful");
 });
 
-app.post('/api/registergame', async (req, res) =>{
+app.post('registergame', async (req, res) =>{
     const blueCar = req.body.blueCar;
     const bluePenalty = req.body.bluePenalty;
     const greenCar = req.body.greenCar;
@@ -103,7 +103,7 @@ app.post('/api/registergame', async (req, res) =>{
     })
 })
 
-app.post('/api/registeruser', async (req, res) =>{
+app.post('/registeruser', async (req, res) =>{
     const username = req.body.username;
     const privledge = req.body.privledge;
     const gameId = req.body.gameId;
@@ -125,7 +125,7 @@ app.post('/api/registeruser', async (req, res) =>{
     })
 })
 
-app.post('/api/registerround', async (req, res) =>{
+app.post('/registerround', async (req, res) =>{
     const gameId = req.body.gameId;
     const userId = req.body.userId
 
@@ -229,7 +229,7 @@ app.post('/api/registerround', async (req, res) =>{
     })
 })
 
-app.post('/api/checkcode', async (req, res) => {
+app.post('/checkcode', async (req, res) => {
     const code = req.body.code;
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
@@ -256,7 +256,7 @@ app.post('/api/checkcode', async (req, res) => {
 });
 
 
-app.post('/api/gameComponents', async (req, res) => {
+app.post('/gameComponents', async (req, res) => {
     const gameId = req.body.gameId;    
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
@@ -281,7 +281,7 @@ app.post('/api/gameComponents', async (req, res) => {
     });
 });
 
-app.post('/api/retrieveplayers', async (req, res) => {
+app.post('/retrieveplayers', async (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
@@ -352,7 +352,7 @@ app.post('/api/progressgamestate', async (req, res) => {
     });
 });
 
-app.post('/api/progressgamestatetwo', async (req, res) => {
+app.post('/progressgamestatetwo', async (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
@@ -378,7 +378,7 @@ app.post('/api/progressgamestatetwo', async (req, res) => {
     });
 });
 
-app.post('/api/retrieveleaderboard', async (req, res) => {
+app.post('/retrieveleaderboard', async (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
@@ -399,7 +399,7 @@ app.post('/api/retrieveleaderboard', async (req, res) => {
     });
 });
 
-app.post('/api/retrieveroundinfo', async (req, res) => {
+app.post('/retrieveroundinfo', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
     const requestId = req.body.requestId;
@@ -422,7 +422,7 @@ app.post('/api/retrieveroundinfo', async (req, res) => {
     });
 });
 
-app.post('/api/retrievelimitedroundinfo', async (req, res) => {
+app.post('/retrievelimitedroundinfo', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
     const roundLimit = req.body.roundLimit;
@@ -446,7 +446,7 @@ app.post('/api/retrievelimitedroundinfo', async (req, res) => {
     });
 });
 
-app.post('/api/retrieveWIP', async (req, res) => {
+app.post('/retrieveWIP', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
     const roundNum = req.body.roundNum
@@ -470,7 +470,7 @@ app.post('/api/retrieveWIP', async (req, res) => {
     });
 });
 
-app.post('/api/retrievegamedetails', async (req, res) => {
+app.post('/retrievegamedetails', async (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (await isDuplicateRequest(requestId)) {
