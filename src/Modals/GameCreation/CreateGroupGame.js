@@ -47,7 +47,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         
                     try {
                         const requestId = uuidv4()
-                        const response = await axios.post('https://motorcity.boeingcenter.com/api/retrievegamestate', {
+                        const response = await axios.post('http://3.129.12.15/retrievegamestate', {
                             gameId: roundManager.gameId,
                             requestId: requestId
                         });
@@ -76,7 +76,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 if (checkUsers && elapsedTime >= timePerUpdate) {
                     try {
                         const requestId = uuidv4()
-                        const response = await axios.post('https://motorcity.boeingcenter.com/api/retrieveplayers', {
+                        const response = await axios.post('http://3.129.12.15/retrieveplayers', {
                             gameId: roundManager.gameId,
                             requestId: requestId
                         });
@@ -104,7 +104,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
             try {
                 const requestId = uuidv4()
-                const response = await axios.post('https://motorcity.boeingcenter.com/api/progressgamestate', {
+                const response = await axios.post('http://3.129.12.15/progressgamestate', {
                     gameId: roundManager.gameId,
                     requestId: requestId
                 });
@@ -207,7 +207,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const handleRecycleGame = async (oldId, username, gameNotes) => {
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/retrievegamedetails', {
+            const response = await axios.post('http://3.129.12.15/retrievegamedetails', {
                 gameId: oldId,
                 requestId: requestId
             });
@@ -282,7 +282,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/registergame', {
+            const response = await axios.post('http://3.129.12.15/registergame', {
                 blueCar: blueCar,
                 bluePenalty: bluePenalty,
                 greenCar: greenCar,
@@ -323,7 +323,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const handleCreateModerator = async (username) => {
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/registeruser',
+            const response = await axios.post('http://3.129.12.15/registeruser',
                 {
                     username: username,
                     privledge: "moderator",
@@ -339,7 +339,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
     const handleCreatePlayer = async (username) => {
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/registeruser',
+            const response = await axios.post('http://3.129.12.15/registeruser',
                 {
                     username: username,
                     privledge: "player",
@@ -356,7 +356,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/checkcode',
+            const response = await axios.post('http://3.129.12.15/checkcode',
                 {
                     code: code,
                     requestId: requestId
@@ -375,7 +375,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
         try {
             const requestId = uuidv4()
-            const response = await axios.post('https://motorcity.boeingcenter.com/api/gameComponents',
+            const response = await axios.post('http://3.129.12.15/gameComponents',
                 {
                     gameId: roundManager.gameId,
                     requestId: requestId
