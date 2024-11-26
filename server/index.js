@@ -281,7 +281,7 @@ app.post('/retrieveplayers',  (req, res) => {
     });
 });
 
-app.post('/api/retrievegamestate',  (req, res) => {
+app.post('/retrievegamestate',  (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (processedRequests.has(requestId)) {
@@ -305,7 +305,7 @@ app.post('/api/retrievegamestate',  (req, res) => {
     });
 });
 
-app.post('/api/progressgamestate',  (req, res) => {
+app.post('/progressgamestate',  (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
     if (processedRequests.has(requestId)) {
