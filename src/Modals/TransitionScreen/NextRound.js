@@ -10,6 +10,7 @@ import Slide from '@mui/material/Slide';
 import Box from '@mui/material/Box';
 
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 import { LongMemory } from '../../Rules/LongMemory';
 import { ShortMemory } from '../../Rules/ShortMemory';
@@ -37,6 +38,7 @@ const commitToDB = async ({roundManager, longMemory}) => {
   + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
 
   try {
+    const requestId = uuidv4()
     const response = await axios.post('http://3.129.12.15:8080/registerround', 
       {
         gameId: roundManager.gameId,
@@ -77,6 +79,7 @@ const commitToDB = async ({roundManager, longMemory}) => {
         unusedR: longMemory.storage[roundManager.roundNum].endResources[0],
         unusedY: longMemory.storage[roundManager.roundNum].endResources[1],
         unusedB: longMemory.storage[roundManager.roundNum].endResources[2],
+        requestId: requestId
       })
     //roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
 
@@ -141,8 +144,10 @@ export default function AlertDialogSlide({ roundManager, longMemory, endGame, au
 
 const checkGameEnd = async () => {
     try {
+      const requestId = uuidv4()
         const response = await axios.post('http://3.129.12.15:8080/retrievegamestate', {
-            gameId: roundManager.gameId
+            gameId: roundManager.gameId,
+            requestId: requestId
         });
         if (response.data.data.game_state === 'FINISHED') {
             return true;
@@ -169,8 +174,10 @@ const checkGameEnd = async () => {
 
   const notifyDB = async () => {
     try {
+      const requestId = uuidv4()
       const userResponse = await axios.post('http://3.129.12.15:8080/progressgamestatetwo', {
-          gameId: roundManager.gameId
+          gameId: roundManager.gameId,
+          requestId: requestId
       });
     } catch (error) {
         console.error('Error fetching user data:', error);

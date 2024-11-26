@@ -64,12 +64,9 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
       setTimePerRound(120);
     }
 
-    if (elapsedTime === (timePerRound / 3) * 2) {
-      setActiveConverter(false);
-    }
-
     if (elapsedTime >= timePerRound) {
       setAutoAdvance(true);
+      handleAllocate();
     }
   }, [elapsedTime, roundManager, timePerRound]);
 
@@ -77,7 +74,6 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   const resetTimer = useCallback(() => {
     setElapsedTime(0);
     setAutoAdvance(false);
-    setActiveConverter(true);
   }, []);
 
   function renderColumnHeader(i) {

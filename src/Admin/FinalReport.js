@@ -12,6 +12,7 @@ import {
     TableHead, TableRow, Paper, TableSortLabel
 } from '@mui/material';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx'; // Make sure to install xlsx library
 
 import './FinalReport.css'; // Import the CSS file for styles
@@ -36,18 +37,21 @@ export function FinalReport({ roundManager, wipRound, time}) {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
+                const requestId = uuidv4(); // Generate a unique ID
                 const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
-                    gameId: roundManager.gameId
+                    gameId: roundManager.gameId,
+                    requestId: requestId
                 });
     
                 const playerData = response.data.data;
-    
+                const requestId2 = uuidv4()
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
                         const revResponse = await axios.post('http://3.129.12.15:8080/retrievelimitedroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id,
-                            roundLimit: roundManager.EndRound
+                            roundLimit: roundManager.EndRound,
+                            requestId: requestId2
                         });
     
                         const roundData = revResponse.data.data;
@@ -184,9 +188,11 @@ export function FinalReport({ roundManager, wipRound, time}) {
     const handleRowClick = async (userId) => {
         setSelectedUser(userId);
         try {
+            const requestId = uuidv4()
             const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
-                userId: userId
+                userId: userId,
+                requestId: requestId
             });
     
             // Transform the data: if any value is 0, replace it with null
@@ -227,10 +233,11 @@ export function FinalReport({ roundManager, wipRound, time}) {
 
     const exportToExcel = async () => {
         const workbook = XLSX.utils.book_new();
-
+        const requestId = uuidv4()
         try{
             const gameData = await axios.post('http://3.129.12.15:8080/retrievegamedetails', {
                 gameId: roundManager.gameId,
+                requestId: requestId
             });
             
             // Flatten the data for Excel export
@@ -315,9 +322,11 @@ export function FinalReport({ roundManager, wipRound, time}) {
         // Add detailed user data sheets
         for (const user of userData) {
             try {
+                const requestId = uuidv4()
                 const detailedUserResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                     gameId: roundManager.gameId,
-                    userId: user.userId
+                    userId: user.userId,
+                    requestId: requestId
                 });
                 const detailedUserData = detailedUserResponse.data.data.map(row => ({
                     RoundNumber: row.round_number,

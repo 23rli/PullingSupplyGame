@@ -5,6 +5,7 @@ import {
     TableHead, TableRow, Paper, TableSortLabel
 } from '@mui/material';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import NumberInputModal from "./WIPPenalty.js"
 import './AdminPanel.css'; // Import the CSS file for styles
 
@@ -27,8 +28,10 @@ export function AdminPanel({ roundManager, report }) {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
+                const requestId = uuidv4()
                 const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
-                    gameId: roundManager.gameId
+                    gameId: roundManager.gameId,
+                    requestId: requestId
                 });
 
                 const playerData = response.data.data;
@@ -36,9 +39,11 @@ export function AdminPanel({ roundManager, report }) {
 
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
+                        const requestId = uuidv4()
                         const revResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                             gameId: roundManager.gameId,
-                            userId: player.user_id
+                            userId: player.user_id,
+                            requestId: requestId
                         });
                         const revenue = revResponse.data.data[0]?.revenue || 0;
                         const roundNum = revResponse.data.data[0]?.round_number || 0;
@@ -66,8 +71,10 @@ export function AdminPanel({ roundManager, report }) {
 
     const endGame = async () => {
         try {
+            const requestId = uuidv4()
             const userResponse = await axios.post('http://3.129.12.15:8080/progressgamestatetwo', {
-                gameId: roundManager.gameId
+                gameId: roundManager.gameId,
+                requestId: requestId
             });
             
         } catch (error) {
@@ -78,11 +85,12 @@ export function AdminPanel({ roundManager, report }) {
     
     const handleRowClick = async (userId) => {
         setSelectedUser(userId);
-
+        const requestId = uuidv4()
         try {
             const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
-                userId: userId
+                userId: userId,
+                requestId: requestId
             });
             setDetailedUserData(userResponse.data.data); // Expecting an array of rows from the 'round' table
 

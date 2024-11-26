@@ -11,6 +11,7 @@ import { Checkbox } from '@mui/material';
 import { Grid } from '@mui/material'
 
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 export function CreateIndiGame({ roundManager, onStart }) {
   const [open, setOpen] = React.useState(false);
@@ -63,6 +64,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
     gameNotes
   ) => {
     try {
+      const requestId = uuidv4()
       const response = await axios.post('http://3.129.12.15:8080/registergame', {
         blueCar: blueCar,
         bluePenalty: bluePenalty,
@@ -80,7 +82,8 @@ export function CreateIndiGame({ roundManager, onStart }) {
         redRevenue: redRevenue,
         yellowRevenue: yellowRevenue,
         gameState: "IN PROGRESS",
-        gameNotes: gameNotes
+        gameNotes: gameNotes,
+        requestId: requestId
       });
 
 
@@ -102,11 +105,13 @@ export function CreateIndiGame({ roundManager, onStart }) {
   const handleCreateUser = async (username) => {
 
     try {
+      const requestId = uuidv4()
       const response = await axios.post('http://3.129.12.15:8080/registeruser',
         {
           username: username,
           privledge: "player",
-          gameId: roundManager.gameId
+          gameId: roundManager.gameId,
+          requestId: requestId
         })
       roundManager.userId = response.data.userId; // Accessing 'newId' instead of 'id'
     } catch (error) {

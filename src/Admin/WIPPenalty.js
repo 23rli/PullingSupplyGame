@@ -8,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid';
 
 export function NumberInputModal({endGame, roundManager, time}) {
     const [open, setOpen] = useState(false);
