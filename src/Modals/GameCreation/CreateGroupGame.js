@@ -371,6 +371,27 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         return false;
     };
 
+    const checkUniqueness = async (username) => {
+
+        try {
+            const requestId = uuidv4()
+            const response = await axios.post('http://3.129.12.15:8080/retrieveplayers', {
+                gameId: roundManager.gameId,
+                requestId: requestId
+            });
+            for(let i = 0; i <  response.data.data.length; i++){
+                if(username.equals(response.data.data[i].username)){
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error registering:', error);
+        }
+
+        return false;
+    };
     const joinGame = async ({ roundManager, username }) => {
 
         try {
@@ -448,14 +469,17 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                         try {
                             // Await the result of checkValidity
                             const valid = await checkValidity(code);
+                            const unique = await checkUniqueness(username);
 
-                            if (valid) {
+                            if (valid & unique) {
 
                                 joinGame({ roundManager, username });
                                 handleOpenWaitJoin();
                                 setCheckGameStatus(true);
-                            } else {
+                            } else if (!valid){
                                 setErrorStatement("Invalid Code. Please try again.");
+                            }else{
+                                setErrorStatement("The username is already taken. Please try another one");
                             }
                         } catch (error) {
                             console.error('Error during form submission:', error);

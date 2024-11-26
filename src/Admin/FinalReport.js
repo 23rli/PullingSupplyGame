@@ -60,7 +60,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                         let carNum = 0;
                         let maxWIP = 0;
                         let throughput = 0;
-                        let unfinished = 0;
+                        //let unfinished = 0;
     
                         roundData.forEach((round) => {
                             carNum = round.round_number == wipRound ? round.wip : carNum;
@@ -68,7 +68,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             throughput += round.done_b + round.done_g + round.done_r + round.done_y;
                         });
 
-                        unfinished = roundData[0].wip
+                        //unfinished = roundData[0].wip Break if players are at 0 lol
     
                         const penalty = calculateWIPPenalty(roundData);
                         const revenueAfterWIP = revenue - penalty;
@@ -83,8 +83,8 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             penalty: penalty,
                             finalScore: finalScore,
                             throughput: throughput,
-                            maxWIP: maxWIP,
-                            unfinished: unfinished,
+                            maxWIP: maxWIP
+                           // unfinished: unfinished,
                         };
                     })
                 );
