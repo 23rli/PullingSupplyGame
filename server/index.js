@@ -28,7 +28,7 @@ app.post('/test', (req, res) => {
     res.status(200).send("Test successful");
 });
 
-app.post('registergame',  (req, res) =>{
+app.post('/registergame',  (req, res) =>{
     const blueCar = req.body.blueCar;
     const bluePenalty = req.body.bluePenalty;
     const greenCar = req.body.greenCar;
