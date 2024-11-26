@@ -380,7 +380,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
                 requestId: requestId
             });
             for(let i = 0; i <  response.data.data.length; i++){
-                if(username.equals(response.data.data[i].username)){
+                if(username === response.data.data[i].username){
                     return false;
                 }
             }
