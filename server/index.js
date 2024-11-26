@@ -4,6 +4,9 @@ const cors = require('cors');                 // Middleware for Cross-Origin Res
 const mysql = require('mysql');               // MySQL database connection
 const bodyParser = require('body-parser');    // Middleware for parsing request bodies
 
+const redis = require('redis');               // Redis client for caching and concurrency
+const { promisify } = require('util');        // Utility to convert callbacks to promises
+
 // Middleware configuration
 app.use(bodyParser.urlencoded({ extended: false }));  // Parse URL-encoded data
 app.use(bodyParser.json());                           // Parse JSON data
@@ -16,15 +19,32 @@ var db = mysql.createPool({
   host: 'localhost',               // Database host
   user: 'Admin',                    // Database user
   password: 'CarsPullSupplies!',            // Database password
-  database: 'MotorCity'            // Target database
+  database: 'MotorCity'            // Target databanpm se
 });
+
+
+// Redis client setup
+const redisClient = redis.createClient(); // Default Redis connection (localhost:6379)
+const getAsync = promisify(redisClient.get).bind(redisClient);
+const setAsync = promisify(redisClient.set).bind(redisClient);
+
+// Helper function to check for request ID in Redis
+async function isDuplicateRequest(requestId) {
+    const exists = await getAsync(requestId);
+    return exists !== null;
+}
+
+// Helper function to mark request ID as processed
+async function markRequestAsProcessed(requestId, ttl = 300) {
+    await setAsync(requestId, true, 'EX', ttl); // Set with TTL of 300 seconds (5 minutes)
+}
 
 app.post('/test', (req, res) => {
     console.log("Received request at /test");
     res.status(200).send("Test successful");
 });
 
-app.post('/registergame', (req, res) =>{
+app.post('/registergame', async (req, res) =>{
     const blueCar = req.body.blueCar;
     const bluePenalty = req.body.bluePenalty;
     const greenCar = req.body.greenCar;
@@ -42,6 +62,16 @@ app.post('/registergame', (req, res) =>{
     const yellowRevenue = req.body.yellowRevenue;
     const gameState = req.body.gameState;
     const gameNotes = req.body.gameNotes;
+    const requestId = req.body.requestId;
+
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
+
     console.log("ARRIVE IN REGISTER GAME> ABOUT to do DB QUERY")
     db.query("INSERT into gamedata (blue_car, blue_penalty, green_car, green_penalty,"
         + " red_car, red_penalty, yellow_car, yellow_penalty, rolls, mode, code, blue_revenue," 
@@ -73,10 +103,19 @@ app.post('/registergame', (req, res) =>{
     })
 })
 
-app.post('/registeruser', (req, res) =>{
+app.post('/registeruser', async (req, res) =>{
     const username = req.body.username;
     const privledge = req.body.privledge;
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
     db.query("INSERT into users (username, privledge, game) VALUES (?, ?, ?)", [username, privledge, gameId], (err, result) => {
         if (err){
             console.log(err)
@@ -86,7 +125,7 @@ app.post('/registeruser', (req, res) =>{
     })
 })
 
-app.post('/registerround', (req, res) =>{
+app.post('/registerround', async (req, res) =>{
     const gameId = req.body.gameId;
     const userId = req.body.userId
 
@@ -128,7 +167,15 @@ app.post('/registerround', (req, res) =>{
     const unusedY = req.body.unusedY;
     const unusedB = req.body.unusedB;
 
-    
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
+
     db.query("INSERT into round "
         + "(game_id, user_id, round_number, manu_b, manu_g, manu_r, manu_y, assem_b, assem_g, assem_r, assem_y,"
         + "qual_b, qual_g, qual_r, qual_y, paint_b, paint_g, paint_r, paint_y, dry_b, dry_g, dry_r, dry_y, wip,"
@@ -182,8 +229,17 @@ app.post('/registerround', (req, res) =>{
     })
 })
 
-app.post('/checkcode', (req, res) => {
+app.post('/checkcode', async (req, res) => {
     const code = req.body.code;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
+
 
     // Query the database, filter by code and game_state, and order by game_created descending
     db.query("SELECT * FROM gamedata WHERE code = ? AND (game_state = 'IN PREP' OR game_state = 'IN PROGRESS') ORDER BY game_created DESC", [code], (err, result) => {
@@ -200,8 +256,16 @@ app.post('/checkcode', (req, res) => {
 });
 
 
-app.post('/gameComponents', (req, res) => {
-    const gameId = req.body.gameId;
+app.post('/gameComponents', async (req, res) => {
+    const gameId = req.body.gameId;    
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT rolls, blue_car, green_car, red_car, yellow_car, blue_revenue, green_revenue, red_revenue, yellow_revenue FROM gamedata WHERE game_id = ?", [gameId], (err, result) => {
@@ -217,8 +281,16 @@ app.post('/gameComponents', (req, res) => {
     });
 });
 
-app.post('/retrieveplayers', (req, res) => {
+app.post('/retrieveplayers', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT username FROM users WHERE game = ? AND privledge = 'player' ORDER BY username ASC", [gameId], (err, result) => {
@@ -232,8 +304,15 @@ app.post('/retrieveplayers', (req, res) => {
     });
 });
 
-app.post('/retrievegamestate', (req, res) => {
+app.post('/retrievegamestate', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT game_state FROM gamedata WHERE game_id = ?", [gameId], (err, result) => {
@@ -247,8 +326,15 @@ app.post('/retrievegamestate', (req, res) => {
     });
 });
 
-app.post('/progressgamestate', (req, res) => {
+app.post('/progressgamestate', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Update the game_state from IN PREP to IN PROGRESS based on the game_id
     db.query("UPDATE gamedata SET game_state = 'IN PROGRESS' WHERE game_id = ?", [gameId], (err, result) => {
@@ -266,8 +352,15 @@ app.post('/progressgamestate', (req, res) => {
     });
 });
 
-app.post('/progressgamestatetwo', (req, res) => {
+app.post('/progressgamestatetwo', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Update the game_state from IN PREP to IN PROGRESS based on the game_id
     db.query("UPDATE gamedata SET game_state = 'FINISHED' WHERE game_id = ?", [gameId], (err, result) => {
@@ -285,8 +378,14 @@ app.post('/progressgamestatetwo', (req, res) => {
     });
 });
 
-app.post('/retrieveleaderboard', (req, res) => {
+app.post('/retrieveleaderboard', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT * FROM users WHERE game = ? AND privledge = 'player' ORDER BY username ASC", [gameId], (err, result) => {
@@ -300,9 +399,16 @@ app.post('/retrieveleaderboard', (req, res) => {
     });
 });
 
-app.post('/retrieveroundinfo', (req, res) => {
+app.post('/retrieveroundinfo', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? ORDER BY round_number DESC", [gameId, userId], (err, result) => {
@@ -316,10 +422,17 @@ app.post('/retrieveroundinfo', (req, res) => {
     });
 });
 
-app.post('/retrievelimitedroundinfo', (req, res) => {
+app.post('/retrievelimitedroundinfo', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
     const roundLimit = req.body.roundLimit;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT * FROM round WHERE game_id = ? AND user_id = ? AND round_number <= ? ORDER BY round_number DESC", [gameId, userId, roundLimit], (err, result) => {
@@ -333,10 +446,17 @@ app.post('/retrievelimitedroundinfo', (req, res) => {
     });
 });
 
-app.post('/retrieveWIP', (req, res) => {
+app.post('/retrieveWIP', async (req, res) => {
     const gameId = req.body.gameId;
     const userId = req.body.userId;
     const roundNum = req.body.roundNum
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT WIP FROM round WHERE game_id = ? AND user_id = ? AND round_number = ? ORDER BY revenue DESC", [gameId, userId, roundNum], (err, result) => {
@@ -350,8 +470,15 @@ app.post('/retrieveWIP', (req, res) => {
     });
 });
 
-app.post('/retrievegamedetails', (req, res) => {
+app.post('/retrievegamedetails', async (req, res) => {
     const gameId = req.body.gameId;
+    const requestId = req.body.requestId;
+    if (await isDuplicateRequest(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    await markRequestAsProcessed(requestId);
+
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT * FROM gamedata WHERE game_id = ?", [gameId], (err, result) => {
