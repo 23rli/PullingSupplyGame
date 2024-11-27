@@ -6,7 +6,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 
-export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
+export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }) {
     const [openIntro, setOpenIntro] = useState(false);
     const [openJoin, setOpenJoin] = useState(false);
     const [openReJoin, setOpenReJoin] = useState(false);
@@ -179,7 +179,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
         setOpenJoin(false);
     };
 
-    const handleOpenReJoin = () => {
+    const handleOpenRejoin = () => {
         setOpenIntro(false);
         setOpenReJoin(true);
     };
