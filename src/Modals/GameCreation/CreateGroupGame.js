@@ -455,7 +455,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 requestId: requestId2
             });
             console.log(response2)
-            roundManager.userId = response.data.data.user_id;
+            roundManager.userId = response2.data.data.user_id;
             console.log(roundManager.userId + ", " + roundManager.gameId)
             
             const requestId3 = uuidv4()
