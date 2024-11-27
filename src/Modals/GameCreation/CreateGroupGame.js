@@ -439,6 +439,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 })
 
             const data = response.data.data;
+            console.log(data);
 
             roundManager.setGameResources(data.rolls)
             roundManager.setMode(1)
@@ -452,6 +453,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 username: username,
                 requestId: requestId2
             });
+            console.log(response2)
             roundManager.userId = response.data.data[0].user_id;
             
             const requestId3 = uuidv4()
@@ -460,6 +462,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 userId: roundManager.userId,
                 requestId: requestId3
             });
+            console.log(response3)
             
             if(response3.data.data.length > 0){
                 const recent = response3.data.data.length - 1;
