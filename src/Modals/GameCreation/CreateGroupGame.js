@@ -439,6 +439,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 })
 
             const data = response.data.data;
+            console.log("request1 done")
             console.log(data);
 
             roundManager.setGameResources(data.rolls)
