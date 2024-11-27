@@ -458,10 +458,185 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 userId: roundManager.userId,
                 requestId: requestId3
             });
-            for(let i = 0; i <  response3.data.data.length; i++){
-                //basically set roundmanager
-                //do both commits
-                // and repeat
+            
+            if(response3.data.data.length > 0){
+                const recent = response3.data.data.length - 1;
+                roundManager.roundNum = response3.data.data.round_number;
+                let column = [0,0,0,0];
+                let count = 0;
+                let painting = false;
+                let drying = false;
+                if(data.blue_car == 1){
+                    for(let i = 0;  i < response3.data.data.manu_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 0, 0, 0, false, false, 1, column[0]));
+                        count++;
+                        column[0]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.assem_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 3, 0, 0, false, false, 2, column[1]));
+                        count++;
+                        column[1]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.qual_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 3, 3, 0, false, false, 3, column[2]));
+                        count++;
+                        column[2]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.paint_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 3, 3, 2, false, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.dry_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 3, 3, 2, true, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    if(response3.data.data.paint_b > 0 & painting == false){
+                        painting = true;
+                    }else if(response3.data.data.dry_b > 0 & drying == false){
+                        drying = true;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.done_b; i++){
+                        roundManager.Cars.push(new Car("b" + count, null, 3, 3, 2, false, true, 6, 0));
+                        count++;
+                    }
+                }
+                if(data.green_car == 1){
+                    for(let i = 0;  i < response3.data.data.manu_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 0, 0, 0, false, false, 1, column[0]));
+                        count++;
+                        column[0]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.assem_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 2, 0, 0, false, false, 2, column[1]));
+                        count++;
+                        column[1]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.qual_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 2, 2, 0, false, false, 3, column[2]));
+                        count++;
+                        column[2]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.paint_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 2, 2, 2, false, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.dry_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 2, 2, 2, true, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    if(response3.data.data.paint_g > 0 & painting == false){
+                        painting = true;
+                    }else if(response3.data.data.dry_g > 0 & drying == false){
+                        drying = true;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.done_g; i++){
+                        roundManager.Cars.push(new Car("g" + count, null, 2, 2, 2, false, true, 6, 0));
+                        count++;
+                    }
+                }
+                if(data.yellow_car == 1){
+                    for(let i = 0;  i < response3.data.data.manu_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 0, 0, 0, false, false, 1, column[0]));
+                        count++;
+                        column[0]++;
+                    }
+                   
+                    for(let i = 0;  i < response3.data.data.assem_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 2, 0, 0, false, false, 2, column[1]));
+                        count++;
+                        column[1]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.qual_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 2, 3, 0, false, false, 3, column[2]));
+                        count++;
+                        column[2]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.paint_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 2, 3, 2, false, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.dry_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 2, 3, 2, true, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    if(response3.data.data.paint_g > 0 & painting == false){
+                        painting = true;
+                    }else if(response3.data.data.dry_g > 0 & drying == false){
+                        drying = true;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.done_y; i++){
+                        roundManager.Cars.push(new Car("y" + count, null, 2, 3, 2, false, true, 6, 0));
+                        count++;
+                    }
+                }
+                if(data.red_car == 1){
+                    for(let i = 0;  i < response3.data.data.manu_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 0, 0, 0, false, false, 1, column[0]));
+                        count++;
+                        column[0]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.assem_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 3, 0, 0, false, false, 2, column[1]));
+                        count++;
+                        column[1]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.qual_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 3, 2, 0, false, false, 3, column[2]));
+                        count++;
+                        column[2]++;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.paint_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 3, 2, 2, false, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    for(let i = 0;  i < response3.data.data.dry_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 3, 2, 2, true, false, 4, column[3]));
+                        count++;
+                        column[3]++;
+                    }
+                    if(response3.data.data.paint_g > 0 & painting == false){
+                        painting = true;
+                    }else if(response3.data.data.dry_g > 0 & drying == false){
+                        drying = true;
+                    }
+
+                    for(let i = 0;  i < response3.data.data.done_r; i++){
+                        roundManager.Cars.push(new Car("r" + count, null, 3, 2, 2, false, true, 6, 0));
+                        count++;
+                    }
+                }
+                if(painting){
+                    roundManager.paintStatus = true;
+                    roundManager.paintRoundBegan = roundManager.roundNum;
+                }else if(drying){
+                    roundManager.paintStatus = false;
+                    roundManager.dryStatus = false;
+                    roundManager.paintRoundBegan = -1;
+                }
+                
+                roundManager.setShortTermMem();
+
+                longMemory.commitPosition({roundManager})
+                longMemory.commitResources({roundManager})
+                roundManager.advanceRound();
             }
 
 
