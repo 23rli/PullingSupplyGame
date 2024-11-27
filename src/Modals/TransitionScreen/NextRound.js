@@ -38,7 +38,8 @@ const commitToDB = async ({roundManager, longMemory}) => {
   + data[22] * roundManager.revenueR + data[23] * roundManager.revenueY;
 
   try {
-    const requestId = uuidv4()
+    const requestId = uuidv4();
+    console.log(requestId);
     const response = await axios.post('http://3.129.12.15:8080/registerround', 
       {
         gameId: roundManager.gameId,
