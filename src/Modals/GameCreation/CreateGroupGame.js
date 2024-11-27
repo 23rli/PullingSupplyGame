@@ -469,6 +469,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
             if(response3.data.data.length > 0){
                 const recent = response3.data.data.length - 1;
                 roundManager.roundNum = response3.data.data.round_number;
+                console.log(roundManager.roundNum);
                 let column = [0,0,0,0];
                 let count = 0;
                 let painting = false;
