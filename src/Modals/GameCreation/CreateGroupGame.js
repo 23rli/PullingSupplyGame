@@ -418,9 +418,54 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
             roundManager.setMode(1)
             roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
             roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
+            roundManager.setShortTermMem();
             handleCreatePlayer(username);
 
         } catch (error) {
+            console.error('Error registering:', error);
+        }
+    }
+
+    const rejoinGame = async ({ roundManager, username, longMemory }) => {
+
+        try {
+            const requestId = uuidv4()
+            const response = await axios.post('http://3.129.12.15:8080/gameComponents',
+                {
+                    gameId: roundManager.gameId,
+                    requestId: requestId
+                })
+
+            const data = response.data.data;
+
+            roundManager.setGameResources(data.rolls)
+            roundManager.setMode(1)
+            roundManager.setCars(data.blue_car, data.green_car, data.red_car, data.yellow_car)
+            roundManager.setRevenue(data.blue_revenue, data.green_revenue, data.red_revenue, data.yellow_revenue)
+            roundManager.setShortTermMem();
+
+            const requestId2 = uuidv4()
+            const response2 = await axios.post('http://3.129.12.15:8080/retrieveplayerid', {
+                gameId: roundManager.gameId,
+                username: username,
+                requestId: requestId2
+            });
+            roundManager.userId = response.data.data[0].user_id;
+            
+            const requestId3 = uuidv4()
+            const response3 = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
+                gameId: roundManager.gameId,
+                userId: roundManager.userId,
+                requestId: requestId3
+            });
+            for(let i = 0; i <  response3.data.data.length; i++){
+                //basically set roundmanager
+                //do both commits
+                // and repeat
+            }
+
+
+        }catch (error) {
             console.error('Error registering:', error);
         }
     }
@@ -484,9 +529,9 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin }) {
 
                             if (valid & !unique) {
 
-                                //joinGame({ roundManager, username });
+                                rejoinGame({ roundManager, username, longMemory });
                                 //handleOpenWaitJoin();
-                                //setCheckGameStatus(true);
+                                setCheckGameStatus(true);
                             } else if (!valid){
                                 setErrorStatement("Invalid Code. Please try again.");
                             }else{

@@ -37,11 +37,11 @@ const buttonStyle = {
   margin: '10px 0' // Adds margin between buttons
 };
 
-const StartScreen = ({ onStart, openAdmin, roundManager }) => (
+const StartScreen = ({ onStart, openAdmin, roundManager, longMemory}) => (
   <div style={{ textAlign: 'center', color: 'white' }}>
     <h1>Welcome to Motor City!</h1>
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <CreateGroupGame roundManager = {roundManager} onStart = {onStart} openAdmin = {openAdmin}/>
+      <CreateGroupGame roundManager = {roundManager} onStart = {onStart} openAdmin = {openAdmin} longMemory = {longMemory}/>
       <CreateIndiGame roundManager = {roundManager} onStart = {onStart}/>
     </div>
   </div>
@@ -72,7 +72,7 @@ export const TutorialApp = () => {
     <>
       {gameState === 'start' && (
         <div style={screenStyle}>
-          <StartScreen onStart={startGame} openAdmin = {admin} roundManager={roundManager} />
+          <StartScreen onStart={startGame} openAdmin = {admin} roundManager={roundManager} longMemory={longMemory} />
         </div>
       )}
       {gameState === 'playing' && (

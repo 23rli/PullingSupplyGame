@@ -266,11 +266,41 @@ app.post('/gameComponents',  (req, res) => {
 app.post('/retrieveplayers',  (req, res) => {
     const gameId = req.body.gameId;
     const requestId = req.body.requestId;
-   
+
+    if (processedRequests.has(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    // Process the request
+    processedRequests.add(requestId); // Mark this request as processed
 
 
     // Query to select rolls, blue_revenue, and mode based on the provided code
     db.query("SELECT username FROM users WHERE game = ? AND privledge = 'player' ORDER BY username ASC", [gameId], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send({ error: 'Database query error' });
+        } else if (result.length >= 0) {
+            // Send the selected data if the code is found
+            res.send({data: result });
+        }
+    });
+});
+
+app.post('/retrieveplayerid',  (req, res) => {
+    const gameId = req.body.gameId;
+    const username = req.body.username
+    const requestId = req.body.requestId;
+
+    if (processedRequests.has(requestId)) {
+        return res.status(400).json({ message: 'Duplicate request' });
+    }
+
+    // Process the request
+    processedRequests.add(requestId); // Mark this request as processed
+
+    // Query to select rolls, blue_revenue, and mode based on the provided code
+    db.query("SELECT user_id FROM users WHERE game = ? AND privledge = 'player' AND username = ?", [gameId, username], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send({ error: 'Database query error' });
