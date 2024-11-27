@@ -3,7 +3,8 @@ import { Checkbox, Collapse, Dialog, DialogActions, DialogContent, DialogContent
 //update
 
 import axios from 'axios';
-import { Car } from '.../Pieces/Cars/Car.js'
+import { Car } from '../../Pieces/Cars/Car';
+
 import { v4 as uuidv4 } from 'uuid';
 
 
