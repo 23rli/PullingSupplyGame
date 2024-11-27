@@ -471,6 +471,10 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                 console.log(roundManager.roundNum);
                 let column = [0,0,0,0];
                 let count = 0;
+                if(data.blue_car == 1) count++;
+                if(data.green_car == 1) count++;
+                if(data.red_car == 1) count++;
+                if(data.yellow_car == 1) count++;
                 let painting = false;
                 let drying = false;
                 if(data.blue_car == 1){
@@ -507,6 +511,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
 
                     for(let i = 0;  i < response3.data.data[0].done_b; i++){
                         roundManager.cars.push(new Car("b" + count, null, 3, 3, 2, false, true, 6, 0));
+                        roundManager.produced ++;
                         count++;
                     }
                 }
@@ -547,6 +552,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
 
                     for(let i = 0;  i < response3.data.data[0].done_g; i++){
                         roundManager.cars.push(new Car("g" + count, null, 2, 2, 2, false, true, 6, 0));
+                        roundManager.produced ++;
                         count++;
                     }
                 }
@@ -587,6 +593,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
 
                     for(let i = 0;  i < response3.data.data[0].done_y; i++){
                         roundManager.cars.push(new Car("y" + count, null, 2, 3, 2, false, true, 6, 0));
+                        roundManager.produced ++;
                         count++;
                     }
                 }
@@ -627,6 +634,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
 
                     for(let i = 0;  i < response3.data.data[0].done_r; i++){
                         roundManager.cars.push(new Car("r" + count, null, 3, 2, 2, false, true, 6, 0));
+                        roundManager.produced ++;
                         count++;
                     }
                 }
