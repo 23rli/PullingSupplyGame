@@ -456,6 +456,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
             });
             console.log(response2)
             roundManager.userId = response.data.data.user_id;
+            console.log(roundManager.userId + ", " + roundManager.gameId)
             
             const requestId3 = uuidv4()
             const response3 = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
