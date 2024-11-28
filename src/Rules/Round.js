@@ -395,7 +395,7 @@ export class Round {
 
     hasCar(x, y, cars, index) {
         for (let i = 0; i < cars.length; i++) {
-            if (cars[i].coords[0] === x && cars[i].coords[1] === y && index != i + 1){
+            if (cars[i].coords[0] === x && cars[i].coords[1] === y && index != i){
                 console.log(index + " " + i)
                 return true;
             }
