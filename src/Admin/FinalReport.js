@@ -73,8 +73,9 @@ export function FinalReport({ roundManager, wipRound, time}) {
     
                         // Calculate average WIP (divide by the number of rounds if rounds exist)
                         if (roundData.length > 0) {
-                            averageWIP = totalWIP / roundData.length;
+                            averageWIP = (totalWIP / roundData.length).toFixed(3);
                         }
+                        
     
                         const penalty = calculateWIPPenalty(roundData);
                         const revenueAfterWIP = revenue - penalty;
