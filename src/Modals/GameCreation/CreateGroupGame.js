@@ -101,7 +101,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
         }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
     
 
-    const handleGameStart = () => {
+    const eart = () => {
 
         const updateGameState = async () => {
 
@@ -317,6 +317,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
 
  
             setCode(code)
+            roundManager.code = code;
             roundManager.gameId = response.data.gameId; // Accessing 'gameId'
             roundManager.setGameResources(rolls);
             roundManager.setMode(2);

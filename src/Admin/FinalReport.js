@@ -44,7 +44,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 });
     
                 const playerData = response.data.data;
-                const requestId2 = uuidv4()
+                const requestId2 = uuidv4();
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
                         const revResponse = await axios.post('http://3.129.12.15:8080/retrievelimitedroundinfo', {
@@ -60,15 +60,21 @@ export function FinalReport({ roundManager, wipRound, time}) {
                         let carNum = 0;
                         let maxWIP = 0;
                         let throughput = 0;
-                        //let unfinished = 0;
+                        let totalWIP = 0; // To track the sum of WIP across rounds
+                        let averageWIP = 0;
     
+                        // Calculate metrics for each round
                         roundData.forEach((round) => {
-                            carNum = round.round_number == wipRound ? round.wip : carNum;
+                            carNum = round.round_number === wipRound ? round.wip : carNum;
                             maxWIP = Math.max(maxWIP, round.wip);
                             throughput += round.done_b + round.done_g + round.done_r + round.done_y;
+                            totalWIP += round.wip; // Add WIP to the total
                         });
-
-                        //unfinished = roundData[0].wip Break if players are at 0 lol
+    
+                        // Calculate average WIP (divide by the number of rounds if rounds exist)
+                        if (roundData.length > 0) {
+                            averageWIP = totalWIP / roundData.length;
+                        }
     
                         const penalty = calculateWIPPenalty(roundData);
                         const revenueAfterWIP = revenue - penalty;
@@ -83,8 +89,8 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             penalty: penalty,
                             finalScore: finalScore,
                             throughput: throughput,
-                            maxWIP: maxWIP
-                           // unfinished: unfinished,
+                            maxWIP: maxWIP,
+                            averageWIP: averageWIP // Include average WIP in the result
                         };
                     })
                 );
@@ -96,11 +102,9 @@ export function FinalReport({ roundManager, wipRound, time}) {
             }
         };
     
-        if (elapsedTime % timePerUpdate === 0 && elapsedTime < 5) {
-            fetchPlayers();
-            setUpdated(true);
-        }
-    }, [elapsedTime, timePerUpdate, roundManager, wipRound]);
+        fetchPlayers();
+    }, [roundManager, wipRound]);
+    
 
     const calculateWIPPenalty = (roundData) => {
         let penalty = 0;

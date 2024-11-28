@@ -49,6 +49,7 @@ export class Round {
         this.errorDisplayed = false;
 
         this.endGame = false;
+        this.code = -1;
 
         //Admin Resources:
 

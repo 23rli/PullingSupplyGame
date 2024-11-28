@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import NumberInputModal from "./WIPPenalty.js"
+import NumberInputModal from "./WIPPenalty.js";
 import './AdminPanel.css'; // Import the CSS file for styles
 
 
@@ -28,7 +28,7 @@ export function AdminPanel({ roundManager, report }) {
     useEffect(() => {
         const fetchPlayers = async () => {
             try {
-                const requestId = uuidv4()
+                const requestId = uuidv4();
                 const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
                     gameId: roundManager.gameId,
                     requestId: requestId
@@ -36,10 +36,9 @@ export function AdminPanel({ roundManager, report }) {
 
                 const playerData = response.data.data;
 
-
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
-                        const requestId = uuidv4()
+                        const requestId = uuidv4();
                         const revResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id,
@@ -47,7 +46,6 @@ export function AdminPanel({ roundManager, report }) {
                         });
                         const revenue = revResponse.data.data[0]?.revenue || 0;
                         const roundNum = revResponse.data.data[0]?.round_number || 0;
-
 
                         return {
                             userId: player.user_id,
@@ -71,7 +69,7 @@ export function AdminPanel({ roundManager, report }) {
 
     const endGame = async () => {
         try {
-            const requestId = uuidv4()
+            const requestId = uuidv4();
             const userResponse = await axios.post('http://3.129.12.15:8080/progressgamestatetwo', {
                 gameId: roundManager.gameId,
                 requestId: requestId
@@ -85,7 +83,7 @@ export function AdminPanel({ roundManager, report }) {
     
     const handleRowClick = async (userId) => {
         setSelectedUser(userId);
-        const requestId = uuidv4()
+        const requestId = uuidv4();
         try {
             const userResponse = await axios.post('http://3.129.12.15:8080/retrieveroundinfo', {
                 gameId: roundManager.gameId,
@@ -130,7 +128,6 @@ export function AdminPanel({ roundManager, report }) {
         return sortableItems;
 
     }, [userData, sortConfig]);
-    
 
     const renderUserDataTable = () => {
         if (!detailedUserData || detailedUserData.length === 0) return <Typography variant="body2">No data available.</Typography>;
@@ -179,7 +176,7 @@ export function AdminPanel({ roundManager, report }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {detailedUserData.map((row, index) => (
+                    {detailedUserData.map((row, index) => (
                             <TableRow key={index}>
                                 <TableCell style={{ position: 'sticky', left: 0, backgroundColor: 'white', zIndex: 1 }}>{row.round_number}</TableCell>
                                 <TableCell align="right">{row.manu_b || row.manu_b === "0" ? row.manu_b : ''}</TableCell>
@@ -224,93 +221,43 @@ export function AdminPanel({ roundManager, report }) {
             </TableContainer>
         );
     };
-    
 
-        return (
-            <div className="admin-panel-container"> {/* Wrap the Grid in a div */}
-                <Grid container spacing={2} padding={2}>
-                    <Grid item xs={6}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6">Game Settings</Typography>
-                                <Typography variant="body2">Time Since Beginning: {formatTime()}</Typography>
-                                <Typography variant="body2">Current Number of Players: {userData.length}</Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+    return (
+        <Grid container spacing={2}>
+            {/* Render the game code at the top right */}
+            <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Typography variant="h6">{`Game Code: ${roundManager.code}`}</Typography>
+            </Grid>
 
-                    <Grid item xs={6}>
-                        <Card>
-                            <CardContent>
-                                <Typography variant="h6">Game Control</Typography>
-                                <NumberInputModal endGame = {endGame} roundManager = {roundManager} time = {formatTime}/>
-                                <Typography variant="h6" gutterBottom>Player Rounds</Typography>
-                                {userData.map((player) => (
-                                    <Typography variant="body2" key={player.userId}>
-                                        {player.username}: Round: {player.round}
-                                    </Typography>
-                                ))}
-                            </CardContent>
-                        </Card>
-                    </Grid>
+            <Grid item xs={12} md={6}>
+                {/* User Data Table */}
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Username</TableCell>
+                                <TableCell align="right">Revenue</TableCell>
+                                <TableCell align="right">Round</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {sortedData.map((user) => (
+                                <TableRow key={user.userId} onClick={() => handleRowClick(user.userId)}>
+                                    <TableCell>{user.username}</TableCell>
+                                    <TableCell align="right">{user.revenue}</TableCell>
+                                    <TableCell align="right">{user.round}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
 
-                    <Grid item xs={12}>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            <TableSortLabel
-                                                active={sortConfig.key === 'username'}
-                                                direction={sortConfig.direction}
-                                                onClick={() => handleSort('username')}
-                                            >
-                                                Users
-                                            </TableSortLabel>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableSortLabel
-                                                active={sortConfig.key === 'revenue'}
-                                                direction={sortConfig.direction}
-                                                onClick={() => handleSort('revenue')}
-                                            >
-                                                Revenue
-                                            </TableSortLabel>
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {sortedData.map((row) => (
-                                        <TableRow
-                                            key={row.username}
-                                            hover
-                                            onClick={() => handleRowClick(row.userId)}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {row.username}
-                                            </TableCell>
-                                            <TableCell align="right">{row.revenue}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid>
-
-                    {selectedUser && (
-                        <Grid item xs={12}>
-                            <Card className="user-details-card">
-                                <CardContent>
-                                    <Typography variant="h6">User Details:</Typography>
-                                    {renderUserDataTable()}
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    )}
-                </Grid>
-            </div>
+            <Grid item xs={12} md={6}>
+                {/* Render detailed user data if selected */}
+                {selectedUser && renderUserDataTable()}
+            </Grid>
+        </Grid>
     );
 }
 
-export default AdminPanel;
