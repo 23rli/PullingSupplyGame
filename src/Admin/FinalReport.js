@@ -317,7 +317,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
             Final_Score: user.finalScore,
             Throughput: user.throughput,
             Max_WIP: user.maxWIP,
-            Unfinished: user.unfinished
+            Average_WIP: user.averageWIP
         })).sort((a, b) => b.Revenue - a.Revenue); // Sort by Revenue in descending order
         const userRevenueWorksheet = XLSX.utils.json_to_sheet(userRevenueData);
         XLSX.utils.book_append_sheet(workbook, userRevenueWorksheet, "User Overview");
@@ -630,11 +630,11 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                     </TableCell>
                                     <TableCell align="right">
                                         <TableSortLabel
-                                            active={sortConfig.key === 'unfinished'}
+                                            active={sortConfig.key === 'averageWIP'}
                                             direction={sortConfig.direction}
-                                            onClick={() => handleSort('unfinished')}
+                                            onClick={() => handleSort('averageWIP')}
                                         >
-                                            Unfinished
+                                            Average WIP
                                         </TableSortLabel>
                                     </TableCell>
                                 </TableRow>
@@ -655,7 +655,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                         <TableCell align="right">{row.finalScore}</TableCell>
                                         <TableCell align="right">{row.throughput}</TableCell>
                                         <TableCell align="right">{row.maxWIP}</TableCell>
-                                        <TableCell align="right">{row.unfinished}</TableCell>
+                                        <TableCell align="right">{row.averageWIP}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
