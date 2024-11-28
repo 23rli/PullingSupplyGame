@@ -106,10 +106,12 @@ export function FinalReport({ roundManager, wipRound, time}) {
     }, [roundManager, wipRound]);
 
     useEffect(() => {
+        console.log("Updated userData:", userData); // Log userData to verify it's populated correctly
         if (userData.length > 0) {
             setGameStats(revenueData());
         }
     }, [userData]);
+    
     
     
 

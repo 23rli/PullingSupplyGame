@@ -856,7 +856,6 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                         const formJson = Object.fromEntries(formData.entries());
                         const username = formJson.username;
                         const gameNotes = formJson.gameNotes;
-                        const evanDalton = formJson.evanDalton;
                         if(!reUseGame){
                             const blueRevenue = formJson.blueRevenue;
                             const greenRevenue = formJson.greenRevenue;
@@ -887,7 +886,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                                 }
                             }else{
                                 console.log("Edalton rolls used")
-                                rolls = "8,6,2,7,4,3,10,6,1,6,2,2,6,2,1,9,2,3,7,7,2,5,4,4,5,6,3,3,3,4,4,2,1,5,5,3,3,6,2,6,1,3,1,3,2,2,2,2,7,5,2,4,3,4,5,6,3,4,8,3,8,7,2,7,6,3,6,3,2,5,6,4,5,8,2";
+                                rolls = "8,6,2,7,4,3,10,6,1,6,2,2,6,2,1,9,2,3,7,7,2,5,4,4,5,6,3,3,3,4,4,2,1,5,5,3,3,6,2,6,1,3,1,3,2,2,2,2,7,5,2,4,3,4,5,6,3,4,8,3,8,7,2,7,6,3,6,3,2,5,6,4,5,8,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
                             }
 
                             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
