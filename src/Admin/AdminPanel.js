@@ -266,6 +266,15 @@ export function AdminPanel({ roundManager, report }) {
                                         </TableCell>
                                         <TableCell align="right">
                                             <TableSortLabel
+                                                active={sortConfig.key === 'round'}
+                                                direction={sortConfig.direction}
+                                                onClick={() => handleSort('round')}
+                                            >
+                                                Round
+                                            </TableSortLabel>
+                                        </TableCell> 
+                                        <TableCell align="right">
+                                            <TableSortLabel
                                                 active={sortConfig.key === 'revenue'}
                                                 direction={sortConfig.direction}
                                                 onClick={() => handleSort('revenue')}
@@ -273,15 +282,6 @@ export function AdminPanel({ roundManager, report }) {
                                                 Revenue
                                             </TableSortLabel>
                                         </TableCell>
-                                        <TableCell align="right">
-                                            <TableSortLabel
-                                                active={sortConfig.key === 'round'}
-                                                direction={sortConfig.direction}
-                                                onClick={() => handleSort('round')}
-                                            >
-                                                Round
-                                            </TableSortLabel>
-                                        </TableCell> {/* New Sortable Column for Round */}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
