@@ -11,8 +11,8 @@ export class LongMemory {
     commitPosition({ roundManager }) {
         
 
-        if(this.round < roundManager.roundNum){
-            this.storage.push(new ShortMemory(roundManager.roundNum))
+        while(this.round < roundManager.roundNum){
+            this.storage.push(new ShortMemory(this.round + 1))
             this.round ++;
         }
 
