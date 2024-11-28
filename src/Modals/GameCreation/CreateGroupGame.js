@@ -101,7 +101,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
         }, [elapsedTime, checkUsers, timePerUpdate, roundManager]);
     
 
-    const eart = () => {
+    const handleGameStart = () => {
 
         const updateGameState = async () => {
 
