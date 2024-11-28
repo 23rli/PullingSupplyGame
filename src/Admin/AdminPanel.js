@@ -244,12 +244,8 @@ export function AdminPanel({ roundManager, report }) {
                             <CardContent>
                                 <Typography variant="h6">Game Control</Typography>
                                 <NumberInputModal endGame = {endGame} roundManager = {roundManager} time = {formatTime}/>
-                                <Typography variant="h6" gutterBottom>Player Rounds</Typography>
-                                {userData.map((player) => (
-                                    <Typography variant="body2" key={player.userId}>
-                                        {player.username}: Round: {player.round}
-                                    </Typography>
-                                ))}
+                                <Typography variant="h6" gutterBottom>Game COde</Typography>
+                                <Typography variant="body2">{roundManager.code}</Typography>
                             </CardContent>
                         </Card>
                     </Grid>
@@ -299,8 +295,9 @@ export function AdminPanel({ roundManager, report }) {
                                             <TableCell component="th" scope="row">
                                                 {row.username}
                                             </TableCell>
+                                            <TableCell align="right">{row.round}</TableCell> 
                                             <TableCell align="right">{row.revenue}</TableCell>
-                                            <TableCell align="right">{row.round}</TableCell> {/* New Round Column */}
+                                            
                                         </TableRow>
                                     ))}
                                 </TableBody>
