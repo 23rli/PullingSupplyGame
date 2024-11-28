@@ -97,7 +97,6 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 );
     
                 setUserData(updatedUserData);
-                setGameStats(revenueData);
             } catch (error) {
                 console.error('Error fetching players or revenue:', error);
             }
@@ -105,6 +104,13 @@ export function FinalReport({ roundManager, wipRound, time}) {
     
         fetchPlayers();
     }, [roundManager, wipRound]);
+
+    useEffect(() => {
+        if (userData.length > 0) {
+            setGameStats(revenueData());
+        }
+    }, [userData]);
+    
     
 
     const calculateWIPPenalty = (roundData) => {
