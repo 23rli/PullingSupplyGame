@@ -647,6 +647,7 @@ export function CreateGroupGame({ roundManager, onStart, openAdmin, longMemory }
                     roundManager.paintRoundBegan = -1;
                 }
                 roundManager.count = count;
+                roundManager.emitChange()
                 roundManager.setShortTermMem();
 
                 longMemory.commitPosition({roundManager})
