@@ -44,9 +44,9 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 });
     
                 const playerData = response.data.data;
-                const requestId2 = uuidv4();
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
+                        const requestId2 = uuidv4();
                         const revResponse = await axios.post('http://3.129.12.15:8080/retrievelimitedroundinfo', {
                             gameId: roundManager.gameId,
                             userId: player.user_id,

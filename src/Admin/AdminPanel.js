@@ -244,7 +244,7 @@ export function AdminPanel({ roundManager, report }) {
                             <CardContent>
                                 <Typography variant="h6">Game Control</Typography>
                                 <NumberInputModal endGame = {endGame} roundManager = {roundManager} time = {formatTime}/>
-                                <Typography variant="h6" gutterBottom>Game COde</Typography>
+                                <Typography variant="h6" gutterBottom>Game Code</Typography>
                                 <Typography variant="body2">{roundManager.code}</Typography>
                             </CardContent>
                         </Card>
