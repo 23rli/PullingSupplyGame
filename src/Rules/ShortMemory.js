@@ -23,6 +23,16 @@ export class ShortMemory{
 
     setMemory( cars, count, produced, roundResources, conResources, roundNum, paintRoundBegan, paintStatus, dryStatus, readyToPaint){
         
+        console.log(cars);
+        console.log(count)
+        console.log(produced)
+        console.log(roundResources)
+        console.log(conResources)
+        console.log(roundNum)
+        console.log(paintRoundBegan)
+        console.log(paintStatus)
+        console.log(dryStatus)
+        console.log(readyToPaint)
         this.cars = [];
 
         for(let i = 0; i < cars.length; i++){
