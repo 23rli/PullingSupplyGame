@@ -158,6 +158,10 @@ export function FinalReport({ roundManager, wipRound, time}) {
         revenueYPArray.sort((a, b) => a - b);
         WIPPenArray.sort((a, b) => a - b);
         roundArray.sort((a, b) => a - b);
+        console.log(revenueNPArray)
+        console.log(revenueYPArray)
+        console.log(WIPPenArray)
+        console.log(roundArray)
     
         return {
             lowRevNP: revenueNPArray[0],
