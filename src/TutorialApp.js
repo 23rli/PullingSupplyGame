@@ -20,11 +20,23 @@ const screenStyle = {
   backgroundImage: `url(${splashPage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  overflow: 'hidden', // Prevent scrolling inside this container
+  overflow: 'hidden', // Prevent scrolling on the start screen
+};
+
+const pageStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '100vw',
+  height: '100%',
+  margin: 0,
+  padding: 0,
+  backgroundColor: '#2c387e',
+  overflowY: 'auto', // Enable vertical scrolling for other pages
 };
 
 const rectangleStyle = {
-  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
+  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Reduced transparency
   padding: '20px',
   borderRadius: '10px',
   textAlign: 'center',
@@ -50,23 +62,6 @@ const buttonStyle = {
   color: 'white',
 };
 
-// Apply these styles globally using a React effect or an external stylesheet
-const GlobalStyle = () => {
-  return (
-    <style>
-      {`
-        body, html {
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden; /* Disable scrolling globally */
-        }
-      `}
-    </style>
-  );
-};
-
 const StartScreen = ({ onStart, openAdmin, roundManager, longMemory }) => (
   <div style={screenStyle}>
     <div style={rectangleStyle}>
@@ -85,7 +80,7 @@ const StartScreen = ({ onStart, openAdmin, roundManager, longMemory }) => (
 );
 
 const EndScreen = ({ onRestart, backToHomePage, roundManager, longMemory }) => (
-  <div style={screenStyle}>
+  <div style={pageStyle}>
     <div style={rectangleStyle}>
       <h1>Game Over!</h1>
       <div style={buttonContainerStyle}>
@@ -111,7 +106,6 @@ export const TutorialApp = () => {
 
   return (
     <>
-      <GlobalStyle />
       {gameState === 'start' && (
         <div style={screenStyle}>
           <StartScreen
@@ -123,40 +117,47 @@ export const TutorialApp = () => {
         </div>
       )}
       {gameState === 'playing' && (
-        <div style={screenStyle}>
-          <Board
-            roundManager={roundManager}
-            longMemory={longMemory}
-            endGame={endGame}
-          />
+        <div style={pageStyle}>
+          <div style={rectangleStyle}>
+            <Board
+              roundManager={roundManager}
+              longMemory={longMemory}
+              endGame={endGame}
+            />
+          </div>
         </div>
       )}
       {gameState === 'end' && (
-        <div style={screenStyle}>
-          <EndScreen
-            onRestart={startGame}
-            backToHomePage={homepage}
-            roundManager={roundManager}
-            longMemory={longMemory}
-          />
+        <div style={pageStyle}>
+          <div style={rectangleStyle}>
+            <EndScreen
+              onRestart={startGame}
+              backToHomePage={homepage}
+              roundManager={roundManager}
+              longMemory={longMemory}
+            />
+          </div>
         </div>
       )}
       {gameState === 'admin' && (
-        <div style={screenStyle}>
-          <AdminPanel roundManager={roundManager} report={report} />
+        <div style={pageStyle}>
+          <div style={rectangleStyle}>
+            <AdminPanel roundManager={roundManager} report={report} />
+          </div>
         </div>
       )}
       {gameState === 'finalReport' && (
-        <div style={screenStyle}>
-          <FinalReport
-            roundManager={roundManager}
-            wipPenalty={roundManager.WIPPen}
-            wipRound={roundManager.WIPRound}
-            time={roundManager.time}
-          />
+        <div style={pageStyle}>
+          <div style={rectangleStyle}>
+            <FinalReport
+              roundManager={roundManager}
+              wipPenalty={roundManager.WIPPen}
+              wipRound={roundManager.WIPRound}
+              time={roundManager.time}
+            />
+          </div>
         </div>
       )}
     </>
   );
 };
-
