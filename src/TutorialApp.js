@@ -123,6 +123,25 @@ const GlobalStyle = ({ isActive }) => {
   );
 };
 
+const GlobalPlayingStyle = ({ isActive }) => {
+  if (!isActive) return null;
+
+  return (
+    <style>
+      {`
+        body, html {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          overflowX: hidden; /* Disable scrolling globally for the start screen */
+          overflowY: auto;
+        }
+      `}
+    </style>
+  );
+};
+
 const StartScreen = ({ onStart, openAdmin, roundManager, longMemory }) => (
   <div style={screenStyle}>
     <div style={rectangleStyle}>
@@ -167,7 +186,8 @@ export const TutorialApp = () => {
 
   return (
     <>
-      <GlobalStyle isActive={gameState === 'start' || gameState === 'playing'} />
+      <GlobalStyle isActive={gameState === 'start' } />
+      <GlobalPlayingStyle isActive={ gameState === 'playing'} />
 
       {gameState === 'start' && (
         <StartScreen
