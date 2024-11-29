@@ -24,7 +24,7 @@ const screenStyle = {
 };
 
 const rectangleStyle = {
-  backgroundColor: 'rgba(44, 56, 126, 0.6)', // Semi-transparent background
+  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
   padding: '20px',
   borderRadius: '10px',
   textAlign: 'center',
