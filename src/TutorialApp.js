@@ -24,7 +24,7 @@ const screenStyle = {
 };
 
 
-const pageStyle = {
+const containerStyle = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -36,6 +36,21 @@ const pageStyle = {
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   overflowY: 'auto', // Enable scrolling on other pages
+  overflowX: 'hidden',
+};
+const pageStyle = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '100vw',
+  height: '100vh',
+  margin: 0,
+  padding: 0,
+  backgroundImage: `url(${splashPage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  overflowY: 'auto', // Enable scrolling on other pages
+  overflowX: 'hidden',
 };
 
 const rectangleStyle = {
@@ -138,7 +153,7 @@ export const TutorialApp = () => {
         />
       )}
       {gameState === 'playing' && (
-        <div style={pageStyle}>
+        <div style={containerStyle}>
           <div style={rectangleStyle}>
             <Board
               roundManager={roundManager}
