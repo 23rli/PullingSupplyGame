@@ -20,10 +20,11 @@ const screenStyle = {
   backgroundImage: `url(${splashPage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
+  overflow: 'hidden', // Prevent scrolling inside this container
 };
 
 const rectangleStyle = {
-  backgroundColor: 'rgba(44, 56, 126, 0.8)', // Semi-transparent background
+  backgroundColor: 'rgba(44, 56, 126, 0.6)', // Semi-transparent background
   padding: '20px',
   borderRadius: '10px',
   textAlign: 'center',
@@ -49,15 +50,21 @@ const buttonStyle = {
   color: 'white',
 };
 
-const containerStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: '100vw',
-  height: '160vh',
-  margin: 0,
-  padding: 0,
-  backgroundColor: '#2c387e',
+// Apply these styles globally using a React effect or an external stylesheet
+const GlobalStyle = () => {
+  return (
+    <style>
+      {`
+        body, html {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden; /* Disable scrolling globally */
+        }
+      `}
+    </style>
+  );
 };
 
 const StartScreen = ({ onStart, openAdmin, roundManager, longMemory }) => (
@@ -104,6 +111,7 @@ export const TutorialApp = () => {
 
   return (
     <>
+      <GlobalStyle />
       {gameState === 'start' && (
         <div style={screenStyle}>
           <StartScreen
@@ -115,7 +123,7 @@ export const TutorialApp = () => {
         </div>
       )}
       {gameState === 'playing' && (
-        <div style={containerStyle}>
+        <div style={screenStyle}>
           <Board
             roundManager={roundManager}
             longMemory={longMemory}
@@ -151,3 +159,4 @@ export const TutorialApp = () => {
     </>
   );
 };
+
