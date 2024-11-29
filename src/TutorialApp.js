@@ -8,6 +8,7 @@ import { CreateGroupGame } from './Modals/GameCreation/CreateGroupGame.js';
 import GameDataTable from './Modals/Statistics/DataTable.js';
 import { AdminPanel } from './Admin/AdminPanel.js';
 import { FinalReport } from './Admin/FinalReport.js';
+import { maxWidth } from '@mui/system';
 
 const screenStyle = {
   display: 'flex',
@@ -59,7 +60,17 @@ const rectangleStyle = {
   borderRadius: '10px',
   textAlign: 'center',
   color: 'white',
+  maxWidth: '600px',
   width: '80%',
+};
+
+const playRectangleStyle = {
+  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
+  padding: '20px',
+  borderRadius: '10px',
+  textAlign: 'center',
+  color: 'white',
+  width: '100%',
 };
 
 const buttonContainerStyle = {
@@ -154,7 +165,7 @@ export const TutorialApp = () => {
       )}
       {gameState === 'playing' && (
         <div style={containerStyle}>
-          <div style={rectangleStyle}>
+          <div style={playRectangleStyle}>
             <Board
               roundManager={roundManager}
               longMemory={longMemory}
@@ -165,7 +176,7 @@ export const TutorialApp = () => {
       )}
       {gameState === 'end' && (
         <div style={pageStyle}>
-          <div style={rectangleStyle}>
+          <div style={playRectangleStyle}>
             <EndScreen
               onRestart={startGame}
               backToHomePage={homepage}
@@ -177,14 +188,14 @@ export const TutorialApp = () => {
       )}
       {gameState === 'admin' && (
         <div style={pageStyle}>
-          <div style={rectangleStyle}>
+          <div style={playRectangleStyle}>
             <AdminPanel roundManager={roundManager} report={report} />
           </div>
         </div>
       )}
       {gameState === 'finalReport' && (
         <div style={pageStyle}>
-          <div style={rectangleStyle}>
+          <div style={playRectangleStyle}>
             <FinalReport
               roundManager={roundManager}
               wipPenalty={roundManager.WIPPen}
