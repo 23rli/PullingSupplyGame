@@ -187,7 +187,7 @@ export const TutorialApp = () => {
   return (
     <>
       <GlobalStyle isActive={gameState === 'start' } />
-      <GlobalPlayingStyle isActive={ gameState === 'playing'} />
+      <GlobalPlayingStyle isActive={ gameState !== 'start'} />
 
       {gameState === 'start' && (
         <StartScreen
