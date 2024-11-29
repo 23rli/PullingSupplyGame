@@ -20,7 +20,7 @@ const screenStyle = {
   backgroundImage: `url(${splashPage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  overflow: 'hidden', // Prevent scrolling on the start screen
+  overflow: 'hidden', // Prevent scrolling inside this container
 };
 
 const pageStyle = {
@@ -28,15 +28,14 @@ const pageStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   width: '100vw',
-  height: '100%',
+  height: '100vh',
   margin: 0,
   padding: 0,
-  backgroundColor: '#2c387e',
-  overflowY: 'auto', // Enable vertical scrolling for other pages
+  overflowY: 'auto', // Enable scrolling on other pages
 };
 
 const rectangleStyle = {
-  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Reduced transparency
+  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
   padding: '20px',
   borderRadius: '10px',
   textAlign: 'center',
@@ -60,6 +59,25 @@ const buttonStyle = {
   cursor: 'pointer',
   backgroundColor: '#5a5c6c',
   color: 'white',
+};
+
+// Conditional GlobalStyle Component
+const GlobalStyle = ({ isActive }) => {
+  if (!isActive) return null;
+
+  return (
+    <style>
+      {`
+        body, html {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden; /* Disable scrolling globally for the start screen */
+        }
+      `}
+    </style>
+  );
 };
 
 const StartScreen = ({ onStart, openAdmin, roundManager, longMemory }) => (
@@ -106,15 +124,15 @@ export const TutorialApp = () => {
 
   return (
     <>
+      <GlobalStyle isActive={gameState === 'start'} />
+
       {gameState === 'start' && (
-        <div style={screenStyle}>
-          <StartScreen
-            onStart={startGame}
-            openAdmin={admin}
-            roundManager={roundManager}
-            longMemory={longMemory}
-          />
-        </div>
+        <StartScreen
+          onStart={startGame}
+          openAdmin={admin}
+          roundManager={roundManager}
+          longMemory={longMemory}
+        />
       )}
       {gameState === 'playing' && (
         <div style={pageStyle}>
