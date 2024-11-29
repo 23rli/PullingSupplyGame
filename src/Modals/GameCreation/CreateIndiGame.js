@@ -65,7 +65,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
   ) => {
     try {
       const requestId = uuidv4()
-      const response = await axios.post('https://motorcity.boeingcenter.com:8080/registergame', {
+      const response = await axios.post('http://3.129.12.15:8080/registergame', {
         blueCar: blueCar,
         bluePenalty: bluePenalty,
         greenCar: greenCar,
@@ -106,7 +106,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
 
     try {
       const requestId = uuidv4()
-      const response = await axios.post('https://motorcity.boeingcenter.com:8080/registeruser',
+      const response = await axios.post('http://3.129.12.15:8080/registeruser',
         {
           username: username,
           privledge: "player",
