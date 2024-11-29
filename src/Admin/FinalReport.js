@@ -40,59 +40,95 @@ export function FinalReport({ roundManager, wipRound, time}) {
                 const requestId = uuidv4(); // Generate a unique ID
                 const response = await axios.post('http://3.129.12.15:8080/retrieveleaderboard', {
                     gameId: roundManager.gameId,
-                    requestId: requestId
+                    requestId: requestId,
                 });
     
                 const playerData = response.data.data;
+    
                 const updatedUserData = await Promise.all(
                     playerData.map(async (player) => {
-                        const requestId2 = uuidv4();
-                        const revResponse = await axios.post('http://3.129.12.15:8080/retrievelimitedroundinfo', {
-                            gameId: roundManager.gameId,
-                            userId: player.user_id,
-                            roundLimit: roundManager.EndRound,
-                            requestId: requestId2
-                        });
+                        try {
+                            const requestId2 = uuidv4();
+                            const revResponse = await axios.post(
+                                'http://3.129.12.15:8080/retrievelimitedroundinfo',
+                                {
+                                    gameId: roundManager.gameId,
+                                    userId: player.user_id,
+                                    roundLimit: roundManager.EndRound,
+                                    requestId: requestId2,
+                                }
+                            );
     
-                        const roundData = revResponse.data.data;
-                        const revenue = roundData[0]?.revenue || 0;
-                        const finalRoundNum = roundData[0]?.round_number || 0;
-                        let carNum = 0;
-                        let maxWIP = 0;
-                        let throughput = 0;
-                        let totalWIP = 0; // To track the sum of WIP across rounds
-                        let averageWIP = 0;
+                            const roundData = revResponse.data.data || []; // Ensure roundData is an array
+                            if (roundData.length === 0) {
+                                // Handle the case where no round data exists for the player
+                                return {
+                                    userId: player.user_id,
+                                    username: player.username,
+                                    revenue: 0,
+                                    round: 0,
+                                    revenueAfterWIP: 0,
+                                    penalty: 0,
+                                    finalScore: 0,
+                                    throughput: 0,
+                                    maxWIP: 0,
+                                    averageWIP: 0,
+                                };
+                            }
     
-                        // Calculate metrics for each round
-                        roundData.forEach((round) => {
-                            carNum = round.round_number === wipRound ? round.wip : carNum;
-                            maxWIP = Math.max(maxWIP, round.wip);
-                            throughput += round.done_b + round.done_g + round.done_r + round.done_y;
-                            totalWIP += round.wip; // Add WIP to the total
-                        });
+                            const revenue = roundData[0]?.revenue || 0;
+                            const finalRoundNum = roundData[0]?.round_number || 0;
+                            let carNum = 0;
+                            let maxWIP = 0;
+                            let throughput = 0;
+                            let totalWIP = 0; // To track the sum of WIP across rounds
+                            let averageWIP = 0;
     
-                        // Calculate average WIP (divide by the number of rounds if rounds exist)
-                        if (roundData.length > 0) {
-                            averageWIP = (totalWIP / roundData.length).toFixed(3);
+                            // Calculate metrics for each round
+                            roundData.forEach((round) => {
+                                carNum = round.round_number === wipRound ? round.wip : carNum;
+                                maxWIP = Math.max(maxWIP, round.wip);
+                                throughput += round.done_b + round.done_g + round.done_r + round.done_y;
+                                totalWIP += round.wip; // Add WIP to the total
+                            });
+    
+                            // Calculate average WIP (divide by the number of rounds if rounds exist)
+                            if (roundData.length > 0) {
+                                averageWIP = (totalWIP / roundData.length).toFixed(3);
+                            }
+    
+                            const penalty = calculateWIPPenalty(roundData);
+                            const revenueAfterWIP = revenue - penalty;
+                            const finalScore = revenueAfterWIP; // You may want to apply more calculations here
+    
+                            return {
+                                userId: player.user_id,
+                                username: player.username,
+                                revenue: revenue,
+                                round: finalRoundNum,
+                                revenueAfterWIP: revenueAfterWIP,
+                                penalty: penalty,
+                                finalScore: finalScore,
+                                throughput: throughput,
+                                maxWIP: maxWIP,
+                                averageWIP: averageWIP, // Include average WIP in the result
+                            };
+                        } catch (error) {
+                            console.error(`Error processing data for player ${player.user_id}:`, error);
+                            // Return a default object for the player if an error occurs
+                            return {
+                                userId: player.user_id,
+                                username: player.username,
+                                revenue: 0,
+                                round: 0,
+                                revenueAfterWIP: 0,
+                                penalty: 0,
+                                finalScore: 0,
+                                throughput: 0,
+                                maxWIP: 0,
+                                averageWIP: 0,
+                            };
                         }
-                        
-    
-                        const penalty = calculateWIPPenalty(roundData);
-                        const revenueAfterWIP = revenue - penalty;
-                        const finalScore = revenueAfterWIP; // You may want to apply more calculations here
-    
-                        return {
-                            userId: player.user_id,
-                            username: player.username,
-                            revenue: revenue,
-                            round: finalRoundNum,
-                            revenueAfterWIP: revenueAfterWIP,
-                            penalty: penalty,
-                            finalScore: finalScore,
-                            throughput: throughput,
-                            maxWIP: maxWIP,
-                            averageWIP: averageWIP // Include average WIP in the result
-                        };
                     })
                 );
     
@@ -104,6 +140,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
     
         fetchPlayers();
     }, [roundManager, wipRound]);
+    
 
     useEffect(() => {
         console.log("Updated userData:", userData); // Log userData to verify it's populated correctly
