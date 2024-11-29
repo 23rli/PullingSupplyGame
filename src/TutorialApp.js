@@ -30,7 +30,7 @@ const containerStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   width: '100vw',
-  height: '160vh',
+  height: '170vh',
   margin: 0,
   padding: 0,
   backgroundImage: `url(${splashPage})`,
@@ -70,6 +70,17 @@ const playRectangleStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   padding: '20px',
+  borderRadius: '10px',
+  textAlign: 'center',
+  color: 'white',
+  width: '100%',
+};
+
+const containerRectangleStyle = {
+  backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   borderRadius: '10px',
   textAlign: 'center',
   color: 'white',
@@ -168,7 +179,7 @@ export const TutorialApp = () => {
       )}
       {gameState === 'playing' && (
         <div style={containerStyle}>
-          <div style={playRectangleStyle}>
+          <div style={containerRectangleStyle}>
             <Board
               roundManager={roundManager}
               longMemory={longMemory}
