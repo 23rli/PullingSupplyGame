@@ -58,10 +58,8 @@ export const Board = ({ roundManager, longMemory, endGame }) => {
   }, []);
 
   useEffect(() => {
-    if (roundManager.roundNum >= 6 && roundManager.roundNum <= 10) {
+    if (roundManager.roundNum >= 8) {
       setTimePerRound(180);
-    } else if (roundManager.roundNum >= 11) {
-      setTimePerRound(120);
     }
 
     if (elapsedTime >= timePerRound) {
