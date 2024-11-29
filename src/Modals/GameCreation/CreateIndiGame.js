@@ -223,6 +223,17 @@ export function CreateIndiGame({ roundManager, onStart }) {
             fullWidth
             sx={{ marginBottom: '20px' }}
           />
+          <FormControlLabel
+            control={
+                <Checkbox
+                    checked={demoNumbers}
+                    onChange={handleDemoNumbers}
+                    name="Demo Numbers"
+                    color="primary"
+                />
+            }
+            label="Demo Numbers"
+          />
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControlLabel
