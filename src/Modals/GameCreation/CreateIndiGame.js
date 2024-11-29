@@ -19,7 +19,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
   const [greenChecked, setGreenChecked] = React.useState(false);
   const [redChecked, setRedChecked] = React.useState(false);
   const [yellowChecked, setYellowChecked] = React.useState(false);
-  const [demoNumbers, setDemoNumbers] = useState(false);
+  const [demoNumbers, setDemoNumbers] = React.useState(false);
 
   const handleBlueCheckChange = (event) => {
     setBlueChecked(event.target.checked);
