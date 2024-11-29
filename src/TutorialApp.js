@@ -23,12 +23,13 @@ const screenStyle = {
   overflow: 'hidden', // Prevent scrolling inside this container
 };
 
+
 const pageStyle = {
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   width: '100vw',
-  height: '100vh',
+  height: '160vh',
   margin: 0,
   padding: 0,
   backgroundImage: `url(${splashPage})`,
@@ -43,7 +44,6 @@ const rectangleStyle = {
   borderRadius: '10px',
   textAlign: 'center',
   color: 'white',
-  maxWidth: '600px',
   width: '80%',
 };
 
