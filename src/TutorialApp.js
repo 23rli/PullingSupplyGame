@@ -36,8 +36,7 @@ const containerStyle = {
   backgroundImage: `url(${splashPage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  overflowY: 'auto', // Enable scrolling on other pages
-  overflowX: 'hidden',
+  overflow: 'hidden',
 };
 const pageStyle = {
   display: 'flex',
