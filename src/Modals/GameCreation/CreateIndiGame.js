@@ -19,6 +19,7 @@ export function CreateIndiGame({ roundManager, onStart }) {
   const [greenChecked, setGreenChecked] = React.useState(false);
   const [redChecked, setRedChecked] = React.useState(false);
   const [yellowChecked, setYellowChecked] = React.useState(false);
+  const [demoNumbers, setDemoNumbers] = useState(false);
 
   const handleBlueCheckChange = (event) => {
     setBlueChecked(event.target.checked);
@@ -51,6 +52,11 @@ export function CreateIndiGame({ roundManager, onStart }) {
   const handleCloseYellow = () => {
     setYellowChecked(false); // Reset the checkbox state when closing the dialog
   };
+
+  const handleDemoNumbers = (event) => {
+    setDemoNumbers(event.target.checked);
+    console.log("checked eD")
+};
 //update
   const handleCreateGame = async (
     username,
@@ -177,13 +183,18 @@ export function CreateIndiGame({ roundManager, onStart }) {
 
             let rolls = '';
 
-            for (let i = 0; i < 100; i++) {
-              const red = parseInt(Math.random() * 10 + 1);
-              const yellow = parseInt(Math.random() * 8 + 1);
-              const blue = parseInt(Math.random() * 4 + 1);
-              rolls += red + ",";
-              rolls += yellow + ",";
-              rolls += blue + ",";
+            if(!demoNumbers){
+                for (let i = 0; i < 100; i++) {
+                    const red = parseInt(Math.random() * 10 + 1);
+                    const yellow = parseInt(Math.random() * 8 + 1);
+                    const blue = parseInt(Math.random() * 4 + 1);
+                    rolls += red + ",";
+                    rolls += yellow + ",";
+                    rolls += blue + ",";
+                }
+            }else{
+                console.log("Demo Numbers rolls used")
+                rolls = "9,7,3,7,8,4,7,8,3,1,8,2,3,7,3,2,6,2,3,7,1,8,5,4,10,2,2,8,7,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
             }
 
             handleCreateGame(username, blueCar, bluePenalty, greenCar, greenPenalty,
