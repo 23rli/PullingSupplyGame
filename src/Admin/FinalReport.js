@@ -88,7 +88,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             roundData.forEach((round) => {
                                 carNum = round.round_number === wipRound ? round.wip : carNum;
                                 maxWIP = Math.max(maxWIP, round.wip);
-                                throughput += round.done_b + round.done_g + round.done_r + round.done_y;
+                                throughput += round.done_b + round.done_g + round.done_r + round.done_y; //Make through put car secific.
                                 totalWIP += round.wip; // Add WIP to the total
                             });
     
@@ -553,22 +553,6 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                 </Button>
                             </Box>
                             <Typography variant="body2">Number of Players: {userData.length}</Typography>
-                            {roundManager.startB == 1 && (
-                                <Typography variant="body2">Blue WIP Penalty: {roundManager.WIPPen[0]}</Typography>
-
-                            )}
-                            {roundManager.startG == 1 && (
-                                <Typography variant="body2">Green WIP Penalty: {roundManager.WIPPen[1]}</Typography>
-
-                            )}
-                            {roundManager.startR == 1 && (
-                                <Typography variant="body2">Red WIP Penalty: {roundManager.WIPPen[2]}</Typography>
-
-                            )}
-                            {roundManager.startY == 1 && (
-                                <Typography variant="body2">Yellow WIP Penalty: {roundManager.WIPPen[3]}</Typography>
-
-                            )}
                             <Typography variant="body2">Penalty Enacted in Round: {wipRound}</Typography>
                             {gameStats && isGameStateVisible && ( // Conditional rendering
                                 <TableContainer component={Paper}>
