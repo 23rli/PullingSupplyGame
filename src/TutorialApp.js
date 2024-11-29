@@ -66,6 +66,9 @@ const rectangleStyle = {
 
 const playRectangleStyle = {
   backgroundColor: 'rgba(44, 56, 126, 0.9)', // Semi-transparent background
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   padding: '20px',
   borderRadius: '10px',
   textAlign: 'center',
