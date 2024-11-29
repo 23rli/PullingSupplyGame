@@ -31,6 +31,9 @@ const pageStyle = {
   height: '100vh',
   margin: 0,
   padding: 0,
+  backgroundImage: `url(${splashPage})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
   overflowY: 'auto', // Enable scrolling on other pages
 };
 
