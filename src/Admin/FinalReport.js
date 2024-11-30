@@ -666,11 +666,6 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                         >
                                             Throughput
                                         </TableSortLabel>
-                                        <Tooltip
-                                            title={`Blue: ${row.throughput[0]}, Green: ${row.throughput[1]}, Red: ${row.throughput[2]}, Yellow: ${row.throughput[3]}`}
-                                        >
-                                            <span>{row.throughput.reduce((sum, val) => sum + val, 0)}</span> {/* Total throughput */}
-                                        </Tooltip>
                                     </TableCell>
                                     <TableCell align="right">
                                         <TableSortLabel
@@ -706,7 +701,13 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                         <TableCell align="right">{row.revenue}</TableCell>
                                         <TableCell align="right">{row.penalty}</TableCell>
                                         <TableCell align="right">{row.finalScore}</TableCell>
-                                        <TableCell align="right">{row.throughput}</TableCell>
+                                        <TableCell align="right">
+                                            <Tooltip
+                                                title={`Blue: ${row.throughput[0]}, Green: ${row.throughput[1]}, Red: ${row.throughput[2]}, Yellow: ${row.throughput[3]}`}
+                                            >
+                                                <span>{row.throughput.reduce((sum, val) => sum + val, 0)}</span> {/* Total throughput */}
+                                            </Tooltip>
+                                        </TableCell>
                                         <TableCell align="right">{row.maxWIP}</TableCell>
                                         <TableCell align="right">{row.averageWIP}</TableCell>
                                     </TableRow>
@@ -715,6 +716,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                         </Table>
                     </TableContainer>
                 </Grid>
+
 
                 {selectedUser && (
                     <Grid item xs={12}>
