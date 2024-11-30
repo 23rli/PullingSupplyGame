@@ -11,6 +11,8 @@ import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TableSortLabel
 } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx'; // Make sure to install xlsx library
@@ -70,7 +72,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                     revenueAfterWIP: 0,
                                     penalty: 0,
                                     finalScore: 0,
-                                    throughput: 0,
+                                    throughput: [0, 0, 0, 0], // Default throughput array
                                     maxWIP: 0,
                                     averageWIP: 0,
                                 };
@@ -80,7 +82,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             const finalRoundNum = roundData[0]?.round_number || 0;
                             let carNum = 0;
                             let maxWIP = 0;
-                            let throughput = 0;
+                            let throughput = [0, 0, 0, 0]; // Array to track car-specific throughputs
                             let totalWIP = 0; // To track the sum of WIP across rounds
                             let averageWIP = 0;
     
@@ -88,7 +90,13 @@ export function FinalReport({ roundManager, wipRound, time}) {
                             roundData.forEach((round) => {
                                 carNum = round.round_number === wipRound ? round.wip : carNum;
                                 maxWIP = Math.max(maxWIP, round.wip);
-                                throughput += round.done_b + round.done_g + round.done_r + round.done_y; //Make through put car secific.
+    
+                                // Increment throughput for each car type
+                                throughput[0] += round.done_b || 0;
+                                throughput[1] += round.done_g || 0;
+                                throughput[2] += round.done_r || 0;
+                                throughput[3] += round.done_y || 0;
+    
                                 totalWIP += round.wip; // Add WIP to the total
                             });
     
@@ -109,7 +117,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                 revenueAfterWIP: revenueAfterWIP,
                                 penalty: penalty,
                                 finalScore: finalScore,
-                                throughput: throughput,
+                                throughput: throughput, // Use the updated throughput array
                                 maxWIP: maxWIP,
                                 averageWIP: averageWIP, // Include average WIP in the result
                             };
@@ -124,7 +132,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                 revenueAfterWIP: 0,
                                 penalty: 0,
                                 finalScore: 0,
-                                throughput: 0,
+                                throughput: [0, 0, 0, 0], // Default throughput array
                                 maxWIP: 0,
                                 averageWIP: 0,
                             };
@@ -140,6 +148,7 @@ export function FinalReport({ roundManager, wipRound, time}) {
     
         fetchPlayers();
     }, [roundManager, wipRound]);
+    
     
 
     useEffect(() => {
@@ -365,11 +374,16 @@ export function FinalReport({ roundManager, wipRound, time}) {
             Revenue: user.revenue,
             Penalty: user.penalty,
             Final_Score: user.finalScore,
-            Throughput: user.throughput,
+            Throughput_Blue: user.throughput[0], // Blue car throughput
+            Throughput_Green: user.throughput[1], // Green car throughput
+            Throughput_Red: user.throughput[2], // Red car throughput
+            Throughput_Yellow: user.throughput[3], // Yellow car throughput
             Max_WIP: user.maxWIP,
             Average_WIP: user.averageWIP
         })).sort((a, b) => b.Revenue - a.Revenue); // Sort by Revenue in descending order
+        
         const userRevenueWorksheet = XLSX.utils.json_to_sheet(userRevenueData);
+        
         XLSX.utils.book_append_sheet(workbook, userRevenueWorksheet, "User Overview");
         XLSX.utils.book_append_sheet(workbook, statsWorksheet, "Game Stats");
     
@@ -652,6 +666,11 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                         >
                                             Throughput
                                         </TableSortLabel>
+                                        <Tooltip
+                                            title={`Blue: ${row.throughput[0]}, Green: ${row.throughput[1]}, Red: ${row.throughput[2]}, Yellow: ${row.throughput[3]}`}
+                                        >
+                                            <span>{row.throughput.reduce((sum, val) => sum + val, 0)}</span> {/* Total throughput */}
+                                        </Tooltip>
                                     </TableCell>
                                     <TableCell align="right">
                                         <TableSortLabel
