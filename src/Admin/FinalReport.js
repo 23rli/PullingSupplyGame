@@ -92,10 +92,10 @@ export function FinalReport({ roundManager, wipRound, time}) {
                                 maxWIP = Math.max(maxWIP, round.wip);
     
                                 // Increment throughput for each car type
-                                throughput[0] += round.done_b || 0;
-                                throughput[1] += round.done_g || 0;
-                                throughput[2] += round.done_r || 0;
-                                throughput[3] += round.done_y || 0;
+                                throughput[0] = Math.max(round.done_b, throughput[0]);
+                                throughput[1] = Math.max(round.done_g, throughput[1])
+                                throughput[2] = Math.max(round.done_r, throughput[2])
+                                throughput[3] = Math.max(round.done_y, throughput[3])
     
                                 totalWIP += round.wip; // Add WIP to the total
                             });
